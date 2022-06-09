@@ -1,4 +1,5 @@
 import argparse
+import csv
 import json
 import random
 
@@ -74,13 +75,21 @@ if __name__ == "__main__":
     mname = "facebook/blenderbot-400M-distill"
     simulator = BlenderbotForConditionalGeneration.from_pretrained(mname).to(device)
     simulator_tokenizer = BlenderbotTokenizer.from_pretrained(mname)
-    print("start token = ", simulator_tokenizer.bos_token)
-
     # load your bot
     bot = AutoModelForSeq2SeqLM.from_pretrained(args.model_name_or_path).to(device)
     bot_tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
 
+    f = open("keywords.json")
+    keywords_f = json.load(f)
+    f.close()
+    keywords, data, history = [], [], []
+    for field in keywords_f.keys():
+        for word in keywords_f[field]:
+            keywords.append(word)
+    # print("keywords =", keywords) 
+
     dataset = load_dataset("blended_skill_talk", split=args.split)
+
     dataset = dataset.map(
         preprocess,
         remove_columns=[
@@ -116,6 +125,7 @@ if __name__ == "__main__":
                 break
             print()
     else:
+        print("dataset len = ", len(dataset))
         assert args.num_chats <= len(
             dataset
         ), f"--num_chats needs to be smaller than dataset (<={len(dataset)})"
@@ -126,9 +136,11 @@ if __name__ == "__main__":
             tqdm(dataset["context"], disable=(not args.disable_output_dialog))
         ):
             dialog = []
+            # print("index = ", index, "context = ", context)
+            # print("===================================================================================")
             if not args.disable_output_dialog:
                 print(f" dialog id: {index}")
-            for _ in range(5):
+            for _ in range(10):
                 inputs = simulator_tokenizer(
                     [
                         "</s> <s>".join(
@@ -143,6 +155,17 @@ if __name__ == "__main__":
                     reply_ids, skip_special_tokens=True
                 )[0].strip()
                 dialog.append(text)
+                if len(dialog) > 10:
+                    dialog = dialog[1:]
+                if len(dialog) >= 10:
+                    for word in keywords:
+                        if word in text:
+                            # print("word = ", word)
+                            # print("text = ", text)
+                            # print(dialog)
+                            data.append(dialog)
+
+
                 if not args.disable_output_dialog:
                     print(f"\033[0;32;49m {'simulator: ': ^11}{text} \033[0;0m")
 
@@ -154,7 +177,7 @@ if __name__ == "__main__":
                 text = bot_tokenizer.batch_decode(reply_ids, skip_special_tokens=True)[
                     0
                 ].strip()
-                dialog.append(text)
+                # print(dialog)
                 if not args.disable_output_dialog:
                     print(f"\033[0;33;49m {'bot: ': ^11}{text} \033[0;0m")
 
@@ -162,6 +185,32 @@ if __name__ == "__main__":
             if not args.disable_output_dialog:
                 print()
 
-        with open(args.output, "w") as f:
-            for idx, dialog in enumerate(output):
-                f.write(json.dumps({"id": idx, "dialog": dialog}) + "\n")
+        # with open(args.output, "w") as f:
+        #     for idx, dialog in enumerate(output):
+        #         f.write(json.dumps({"id": idx, "dialog": dialog}) + "\n")
+
+        idx = 0
+        source, target = "", ""
+        with open("train_data.csv", "w") as f:
+            writer = csv.writer(f)
+            # writer.writerow(["id", "source", "target"])
+            for text in data:
+                for i in range(1, len(text) - 2, 2):
+                    source, target = "", ""
+                    # print(type(target))
+                    target = text[i].strip("\"")
+                    
+                    for j in range(len(text)):
+                        if i != j:
+                            source += text[j].strip("\"")
+                        else:
+                            source += "@"
+                            # print("i = ", i, "j = ", j, "len(text) = ", len(text), "source = ", source)
+                        source += " "
+                    # print("source =", source)
+                    # print("target =", target)
+                    # print("idx = ", idx)
+                    writer.writerow([idx, source, target])
+                        # print(len(text))
+                    idx += 1
+                # f.write(json.dumps({"id": idx, "dialog": dialog}) + "\n")
