@@ -27,8 +27,8 @@ def preprocess(example):
 
 
 if __name__ == "__main__":
-    random.seed(67833)
-    num_chats = 40 # can modify num chats here
+    random.seed(43833)
+    num_chats = 50 # can modify num chats here
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
 
@@ -76,7 +76,7 @@ if __name__ == "__main__":
         dialog = []
         # if not args.disable_output_dialog:
         #     print(f" dialog id: {index}")
-        for _ in range(10):
+        for _ in range(5):
             inputs = simulator_tokenizer(
                 [
                     "</s> <s>".join(
@@ -91,12 +91,16 @@ if __name__ == "__main__":
                 reply_ids, skip_special_tokens=True
             )[0].strip()
             dialog.append(text)
-            if len(dialog) > 10:
+            if len(dialog) == 11:
                 dialog = dialog[1:]
-            if len(dialog) >= 10:
+            elif len(dialog) == 12:
+                dialog = dialog[2:]
+            if len(dialog) >= 5:
                 for word in keywords:
                     if word in text:
-                        data.append(dialog)
+                        # print(len(dialog[-5:-1]))
+                        # print(word)
+                        data.append(dialog[-5:-1])
 
 
             # if not args.disable_output_dialog:
@@ -110,6 +114,7 @@ if __name__ == "__main__":
             text = bot_tokenizer.batch_decode(reply_ids, skip_special_tokens=True)[
                 0
             ].strip()
+            dialog.append(text)
             # if not args.disable_output_dialog:
             #     print(f"\033[0;33;49m {'bot: ': ^11}{text} \033[0;0m")
 
@@ -119,27 +124,22 @@ if __name__ == "__main__":
 
     idx = 0
     source, target = "", ""
-    stop = False
     with open("text.csv", "w") as f:
         writer = csv.writer(f)
         writer.writerow(["inputs", "target"])
         for text in data:
-            for i in range(1, len(text) - 2, 2):
-                source, target = "", ""
-                # print(type(target))
-                target = text[i].strip("\"")
-                
-                for j in range(len(text)):
-                    if i != j:
-                        source += text[j].strip("\"")
-                    else:
-                        source += "@"
-                    source += " "
-                writer.writerow([source, target])
-                    # print(len(text))
-                idx += 1
-                if idx >= 100:
-                    stop =True
-                    break
-            if stop:
+            # for i in range(1, len(text) - 2, 2):
+            source, target = "", ""
+            # print(type(target))
+            target = text[-1].strip("\"")
+            
+            for j in range(len(text) - 1):
+                source += text[j].strip("\"")
+                source += " "
+            writer.writerow([source, target])
+                # print(len(text))
+            idx += 1
+
+            if idx >= 100:
                 break
+
