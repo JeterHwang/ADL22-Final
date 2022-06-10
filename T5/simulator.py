@@ -1,7 +1,7 @@
 import argparse
 import json
 import random
-
+from pathlib import Path
 import torch
 from datasets import load_dataset
 from tqdm import tqdm
@@ -11,7 +11,7 @@ from transformers import (
     BlenderbotForConditionalGeneration,
     BlenderbotTokenizer,
 )
-
+from bot import T5bot
 
 def parse_args():
     parser = argparse.ArgumentParser()
@@ -47,7 +47,11 @@ def parse_args():
         action="store_true",
         help="whether output the dialogs to the command line",
     )
-
+    parser.add_argument("--model1_path", type=Path, default='./ckpt/2022-06-10-18:07:52-ckpts/Epoch8')
+    parser.add_argument("--model2_path", type=Path, default='./ckpt/2022-06-10-17:35:56-ckpts/Epoch8')
+    parser.add_argument("--tokenizer_path", type=str, default='t5-small')
+    parser.add_argument("--keywords_path", type=Path, default='../final_project_scripts/keywords.json')
+    parser.add_argument("--max_input_len", type=int, default=512)
     args = parser.parse_args()
 
     return args
@@ -77,8 +81,12 @@ if __name__ == "__main__":
     print("start token = ", simulator_tokenizer.bos_token)
 
     # load your bot
-    bot = AutoModelForSeq2SeqLM.from_pretrained(args.model_name_or_path).to(device)
-    bot_tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
+    bot = T5bot.from_pretrained(
+        args.model1_path, 
+        args.model2_path, 
+        args.tokenizer_path, 
+        args.keywords_path
+    )
 
     dataset = load_dataset("blended_skill_talk", split=args.split)
     dataset = dataset.map(
@@ -125,6 +133,8 @@ if __name__ == "__main__":
         for index, context in enumerate(
             tqdm(dataset["context"], disable=(not args.disable_output_dialog))
         ):
+            bot.choose_target() ## Choose a topic to transfer in this dialogue
+            print(bot.target)
             dialog = []
             if not args.disable_output_dialog:
                 print(f" dialog id: {index}")
@@ -147,13 +157,17 @@ if __name__ == "__main__":
                     print(f"\033[0;32;49m {'simulator: ': ^11}{text} \033[0;0m")
 
                 # you might need to change this line due to the model you use
-                inputs = bot_tokenizer(
-                    ["</s> <s>".join(dialog[-3:])], return_tensors="pt", truncation=True
-                ).to(device)
-                reply_ids = bot.generate(**inputs)
-                text = bot_tokenizer.batch_decode(reply_ids, skip_special_tokens=True)[
-                    0
-                ].strip()
+                text = bot.generate(
+                    "</s> <s>".join(dialog[-3:]),
+                    args.max_input_len
+                )
+                # inputs = bot_tokenizer(
+                #     ["</s> <s>".join(dialog[-3:])], return_tensors="pt", truncation=True
+                # ).to(device)
+                # reply_ids = bot.generate(**inputs)
+                # text = bot_tokenizer.batch_decode(reply_ids, skip_special_tokens=True)[
+                #     0
+                # ].strip()
                 dialog.append(text)
                 if not args.disable_output_dialog:
                     print(f"\033[0;33;49m {'bot: ': ^11}{text} \033[0;0m")

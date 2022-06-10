@@ -35,7 +35,7 @@ def read_data(data_dir, tokenizer, args):
     splits = ['train', 'dev', 'test']
     datasets = {}
     for split in splits:
-        directory = data_dir / split / 'text.csv'
+        directory = data_dir / split / f'phase{args.phase}_text.csv'
         if os.path.isfile(directory):
             with open(directory, newline='') as csvfile:
                 rows = csv.reader(csvfile)

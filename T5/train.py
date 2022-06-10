@@ -79,7 +79,9 @@ def train(model, optimizer, lr_scheduler, train_loader, valid_loader, accelerato
                         input_ids=input_ids,
                         attention_mask=attention_mask,
                         max_length=args.max_target_len,
-                        num_beams=1
+                        num_beams=10, 
+                        no_repeat_ngram_size=2, 
+                        early_stopping=True
                     )
                     generated_tokens = accelerator.pad_across_processes(
                         generated_tokens, 
@@ -96,6 +98,8 @@ def train(model, optimizer, lr_scheduler, train_loader, valid_loader, accelerato
                     for target in targets:
                         reference.append(target)
                 
+            for res in decoded_reesult[:10]:
+                print(res)
             result = metric.compute(predictions=[decoded_reesult], references=[reference])
             # print(json.dumps(rouge, indent=2))
             # rouge1_curve.append(rouge['rouge-1']['f'])
@@ -103,14 +107,19 @@ def train(model, optimizer, lr_scheduler, train_loader, valid_loader, accelerato
             # rougel_curve.append(rouge['rouge-l']['f'])
             print({"bleu" : result['score']})
         
-        accelerator.wait_for_everyone()
-        unwrapped_model = accelerator.unwrap_model(model)
-        state_dict_path = args.ckpt_dir / f'Epoch{epoch + 1}'
-        state_dict_path.mkdir(parents=True, exist_ok=True)
-        accelerator.save(unwrapped_model.state_dict(), state_dict_path / 'model.pt')
-        unwrapped_model.config.to_json_file(state_dict_path / 'config.json')
+            accelerator.wait_for_everyone()
+            unwrapped_model = accelerator.unwrap_model(model)
+            state_dict_path = args.ckpt_dir / f'Epoch{epoch + 1}'
+            state_dict_path.mkdir(parents=True, exist_ok=True)
+            unwrapped_model.save_pretrained(
+                state_dict_path, 
+                save_function=accelerator.save, 
+                state_dict=accelerator.get_state_dict(model)
+            )
+        #accelerator.save(unwrapped_model.state_dict(), state_dict_path / 'model.pt')
+        #unwrapped_model.config.to_json_file(state_dict_path / 'config.json')
     
-    accelerator.wait_for_everyone()
+    # accelerator.wait_for_everyone()
     # np.save(args.plot_dir / 'rouge-1.npy', np.array(rouge1_curve))
     # np.save(args.plot_dir / 'rouge-2.npy', np.array(rouge2_curve))
     # np.save(args.plot_dir / 'rouge-l.npy', np.array(rougel_curve))
@@ -133,6 +142,7 @@ def main(args):
     tokenizer = T5Tokenizer.from_pretrained("t5-small")
     ###########################################
     tokenizer.pad_token = tokenizer.eos_token #
+    tokenizer.add_tokens(['@'])
     ###########################################
     print('----- Finish Model Initialization -----')
 
@@ -149,7 +159,7 @@ def main(args):
     )
     valid_loader = DataLoader(
         eval_dataset, 
-        batch_size=args.batch_size, 
+        batch_size=args.batch_size * 2, 
         shuffle=False, 
         pin_memory=True
     )
@@ -201,7 +211,7 @@ def parse_args() -> Namespace:
         "--data_dir",
         type=Path,
         help="Directory to the dataset.",
-        default="../data",
+        default="../data/out_of_domain/",
     )
     parser.add_argument(
         "--ckpt_dir",
@@ -226,15 +236,16 @@ def parse_args() -> Namespace:
     parser.add_argument("--lr", type=float, default=3e-4)
 
     # data loader
-    parser.add_argument("--batch_size", type=int, default=2)
+    parser.add_argument("--batch_size", type=int, default=4)
 
     # training
     parser.add_argument("--num_epoch", type=int, default=8)
     parser.add_argument("--logging_step", type=int, default=100)
     parser.add_argument("--seed", type=int, default=42)
-    parser.add_argument("--gradient_accumulation_steps", type=int, default=16)
-    parser.add_argument("--validation_frequency", type=int, default=1)
+    parser.add_argument("--gradient_accumulation_steps", type=int, default=8)
+    parser.add_argument("--validation_frequency", type=int, default=8)
     parser.add_argument('--warmup_ratio', type=int, default=4)
+    parser.add_argument('--phase', type=int, default=2)
     args = parser.parse_args()
     return args
 
