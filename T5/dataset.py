@@ -1,5 +1,6 @@
 import torch
 import csv
+import os 
 
 def preprocess_function(examples, tokenizer, max_input_length=60, max_target_length=30):
     inputs = examples['inputs']
@@ -30,24 +31,27 @@ def preprocess_function(examples, tokenizer, max_input_length=60, max_target_len
         model_inputs["targets"] = targets
     return model_inputs
 
-def read_data(data_dir, tokenizer):
+def read_data(data_dir, tokenizer, args):
     splits = ['train', 'dev', 'test']
     datasets = {}
     for split in splits:
         directory = data_dir / split / 'text.csv'
-        with open(directory, newline='') as csvfile:
-            rows = csv.reader(csvfile)
-            data = []
-            for i, row in enumerate(rows):
-                if i > 0:
-                    data.append(row)
-            datasets[split] = OTTersDataset(
-                preprocess_function({
-                    'inputs' : [row[0] for row in data],
-                    'target' : [row[1] for row in data] if split != 'test' else None,
-                }, tokenizer),
-                split=split
-            )
+        if os.path.isfile(directory):
+            with open(directory, newline='') as csvfile:
+                rows = csv.reader(csvfile)
+                data = []
+                for i, row in enumerate(rows):
+                    if i > 0:
+                        data.append(row)
+                datasets[split] = OTTersDataset(
+                    preprocess_function({
+                        'inputs' : [row[0] for row in data],
+                        'target' : [row[1] for row in data] if split != 'test' else None,
+                    }, tokenizer, args.max_input_len, args.max_target_len),
+                    split=split
+                )
+        else:
+            datasets[split] = None
     return datasets['train'], datasets['dev'], datasets['test']
 
 class OTTersDataset(torch.utils.data.Dataset):

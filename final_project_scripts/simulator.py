@@ -116,6 +116,7 @@ if __name__ == "__main__":
                 break
             print()
     else:
+        print(len(dataset))
         assert args.num_chats <= len(
             dataset
         ), f"--num_chats needs to be smaller than dataset (<={len(dataset)})"
@@ -125,6 +126,7 @@ if __name__ == "__main__":
         for index, context in enumerate(
             tqdm(dataset["context"], disable=(not args.disable_output_dialog))
         ):
+            print(context)
             dialog = []
             if not args.disable_output_dialog:
                 print(f" dialog id: {index}")

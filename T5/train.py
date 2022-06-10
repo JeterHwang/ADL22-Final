@@ -70,37 +70,38 @@ def train(model, optimizer, lr_scheduler, train_loader, valid_loader, accelerato
                     train_loss = 0
                 t.update(1)            
         
-        model.eval()
-        decoded_reesult, reference = [], []
-        with torch.no_grad():
-            for step, (input_ids, attention_mask, _, targets) in enumerate(tqdm(valid_loader)):
-                generated_tokens = accelerator.unwrap_model(model).generate(
-                    input_ids=input_ids,
-                    attention_mask=attention_mask,
-                    max_length=args.max_target_len,
-                    num_beams=1
-                )
-                generated_tokens = accelerator.pad_across_processes(
-                    generated_tokens, 
-                    dim=1, 
-                    pad_index=tokenizer.pad_token_id
-                )
-                generated_tokens = accelerator.gather(generated_tokens)
-                decoded_preds = tokenizer.batch_decode(
-                    generated_tokens, 
-                    skip_special_tokens=True
-                )
-                for pred in decoded_preds:
-                    decoded_reesult.append(pred.strip())
-                for target in targets:
-                    reference.append(target)
-            
-        result = metric.compute(predictions=[decoded_reesult], references=[reference])
-        # print(json.dumps(rouge, indent=2))
-        # rouge1_curve.append(rouge['rouge-1']['f'])
-        # rouge2_curve.append(rouge['rouge-2']['f'])
-        # rougel_curve.append(rouge['rouge-l']['f'])
-        print({"bleu" : result['score']})
+        if (epoch + 1) % args.validation_frequency == 0:
+            model.eval()
+            decoded_reesult, reference = [], []
+            with torch.no_grad():
+                for step, (input_ids, attention_mask, _, targets) in enumerate(tqdm(valid_loader)):
+                    generated_tokens = accelerator.unwrap_model(model).generate(
+                        input_ids=input_ids,
+                        attention_mask=attention_mask,
+                        max_length=args.max_target_len,
+                        num_beams=1
+                    )
+                    generated_tokens = accelerator.pad_across_processes(
+                        generated_tokens, 
+                        dim=1, 
+                        pad_index=tokenizer.pad_token_id
+                    )
+                    generated_tokens = accelerator.gather(generated_tokens)
+                    decoded_preds = tokenizer.batch_decode(
+                        generated_tokens, 
+                        skip_special_tokens=True
+                    )
+                    for pred in decoded_preds:
+                        decoded_reesult.append(pred.strip())
+                    for target in targets:
+                        reference.append(target)
+                
+            result = metric.compute(predictions=[decoded_reesult], references=[reference])
+            # print(json.dumps(rouge, indent=2))
+            # rouge1_curve.append(rouge['rouge-1']['f'])
+            # rouge2_curve.append(rouge['rouge-2']['f'])
+            # rougel_curve.append(rouge['rouge-l']['f'])
+            print({"bleu" : result['score']})
         
         accelerator.wait_for_everyone()
         unwrapped_model = accelerator.unwrap_model(model)
@@ -137,7 +138,7 @@ def main(args):
 
     # dataloader
     print('----- Start Reading Data -----')
-    train_dataset, eval_dataset, test_dataset = read_data(args.data_dir, tokenizer)
+    train_dataset, eval_dataset, test_dataset = read_data(args.data_dir, tokenizer, args)
     print('----- Finish Reading Data -----')
 
     train_loader = DataLoader(
@@ -200,7 +201,7 @@ def parse_args() -> Namespace:
         "--data_dir",
         type=Path,
         help="Directory to the dataset.",
-        default="../OTTers/data/in_domain",
+        default="../data",
     )
     parser.add_argument(
         "--ckpt_dir",
@@ -215,7 +216,7 @@ def parse_args() -> Namespace:
         default="./plot/",
     )
     # BERT max length
-    parser.add_argument("--max_input_len", type=int, default=512)
+    parser.add_argument("--max_input_len", type=int, default=256)
     parser.add_argument("--max_target_len", type=int, default=128)
 
     # optimizer
@@ -232,6 +233,7 @@ def parse_args() -> Namespace:
     parser.add_argument("--logging_step", type=int, default=100)
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--gradient_accumulation_steps", type=int, default=16)
+    parser.add_argument("--validation_frequency", type=int, default=1)
     parser.add_argument('--warmup_ratio', type=int, default=4)
     args = parser.parse_args()
     return args
