@@ -173,8 +173,8 @@ if __name__ == "__main__":
 
                 # you might need to change this line due to the model you use
                 text = bot.generate(
-                    # "</s> <s>".join(dialog[-3:]),
-                    dialog[-1],
+                    "</s> <s>".join(dialog[-3:]),
+                    #dialog[-1],
                     args.max_input_len
                 )
                 # inputs = bot_tokenizer(
