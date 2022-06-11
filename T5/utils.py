@@ -158,9 +158,9 @@ def prepare_input(head_entity, tail_entity, tokenizer, input_len=32):
     input_id += [tokenizer.convert_tokens_to_ids('<PAD>')] * (input_len - len(input_id))
     return torch.tensor([input_id], dtype=torch.long)
 
-def connect_entities(head_entity, tail_entity, generator, tokenizer, temperature=1, num_outs=1, top_k=0, top_p=1.0):
+def connect_entities(head_entity, tail_entity, generator, tokenizer, device, temperature=1, num_outs=1, top_k=0, top_p=1.0):
     gen_input = prepare_input(head_entity, tail_entity, tokenizer)
-    gen_input = gen_input.to('cuda')
+    gen_input = gen_input.to(device)
     gen_output, prob_arr = generator(gen_input, temperature=temperature, num_outs=num_outs, top_k=top_k, top_p=top_p)
     prob_sum = [-sum(math.log(x) for x in l if x < 1 and x >= 0) for l in prob_arr]
     outs = []
@@ -269,7 +269,7 @@ def get_filtered_paths(paths, scores, relation2text, parse_edges=True, input_ent
 
     return filt_paths, filt_scores
 
-def get_min_path(paths, scores, parse_edges=True):
+def get_min_path(paths, scores, relation2text, parse_edges=True):
     min_score, max_scores = min(scores), max(scores)
     filt_paths, filt_scores = [], []
     for i, path in enumerate(paths):
@@ -279,7 +279,7 @@ def get_min_path(paths, scores, parse_edges=True):
             filt_score=(scores[i])
     
     if parse_edges:
-        filt_path = convert_edgesnames(filt_path)
+        filt_path = convert_edgesnames(filt_path, relation2text)
     # print(paths, filt_path)
     return filt_path, filt_score
 
