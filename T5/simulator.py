@@ -47,8 +47,8 @@ def parse_args():
         action="store_true",
         help="whether output the dialogs to the command line",
     )
-    parser.add_argument("--model1_path", type=Path, default='./ckpt/2022-06-10-18:07:52-ckpts/Epoch8')
-    parser.add_argument("--model2_path", type=Path, default='./ckpt/2022-06-10-17:35:56-ckpts/Epoch8')
+    parser.add_argument("--model1_path", type=Path, default='./ckpt/2022-06-11-12:54:52-ckpts/Epoch8')
+    parser.add_argument("--model2_path", type=Path, default='./ckpt/2022-06-11-12:26:01-ckpts/Epoch8')
     parser.add_argument("--tokenizer_path", type=str, default='t5-small')
     parser.add_argument("--keywords_path", type=Path, default='../final_project_scripts/keywords.json')
     parser.add_argument("--max_input_len", type=int, default=512)
