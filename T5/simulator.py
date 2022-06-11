@@ -48,16 +48,16 @@ def parse_args():
         help="whether output the dialogs to the command line",
     )
 
-
-    parser.add_argument("--bot", type=str, default='T5bot')
-    parser.add_argument("--commensense_model_path", type=Path, default="")
-    parser.add_argument("--rel2text_path", type=Path, default="")
-    parser.add_argument("--counts_path", type=Path, default="")
-    parser.add_argument("--model1_path", type=Path, default='./ckpt/2022-06-11-12:54:52-ckpts/Epoch8')
-    parser.add_argument("--model2_path", type=Path, default='./ckpt/2022-06-11-12:26:01-ckpts/Epoch8')
+    parser.add_argument("--bot", type=str, default='T5bot', choices=['T5bot', 'GPT5bot'])
+    parser.add_argument("--commensense_model_path", type=Path, default="./pretrained/checkpoints_6lendict_wcontains")
+    parser.add_argument("--rel2text_path", type=Path, default="./pretrained/relation2text.json")
+    parser.add_argument("--counts_path", type=Path, default="./pretrained/counts.txt")
+    parser.add_argument("--model1_path", type=Path, default='./pretrained/model1')
+    parser.add_argument("--model2_path", type=Path, default='./pretrained/model2')
     parser.add_argument("--tokenizer2_path", type=str, default='t5-small')
-    parser.add_argument("--keywords_path", type=Path, default='../final_project_scripts/keywords.json')
+    parser.add_argument("--keywords_path", type=Path, default='./pretrained/keywords.json')
     parser.add_argument("--max_input_len", type=int, default=512)
+    parser.add_argument("--device", type=str, default='cuda:0')
     args = parser.parse_args()
 
     return args
@@ -79,10 +79,8 @@ if __name__ == "__main__":
     args = parse_args()
     random.seed(args.seed)
 
-    device = "cuda" if torch.cuda.is_available() else "cpu"
-
     mname = "facebook/blenderbot-400M-distill"
-    simulator = BlenderbotForConditionalGeneration.from_pretrained(mname).to(device)
+    simulator = BlenderbotForConditionalGeneration.from_pretrained(mname).to(args.device)
     simulator_tokenizer = BlenderbotTokenizer.from_pretrained(mname)
     print("start token = ", simulator_tokenizer.bos_token)
 
@@ -92,7 +90,8 @@ if __name__ == "__main__":
             args.model1_path, 
             args.model2_path, 
             args.tokenizer2_path, 
-            args.keywords_path
+            args.keywords_path,
+            args.device
         )
     else:
         bot = GPT5bot.from_pretrained(
@@ -102,6 +101,7 @@ if __name__ == "__main__":
             args.keywords_path,
             args.rel2text_path,
             args.counts_path,
+            args.device,
         )
 
     dataset = load_dataset("blended_skill_talk", split=args.split)
@@ -123,7 +123,7 @@ if __name__ == "__main__":
             while True:
                 inputs = simulator_tokenizer(
                     ["</s> <s>".join(dialog[-3:])], return_tensors="pt", truncation=True
-                ).to(device)
+                ).to(args.device)
                 # print("bello", "</s> <s>".join(dialog[-3:]))
                 reply_ids = simulator.generate(**inputs, do_sample=True, top_p=0.8)
                 text = simulator_tokenizer.batch_decode(
@@ -163,7 +163,7 @@ if __name__ == "__main__":
                     ],
                     return_tensors="pt",
                     truncation=True,
-                ).to(device)
+                ).to(args.device)
                 reply_ids = simulator.generate(**inputs)
                 text = simulator_tokenizer.batch_decode(
                     reply_ids, skip_special_tokens=True
@@ -175,6 +175,7 @@ if __name__ == "__main__":
                 # you might need to change this line due to the model you use
                 text = bot.generate(
                     "</s> <s>".join(dialog[-3:]),
+                    #dialog[-1],
                     args.max_input_len
                 )
                 # inputs = bot_tokenizer(

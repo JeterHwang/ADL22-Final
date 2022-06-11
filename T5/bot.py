@@ -11,25 +11,26 @@ from utils import connect_entities, get_verbnouns, check_overlap, idf_score, get
 extra_stopwords = ["lot", "person", "have", "not", "also", "very", "often", "however", "too", "usually", "really", "early", "never", "always", "sometimes", "together", "likely", "simply", "generally", "instead", "actually", "again", "rather", "almost", "especially", "ever", "quickly", "probably", "already", "below", "directly", "therefore", "else", "thus", "easily", "eventually", "exactly", "certainly", "normally", "currently", "extremely", "finally", "constantly", "properly", "soon", "specifically", "ahead", "daily", "highly", "immediately", "relatively", "slowly", "fairly", "primarily", "completely", "ultimately", "widely", "recently", "seriously", "frequently", "fully", "mostly", "naturally", "nearly", "occasionally", "carefully", "clearly", "essentially", "possibly", "slightly", "somewhat", "equally", "greatly", "necessarily", "personally", "rarely", "regularly", "similarly", "basically", "closely", "effectively", "initially", "literally", "mainly", "merely", "gently", "hopefully", "originally", "roughly", "significantly", "totally", "twice", "elsewhere", "everywhere", "obviously", "perfectly", "physically", "successfully", "suddenly", "truly", "virtually", "altogether", "anyway", "automatically", "deeply", "definitely", "deliberately", "hardly", "readily", "terribly", "unfortunately", "forth", "briefly", "moreover", "strongly", "honestly", "previously", "as", "there", "when", "how", "so", "up", "out", "no", "only", "well", "then", "first", "where", "why", "now", "around", "once", "down", "off", "here", "away", "today", "far", "quite", "later", "above", "yet", "maybe", "otherwise", "near", "forward", "somewhere", "anywhere", "please", "forever", "somehow", "absolutely", "abroad", "yeah", "nowhere", "the", "to", "in", "on", "by", "more", "about", "such", "through", "new", "just", "any", "each", "much", "before", "between", "free", "right", "best", "since", "both", "sure", "without", "back", "better", "enough", "lot", "small", "though", "less", "little", "under", "next", "hard", "real", "left", "least", "short", "last", "within", "along", "lower", "TRUE", "bad", "across", "clear", "easy", "full", "close", "late", "proper", "fast", "wide", "item", "wrong", "ago", "behind", "quick", "straight", "direct", "extra", "pretty", "overall", "alone", "bright", "flat", "whatever", "slow", "clean", "fresh", "whenever", "cheap", "thin", "cool", "fair", "fine", "smooth", "FALSE", "thick", "nearby", "wild", "apart", "none", "strange", "aside", "super", "ill", "honest", "ok", "thanks"]
 
 class T5bot(torch.nn.Module):
-    def __init__(self, stage1_model, stage2_model, tokenizer, keywords):
+    def __init__(self, stage1_model, stage2_model, tokenizer, keywords, device='cpu'):
         super(T5bot, self).__init__()
         self.model1 = stage1_model
         self.model2 = stage2_model
         self.tokenizer = tokenizer
         self.keywords = keywords
+        self.device   = device
 
         self.tokenizer.add_tokens(['@', '<s>', '</s>'])
         self.target = None
 
     @staticmethod
-    def from_pretrained(model1_path, model2_path, tokenizer_path, keywords_path):
+    def from_pretrained(model1_path, model2_path, tokenizer_path, keywords_path, device):
         print('----- Start Loading Pretrained Models -----')
         model1 = T5ForConditionalGeneration.from_pretrained(model1_path)
         model2 = T5ForConditionalGeneration.from_pretrained(model2_path)
         tokenizer = T5Tokenizer.from_pretrained(tokenizer_path)
         keywords = json.loads(keywords_path.read_text())
         print('----- Finish Loading Pretrained Models -----')
-        return T5bot(model1, model2, tokenizer, keywords)
+        return T5bot(model1, model2, tokenizer, keywords, device)
 
     def _generate(self, input_ids, attention_mask, stage, max_target_len=128):
         if stage == 1:
@@ -38,7 +39,7 @@ class T5bot(torch.nn.Module):
             model = self.model2
         else:
             raise NotImplementedError
-        model = model.eval().to('cuda')
+        model = model.eval().to(self.device)
         decoded_result = []
         if stage == 1:
             generated_tokens = model.generate(
@@ -81,7 +82,7 @@ class T5bot(torch.nn.Module):
             padding='max_length',
             add_special_tokens=True,
             return_tensors="pt",
-        ).to('cuda')
+        ).to(self.device)
         model1_output = self._generate(
             model1_input['input_ids'], 
             model1_input['attention_mask'], 
@@ -95,7 +96,7 @@ class T5bot(torch.nn.Module):
             padding='max_length',
             add_special_tokens=True,
             return_tensors="pt",
-        ).to('cuda')
+        ).to(self.device)
         model2_output = self._generate(
             model2_input['input_ids'], 
             model2_input['attention_mask'], 
@@ -104,8 +105,8 @@ class T5bot(torch.nn.Module):
         return model2_output
 
 class GPT5bot(torch.nn.Module):
-    def __init__(self, stage1_model, tokenizer1, stage2_model, tokenizer2, keywords, gutenberg_idf, relation2text):
-        super(T5bot, self).__init__()
+    def __init__(self, stage1_model, tokenizer1, stage2_model, tokenizer2, keywords, gutenberg_idf, relation2text, device='cpu'):
+        super(GPT5bot, self).__init__()
         self.GPT2          =  stage1_model
         self.GPT2tokenizer = tokenizer1
         self.T5            = stage2_model
@@ -113,12 +114,13 @@ class GPT5bot(torch.nn.Module):
         self.keywords      = keywords
         self.gutenberg_idf = gutenberg_idf
         self.relation2text = relation2text
-
+        self.device        = device
         self.T5tokenizer.add_tokens(['@', '<s>', '</s>'])
+        
         self.target = None
 
     @staticmethod
-    def from_pretrained(model2_path, tokenizer2_path, commensense_model_path, keywords_path, rel2text_path, counts_path):
+    def from_pretrained(model2_path, tokenizer2_path, commensense_model_path, keywords_path, rel2text_path, counts_path, device):
         print('----- Start Loading GPT-2 -----')
         lm_type = 'gpt2'
         config = GPT2Config.from_pretrained(lm_type)
@@ -140,12 +142,13 @@ class GPT5bot(torch.nn.Module):
         gpt = GPT2Model.from_pretrained(lm_type)
         config.vocab_size = len(tokenizer)
         gpt.resize_token_embeddings(len(tokenizer))
-        pretrain_generator_ckpt = commensense_model_path / "checkpoints_6lendict_wcontains/model.ckpt"
+        pretrain_generator_ckpt = commensense_model_path / "model.ckpt"
         print('loading generator')
         generator = Generator(gpt, config)
-        generator.load_state_dict(torch.load(pretrain_generator_ckpt, map_location='cpu'))
+        state_dict = torch.load(pretrain_generator_ckpt, map_location='cpu')
+        generator.load_state_dict(state_dict, strict=False)
         print('loaded state dict generator')
-        generator = generator.to('cuda')
+        generator = generator.to(device)
         print('----- Start Loading T5 -----')
         model2 = T5ForConditionalGeneration.from_pretrained(model2_path)
         tokenizer2 = T5Tokenizer.from_pretrained(tokenizer2_path)
@@ -156,11 +159,14 @@ class GPT5bot(torch.nn.Module):
         gutenberg_word2cnt = {w:int(c) for c,w in gutenberg_counts }
         gutenberg_idf = {w:(1.0/math.log(1+c)) for w,c in gutenberg_word2cnt.items()} # more frequnt words have low frequency
         print('----- Finish Loading Pretrained Models -----')
-        return GPT5bot(generator, tokenizer, model2, tokenizer2, keywords, gutenberg_idf, relation2text)
+        return GPT5bot(generator, tokenizer, model2, tokenizer2, keywords, gutenberg_idf, relation2text, device)
 
     def find_path(self, context, target, verbose=False, remove_overlap=True, split_entities_into_multi=True):
+        dp = {'context': context, 'target': target}
+
         context_keywords = get_verbnouns(context.strip())
         target_keywords = get_verbnouns(target.strip())
+        
         if split_entities_into_multi:
             def _augment(lst):
                 for w in lst[:]:
@@ -171,8 +177,8 @@ class GPT5bot(torch.nn.Module):
             _augment(context_keywords)
             # print("after aug : context_words = ", context_words)
             _augment(target_keywords)
-            
-        dp = {'context': context, 'target': target}
+        
+        dp['paths'] = dict()
         for head_entity in context_keywords:
             for tail_entity in target_keywords:
                 if tail_entity in ['person'] or head_entity in ['person'] or 'not' in tail_entity:
@@ -189,6 +195,8 @@ class GPT5bot(torch.nn.Module):
                     head_entity, 
                     tail_entity, 
                     self.GPT2, 
+                    self.GPT2tokenizer,
+                    device=self.device,
                     temperature=0.7, 
                     num_outs=5, 
                     top_k=0,
@@ -224,22 +232,24 @@ class GPT5bot(torch.nn.Module):
             all_head_tails_scores = sorted(all_head_tails_scores, key=lambda k:-k[2]) # decreasing score
             reranked_head_tails = [ [x,y] for x,y,_ in all_head_tails_scores[:apply_ranking_topk] ] 
 
+        new_dp_list = []
         for ht in reranked_head_tails:
             ht = ht[0]+'---'+ht[1]
             head, tail = ht.split('---')
             paths, scores = dp['paths'][ht]['headtotail_paths'], dp['paths'][ht]['headtotail_scores']
                 
             if is_test is True:
-                path, score = get_min_path(paths, scores, parse_edges=True)
+                path, score = get_min_path(paths, scores, self.relation2text, parse_edges=False)
                 newdp = {'context':dp['context'], 'target': dp['target']}
                 newdp['path'] = path
                 newdp['score_path'] = score
                 newdp['type'] = 'direct'                     
                 newdp['path_headentity'] = head
                 newdp['path_tailentity'] = tail
+                new_dp_list.append(newdp)
                 continue
                 
-            paths, scores = get_filtered_paths(paths, scores, self.relation2text, parse_edges=True)
+            paths, scores = get_filtered_paths(paths, scores, self.relation2text, parse_edges=False)
             for i, path in enumerate(paths):
                 # newdp = copy.deepcopy(dp)
                 newdp = {'context':dp['context'], 'target': dp['target']}
@@ -248,13 +258,13 @@ class GPT5bot(torch.nn.Module):
                 newdp['type'] = 'direct'
                 newdp['path_headentity'] = head
                 newdp['path_tailentity'] = tail
-        return newdp           
+                new_dp_list.append(newdp)
+        return new_dp_list           
 
     def generate_sentence(self, input_ids, attention_mask, max_target_len=128):
-        model = self.T5
-        model = model.eval().to('cuda')
+        self.T5.eval().to(self.device)
         decoded_result = []
-        generated_tokens = model.generate(
+        generated_tokens = self.T5.generate(
             input_ids=input_ids,
             attention_mask=attention_mask,
             max_length=max_target_len,
@@ -262,7 +272,7 @@ class GPT5bot(torch.nn.Module):
             top_k=50, 
             top_p=1, 
         )
-        decoded_preds = self.tokenizer.batch_decode(
+        decoded_preds = self.T5tokenizer.batch_decode(
             generated_tokens, 
             skip_special_tokens=True
         )
@@ -273,7 +283,10 @@ class GPT5bot(torch.nn.Module):
     def generate(self, source, max_input_length=512):
         dp = self.find_path(source, self.target)
         dp = self.filter_path(dp, is_test=False)
-        input_text = 'context : ' + dp['context'] + ' @ path_tailentity : ' + self.target + ' @ path : ' + dp['path']
+        dp.sort(key=lambda x : x['score_path'])
+        for ele in dp:
+            print(ele['score_path'], ele['path'])
+        input_text = 'context : ' + dp[0]['context'] + ' @ path_tailentity : ' + self.target + ' @ path : ' + dp[0]['path']
         T5_input = self.T5tokenizer(
             [input_text],
             max_length=max_input_length, 
@@ -281,7 +294,7 @@ class GPT5bot(torch.nn.Module):
             padding='max_length',
             add_special_tokens=True,
             return_tensors="pt",
-        ).to('cuda')
+        ).to(self.device)
         T5_output = self.generate_sentence(
             T5_input['input_ids'], 
             T5_input['attention_mask']
@@ -394,7 +407,7 @@ class Generator(torch.nn.Module):
         probs_arr = [[] for i in range(inputs.shape[0])]
         with torch.no_grad():
             for step in range(self.max_len):
-                outputs = self.gpt(next_token, past=past)
+                outputs = self.gpt(next_token, past_key_values=past)
                 hidden = outputs[0][:, -1]
                 past = outputs[1]
                 next_token_logits = self.lm_head(hidden)
