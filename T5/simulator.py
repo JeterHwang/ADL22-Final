@@ -11,7 +11,7 @@ from transformers import (
     BlenderbotForConditionalGeneration,
     BlenderbotTokenizer,
 )
-from bot import T5bot
+from bot import T5bot, GPT5bot
 
 def parse_args():
     parser = argparse.ArgumentParser()
@@ -47,9 +47,15 @@ def parse_args():
         action="store_true",
         help="whether output the dialogs to the command line",
     )
+
+
+    parser.add_argument("--bot", type=str, default='T5bot')
+    parser.add_argument("--commensense_model_path", type=Path, default="")
+    parser.add_argument("--rel2text_path", type=Path, default="")
+    parser.add_argument("--counts_path", type=Path, default="")
     parser.add_argument("--model1_path", type=Path, default='./ckpt/2022-06-11-12:54:52-ckpts/Epoch8')
     parser.add_argument("--model2_path", type=Path, default='./ckpt/2022-06-11-12:26:01-ckpts/Epoch8')
-    parser.add_argument("--tokenizer_path", type=str, default='t5-small')
+    parser.add_argument("--tokenizer2_path", type=str, default='t5-small')
     parser.add_argument("--keywords_path", type=Path, default='../final_project_scripts/keywords.json')
     parser.add_argument("--max_input_len", type=int, default=512)
     args = parser.parse_args()
@@ -81,12 +87,22 @@ if __name__ == "__main__":
     print("start token = ", simulator_tokenizer.bos_token)
 
     # load your bot
-    bot = T5bot.from_pretrained(
-        args.model1_path, 
-        args.model2_path, 
-        args.tokenizer_path, 
-        args.keywords_path
-    )
+    if args.bot == 'T5bot':
+        bot = T5bot.from_pretrained(
+            args.model1_path, 
+            args.model2_path, 
+            args.tokenizer2_path, 
+            args.keywords_path
+        )
+    else:
+        bot = GPT5bot.from_pretrained(
+            args.model2_path,
+            args.tokenizer2_path,
+            args.commensense_model_path,
+            args.keywords_path,
+            args.rel2text_path,
+            args.counts_path,
+        )
 
     dataset = load_dataset("blended_skill_talk", split=args.split)
     dataset = dataset.map(
