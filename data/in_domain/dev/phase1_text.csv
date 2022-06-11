@@ -19,29 +19,29 @@ context : i love going to the gym. @ path_tailentity : diet,gym is the location 
 context : i love going to the gym. @ path_tailentity : diet,gym is the location which has sports equipment used for exercise is wanted due to diet
 context : i love going to the gym. @ path_tailentity : diet,love is a diet
 context : i love going to the gym. @ path_tailentity : diet,love makes someone want to live life has prequisite diet
-context : i love going to the gym. @ path_tailentity : diet,love go has a context christianity is a specific way to do consumption uses diet
+context : i love going to the gym. @ path_tailentity : diet,love go has a context christianity is a specific way to do consumption _UsedFor diet
 context : i love going to the gym. @ path_tailentity : diet,love go has a context cycling is a good exercise is the goal which motivates go for run is wanted due to diet
 context : i make the greatest dessert all my friends say so. @ path_tailentity : dk,dessert has a specific instance dk
 context : i make the greatest dessert all my friends say so. @ path_tailentity : dk,dessert has a specific instance dutch food has a specific instance kdk
-context : i make the greatest dessert all my friends say so. @ path_tailentity : dk,make dessert uses cake has a specific instance dk
-context : i make the greatest dessert all my friends say so. @ path_tailentity : dk,make dessert uses cake has a specific instance kdk
-context : i make the greatest dessert all my friends say so. @ path_tailentity : dk,make dessert is a subevent of following recipe causes food has a specific instance dk
+context : i make the greatest dessert all my friends say so. @ path_tailentity : dk,make dessert _UsedFor cake has a specific instance dk
+context : i make the greatest dessert all my friends say so. @ path_tailentity : dk,make dessert _UsedFor cake has a specific instance kdk
+context : i make the greatest dessert all my friends say so. @ path_tailentity : dk,make dessert is a subevent of following recipe Causes food has a specific instance dk
 context : i make the greatest dessert all my friends say so. @ path_tailentity : dk,friend has a specific instance dk
 context : i make the greatest dessert all my friends say so. @ path_tailentity : dk,dessert has a specific instance dk
 context : i make the greatest dessert all my friends say so. @ path_tailentity : dk,dessert has a specific instance dutch pudding is a food is in the context of dk
 context : i make the greatest dessert all my friends say so. @ path_tailentity : dk,dessert has a specific instance kd
 context : i make the greatest dessert all my friends say so. @ path_tailentity : dk,dessert has a specific instance dacquoise is a dessert is in the context of dk
-context : i make the greatest dessert all my friends say so. @ path_tailentity : dk,make dessert uses cake has a specific instance dk
-context : i make the greatest dessert all my friends say so. @ path_tailentity : dk,make dessert uses cake has a specific instance kd
-context : i make the greatest dessert all my friends say so. @ path_tailentity : dk,make dessert uses chocolate has a specific instance dk
+context : i make the greatest dessert all my friends say so. @ path_tailentity : dk,make dessert _UsedFor cake has a specific instance dk
+context : i make the greatest dessert all my friends say so. @ path_tailentity : dk,make dessert _UsedFor cake has a specific instance kd
+context : i make the greatest dessert all my friends say so. @ path_tailentity : dk,make dessert _UsedFor chocolate has a specific instance dk
 context : i make the greatest dessert all my friends say so. @ path_tailentity : dk,friend is desired by person has a specific instance jdk
 context : i make the greatest dessert all my friends say so. @ path_tailentity : dk,friend is a film is in the context of dk
 context : i make the greatest dessert all my friends say so. @ path_tailentity : dk,dessert has a specific instance kdk
 context : i make the greatest dessert all my friends say so. @ path_tailentity : dk,dessert has a specific instance dk
 context : i make the greatest dessert all my friends say so. @ path_tailentity : dk,dessert has a specific instance kd
 context : i make the greatest dessert all my friends say so. @ path_tailentity : dk,dessert has a specific instance apple juice is in the context of dk
-context : i make the greatest dessert all my friends say so. @ path_tailentity : dk,make dessert uses cake has a specific instance dk
-context : i make the greatest dessert all my friends say so. @ path_tailentity : dk,make dessert uses cake has a specific instance kd
+context : i make the greatest dessert all my friends say so. @ path_tailentity : dk,make dessert _UsedFor cake has a specific instance dk
+context : i make the greatest dessert all my friends say so. @ path_tailentity : dk,make dessert _UsedFor cake has a specific instance kd
 context : i make the greatest dessert all my friends say so. @ path_tailentity : dk,make dessert is a subevent of eating ice cream has prequisite food has a specific instance kdk
 context : i make the greatest dessert all my friends say so. @ path_tailentity : dk,make dessert is a subevent of eating ice cream has prequisite food has a specific instance kd
 context : i make the greatest dessert all my friends say so. @ path_tailentity : dk,friend has a specific instance jdk
@@ -74,65 +74,65 @@ context : i like the pool. @ path_tailentity : vegetable,pool is in the context 
 context : i buy a lot of clothes. @ path_tailentity : nemo,buy is a dependency of get is wanted due to christianity is in the context of nemo
 context : i buy a lot of clothes. @ path_tailentity : nemo,buy motivated by goal own can be typically done by person has a specific instance nemo
 context : i buy a lot of clothes. @ path_tailentity : nemo,buy is a dependency of entertain people motivated by goal popular is a property of emo
-context : i buy a lot of clothes. @ path_tailentity : nemo,buy uses store is the location which has label has genre neo
-context : i buy a lot of clothes. @ path_tailentity : nemo,buy uses meat has a specific instance mozilla is similar to nemo
-context : i buy a lot of clothes. @ path_tailentity : nemo,buy clothes uses department store is the location which has music is in the context of nemo
+context : i buy a lot of clothes. @ path_tailentity : nemo,buy _UsedFor store is the location which has label has genre neo
+context : i buy a lot of clothes. @ path_tailentity : nemo,buy _UsedFor meat has a specific instance mozilla is similar to nemo
+context : i buy a lot of clothes. @ path_tailentity : nemo,buy clothes _UsedFor department store is the location which has music is in the context of nemo
 context : i buy a lot of clothes. @ path_tailentity : nemo,buy clothes is a dependency of dress nice is wanted due to christmas is similar to nemo
 context : i buy a lot of clothes. @ path_tailentity : nemo,buy lot can be typically done by lot is in the context of nemo
 context : i buy a lot of clothes. @ path_tailentity : nemo,buy is a dependency of buy for loved one motivated by goal to has a context music has a specific instance emo
 context : i buy a lot of clothes. @ path_tailentity : nemo,buy is a dependency of have food is wanted due to hunger has a specific instance nemo
 context : i buy a lot of clothes. @ path_tailentity : nemo,buy is a dependency of go to mall is wanted due to good times is a album has a specific instance nemo
 context : i buy a lot of clothes. @ path_tailentity : nemo,buy is a dependency of eat in fast food restaurant is wanted due to friends is a film is in the context of nemo
-context : i buy a lot of clothes. @ path_tailentity : nemo,buy clothes uses department store is the location which has music is in the context of nemo
-context : i buy a lot of clothes. @ path_tailentity : nemo,buy clothes uses mall is the location which has music is in the context of nemo
+context : i buy a lot of clothes. @ path_tailentity : nemo,buy clothes _UsedFor department store is the location which has music is in the context of nemo
+context : i buy a lot of clothes. @ path_tailentity : nemo,buy clothes _UsedFor mall is the location which has music is in the context of nemo
 context : i buy a lot of clothes. @ path_tailentity : nemo,buy lot can be typically done by lot is in the context of nemo
 context : i buy a lot of clothes. @ path_tailentity : nemo,buy is a dependency of live has genre emo
 context : i buy a lot of clothes. @ path_tailentity : nemo,buy is a dependency of sell new book has subevent autograph is a album has a specific instance nemo
 context : i buy a lot of clothes. @ path_tailentity : nemo,buy motivated by goal need money can be typically done by beggar is at location street has a specific instance streetlight has a context emo
-context : i buy a lot of clothes. @ path_tailentity : nemo,buy clothes is a dependency of dress nice motivated by goal impress uses music is in the context of nemo
-context : i buy a lot of clothes. @ path_tailentity : nemo,buy clothes uses mall is the location which has disco is in the genre nemo
-context : i buy a lot of clothes. @ path_tailentity : nemo,buy clothes uses mall is the location which has mexican restaurant has genre emo
+context : i buy a lot of clothes. @ path_tailentity : nemo,buy clothes is a dependency of dress nice motivated by goal impress _UsedFor music is in the context of nemo
+context : i buy a lot of clothes. @ path_tailentity : nemo,buy clothes _UsedFor mall is the location which has disco is in the genre nemo
+context : i buy a lot of clothes. @ path_tailentity : nemo,buy clothes _UsedFor mall is the location which has mexican restaurant has genre emo
 context : i buy a lot of clothes. @ path_tailentity : nemo,buy clothes is a dependency of dress nice motivated by goal popular is a property of music is in the context of nemo
 context : i buy a lot of clothes. @ path_tailentity : nemo,buy lot can be typically done by lot is in the context of nemo
-context : mother in phone stuff. @ path_tailentity : gas,phone is a dependency of talking with far away causes gas
+context : mother in phone stuff. @ path_tailentity : gas,phone is a dependency of talking with far away Causes gas
 context : mother in phone stuff. @ path_tailentity : spend,phone used for call is a dependency of spend
 context : mother in phone stuff. @ path_tailentity : spend,phone used for make phone call is a dependency of spend
 context : mother in phone stuff. @ path_tailentity : spend lot,phone used for call on telephone is a dependency of chat with friends has subevent spend lot
 context : mother in phone stuff. @ path_tailentity : spend lot,phone used for get information is the goal which motivates read newspaper has subevent spend lot
 context : mother in phone stuff. @ path_tailentity : spend lot,phone capable of ring is the last subevent of spend money has subevent spend lot
 context : mother in phone stuff. @ path_tailentity : spend lot,phone used for calling makes someone want to buy christmas presents has subevent spend lot
-context : mother in phone stuff. @ path_tailentity : spend lot,phone used for talking to friend is a subevent of driving to work causes spend lot
-context : mother in phone stuff. @ path_tailentity : gas,phone is a dependency of talking with far away causes gas
+context : mother in phone stuff. @ path_tailentity : spend lot,phone used for talking to friend is a subevent of driving to work Causes spend lot
+context : mother in phone stuff. @ path_tailentity : gas,phone is a dependency of talking with far away Causes gas
 context : mother in phone stuff. @ path_tailentity : spend,phone used for call is a dependency of spend
 context : mother in phone stuff. @ path_tailentity : spend,phone used for make call is a dependency of spend
 context : mother in phone stuff. @ path_tailentity : spend lot,phone used for call people is a dependency of have party has subevent spend lot
-context : mother in phone stuff. @ path_tailentity : spend lot,phone used for talk with friends is a subevent of driving to work causes spend lot
-context : mother in phone stuff. @ path_tailentity : spend lot,phone used for call on phone is a dependency of talk to is a subevent of spending money causes spend lot
+context : mother in phone stuff. @ path_tailentity : spend lot,phone used for talk with friends is a subevent of driving to work Causes spend lot
+context : mother in phone stuff. @ path_tailentity : spend lot,phone used for call on phone is a dependency of talk to is a subevent of spending money Causes spend lot
 context : mother in phone stuff. @ path_tailentity : spend lot,phone is a dependency of talk with far away has subevent exchange information is the goal which motivates purchase cellular phone is wanted due to need to make money can be typically done by spend lot
-context : mother in phone stuff. @ path_tailentity : spend lot,phone used for call friends is a dependency of have party is wanted due to buying beer causes spend lot
-context : mother in phone stuff. @ path_tailentity : gas,phone is a dependency of talking with far away causes gas
+context : mother in phone stuff. @ path_tailentity : spend lot,phone used for call friends is a dependency of have party is wanted due to buying beer Causes spend lot
+context : mother in phone stuff. @ path_tailentity : gas,phone is a dependency of talking with far away Causes gas
 context : mother in phone stuff. @ path_tailentity : spend,phone used for call is a dependency of spend
 context : mother in phone stuff. @ path_tailentity : spend,phone used for talk with is the goal which motivates buy products has subevent spend
 context : mother in phone stuff. @ path_tailentity : spend lot,phone is a dependency of go to mall has subevent spend lot
 context : mother in phone stuff. @ path_tailentity : spend lot,phone used for call on phone is a dependency of talk with far away motivated by goal spend lot
-context : mother in phone stuff. @ path_tailentity : spend lot,phone is a dependency of going to market causes spend lot
+context : mother in phone stuff. @ path_tailentity : spend lot,phone is a dependency of going to market Causes spend lot
 context : mother in phone stuff. @ path_tailentity : spend lot,phone used for purchase items is the goal which motivates spend money has subevent spend lot
 context : mother in phone stuff. @ path_tailentity : spend lot,phone is a dependency of have friends over motivated by goal spend lot
 context : fried catfish is delicious. @ path_tailentity : kid,catfish is a fish has subevent catch can be typically done by kid
-context : fried catfish is delicious. @ path_tailentity : kid,catfish is a fish has prequisite buy fishing pole uses sporting goods store is the location which has kid
+context : fried catfish is delicious. @ path_tailentity : kid,catfish is a fish has prequisite buy fishing pole _UsedFor sporting goods store is the location which has kid
 context : fried catfish is delicious. @ path_tailentity : have kid,catfish is a fish has subevent have kid
 context : fried catfish is delicious. @ path_tailentity : have kid,catfish is a fish has prequisite buy beer has subevent have kid
 context : fried catfish is delicious. @ path_tailentity : kid,fry catfish can be typically done by dad is a kid
-context : fried catfish is delicious. @ path_tailentity : kid,catfish is a fish not desires bicycle used for riding is in the context of kid
-context : fried catfish is delicious. @ path_tailentity : kid,catfish is a fish has prequisite buy fishing pole uses sporting goods store is the location which has sports equipment _product store is the location which has kid
+context : fried catfish is delicious. @ path_tailentity : kid,catfish is a fish not Desires bicycle used for riding is in the context of kid
+context : fried catfish is delicious. @ path_tailentity : kid,catfish is a fish has prequisite buy fishing pole _UsedFor sporting goods store is the location which has sports equipment _product store is the location which has kid
 context : fried catfish is delicious. @ path_tailentity : kid,catfish is a fish has prequisite buy bait is a subevent of go fishing motivated by goal catch fish can be typically done by kid
 context : fried catfish is delicious. @ path_tailentity : kid,catfish has a specific instance find underwater has property coral is at location ocean used for swim can be typically done by kid
-context : fried catfish is delicious. @ path_tailentity : kid,catfish is a fish has subevent catch fish uses fishing rod is a dependency of going fishing causes catch fish can be typically done by kid
+context : fried catfish is delicious. @ path_tailentity : kid,catfish is a fish has subevent catch fish _UsedFor fishing rod is a dependency of going fishing Causes catch fish can be typically done by kid
 context : fried catfish is delicious. @ path_tailentity : have kid,catfish is a fish motivated by goal have kid
 context : fried catfish is delicious. @ path_tailentity : kid,fry catfish can be typically done by dad is a kid
 context : fried catfish is delicious. @ path_tailentity : kid,fry catfish can be typically done by kid
 context : i take care of people. @ path_tailentity : excercise,care is a dependency of staying healthy has subevent excercise
-context : i take care of people. @ path_tailentity : excercise,take care is a dependency of live life motivated by goal live long and prosper is desired by person not desires heart attack is caused by excercise
+context : i take care of people. @ path_tailentity : excercise,take care is a dependency of live life motivated by goal live long and prosper is desired by person not Desires heart attack is caused by excercise
 context : i take care of people. @ path_tailentity : excercise,take care is a dependency of maintain good health has first subevent excercise
 context : i take care of people. @ path_tailentity : excercise,take care is a playing game used for excercise
 context : i take care of people. @ path_tailentity : excercise,take care is a dependency of maintain good health motivated by goal live long life can be typically done by excercise
@@ -141,16 +141,16 @@ context : i take care of people. @ path_tailentity : excercise,take is the last 
 context : i take care of people. @ path_tailentity : excercise,take is a subevent of getting in shape used for excercise
 context : i take care of people. @ path_tailentity : excercise,take is a subevent of run marathon has prequisite excercise
 context : i take care of people. @ path_tailentity : excercise,care is a dependency of staying healthy has subevent excercise
-context : i take care of people. @ path_tailentity : excercise,take care is a dependency of live life motivated by goal live long and prosper is desired by person not desires heart attack is a subevent of excercise
+context : i take care of people. @ path_tailentity : excercise,take care is a dependency of live life motivated by goal live long and prosper is desired by person not Desires heart attack is a subevent of excercise
 context : i take care of people. @ path_tailentity : excercise,take care has a context basketball used for excercise
-context : i take care of people. @ path_tailentity : excercise,take care has a specific instance being healthy uses getting exercise causes excercise
+context : i take care of people. @ path_tailentity : excercise,take care has a specific instance being healthy _UsedFor getting exercise Causes excercise
 context : i take care of people. @ path_tailentity : excercise,take care is a dependency of stay healthy motivated by goal live longer is caused by maintaining good health has subevent excercise
 context : i take care of people. @ path_tailentity : excercise,take is a dependency of get physical activity motivated by goal excercise
 context : i take care of people. @ path_tailentity : excercise,take is a dependency of play sport is wanted due to excercise
-context : i love to vacation in paris. @ path_tailentity : opera,vacation uses rented apartment is at location opera
-context : i love to vacation in paris. @ path_tailentity : opera,vacation uses motel is the location which has opera
-context : i love to vacation in paris. @ path_tailentity : opera,vacation uses pleasure garden is at location opera
-context : i love to vacation in paris. @ path_tailentity : opera,vacation uses cruise ship is a ship is at location opera
+context : i love to vacation in paris. @ path_tailentity : opera,vacation _UsedFor rented apartment is at location opera
+context : i love to vacation in paris. @ path_tailentity : opera,vacation _UsedFor motel is the location which has opera
+context : i love to vacation in paris. @ path_tailentity : opera,vacation _UsedFor pleasure garden is at location opera
+context : i love to vacation in paris. @ path_tailentity : opera,vacation _UsedFor cruise ship is a ship is at location opera
 context : i love to vacation in paris. @ path_tailentity : go opera,vacation is the goal which motivates go to opera
 context : i love to vacation in paris. @ path_tailentity : opera,love vacation can be typically done by people is at location opera
 context : i really love animals. @ path_tailentity : vet,love animal can be typically done by person has a specific instance vet
@@ -164,7 +164,7 @@ context : i really love animals. @ path_tailentity : vet,love animal can be typi
 context : i really love animals. @ path_tailentity : vet,love animal has prequisite vet
 context : i really love animals. @ path_tailentity : vet,love animal motivated by goal pet has a specific instance vet
 context : i really love animals. @ path_tailentity : vet,love is desired by person has a specific instance vet
-context : i really love animals. @ path_tailentity : vet,love uses dog has a specific instance vet
+context : i really love animals. @ path_tailentity : vet,love _UsedFor dog has a specific instance vet
 context : i really love animals. @ path_tailentity : vet,love animal can be typically done by person has a specific instance vet
 context : i really love animals. @ path_tailentity : vet,love animal has prequisite vet
 context : i really love animals. @ path_tailentity : vet,love is desired by person has a specific instance vet
@@ -175,7 +175,7 @@ context : i really love animals. @ path_tailentity : vet,love is desired by pers
 context : i always sleep 8 hours a day. @ path_tailentity : run,sleep is a dependency of run
 context : i always sleep 8 hours a day. @ path_tailentity : run,always sleep is a dependency of stay in bed has subevent run
 context : i always sleep 8 hours a day. @ path_tailentity : run,always sleep is a dependency of run out of steam has subevent run
-context : i always sleep 8 hours a day. @ path_tailentity : run,hour has a specific instance day is the location which has sunshine is desired by person not desires run
+context : i always sleep 8 hours a day. @ path_tailentity : run,hour has a specific instance day is the location which has sunshine is desired by person not Desires run
 context : i always sleep 8 hours a day. @ path_tailentity : run,hour has a specific instance day is the location which has sunshine is a dependency of enjoying day has subevent run
 context : i always sleep 8 hours a day. @ path_tailentity : run,hour has a specific instance day makes someone want to go for jog has subevent run
 context : i always sleep 8 hours a day. @ path_tailentity : run,sleep has subevent breathe hard is the last subevent of run
@@ -183,91 +183,91 @@ context : i always sleep 8 hours a day. @ path_tailentity : run,sleep has prequi
 context : i always sleep 8 hours a day. @ path_tailentity : run,always sleep is a dependency of stay in bed has subevent get tired is the last subevent of run
 context : i always sleep 8 hours a day. @ path_tailentity : run,always sleep is a dependency of stay in bed motivated by goal rest is the last subevent of run
 context : i always sleep 8 hours a day. @ path_tailentity : run,hour is in the context of run
-context : i exercise a lot. @ path_tailentity : spouse,exercise uses playing tennis has prequisite partner is a spouse
-context : i exercise a lot. @ path_tailentity : spouse,exercise has prequisite work for uses boss belongs to spouse
+context : i exercise a lot. @ path_tailentity : spouse,exercise _UsedFor playing tennis has prequisite partner is a spouse
+context : i exercise a lot. @ path_tailentity : spouse,exercise has prequisite work for _UsedFor boss belongs to spouse
 context : i exercise a lot. @ path_tailentity : spouse,exercise has prequisite stay in house can be typically done by spouse
-context : i exercise a lot. @ path_tailentity : spouse,exercise uses playing tennis has subevent tie shoes can be typically done by couple has a specific instance spouse
+context : i exercise a lot. @ path_tailentity : spouse,exercise _UsedFor playing tennis has subevent tie shoes can be typically done by couple has a specific instance spouse
 context : i exercise a lot. @ path_tailentity : spouse,exercise has prequisite get excercise is a subevent of getting fit used for health is desired by person has a specific instance spouse
-context : i exercise a lot. @ path_tailentity : spouse,exercise lot is a dependency of run twenty six miles motivated by goal crazy is not desired by person desires spouse
-context : i exercise a lot. @ path_tailentity : spouse,exercise lot is a subevent of getting fit has prequisite excercise uses playing sports has prequisite spouse
+context : i exercise a lot. @ path_tailentity : spouse,exercise lot is a dependency of run twenty six miles motivated by goal crazy is not desired by person Desires spouse
+context : i exercise a lot. @ path_tailentity : spouse,exercise lot is a subevent of getting fit has prequisite excercise _UsedFor playing sports has prequisite spouse
 context : i exercise a lot. @ path_tailentity : spouse,exercise lot is a dependency of get exercise has subevent get laid is the first subevent of copulate motivated by goal spouse
 context : i exercise a lot. @ path_tailentity : spouse,exercise lot is a dependency of get physical activity has subevent get fit has last subevent get new clothes is the first subevent of get divorce motivated by goal spouse
-context : i exercise a lot. @ path_tailentity : spouse,exercise lot is a subevent of getting physical activity has prequisite physical activity uses getting physical activity causes pleasure is desired by spouse
+context : i exercise a lot. @ path_tailentity : spouse,exercise lot is a subevent of getting physical activity has prequisite physical activity _UsedFor getting physical activity Causes pleasure is desired by spouse
 context : i exercise a lot. @ path_tailentity : have spouse,exercise has prequisite have spouse
 context : i exercise a lot. @ path_tailentity : spouse,exercise has prequisite get in shape motivated by goal live long and prosper is desired by person has a specific instance spouse
-context : i exercise a lot. @ path_tailentity : spouse,exercise uses playing chess has prequisite two people belongs to spouse
-context : i exercise a lot. @ path_tailentity : spouse,exercise uses staying fit causes health is desired by person has a specific instance spouse
-context : i exercise a lot. @ path_tailentity : spouse,exercise lot is a subevent of play sports has prequisite buy clothes uses department store is the location which has spouse
+context : i exercise a lot. @ path_tailentity : spouse,exercise _UsedFor playing chess has prequisite two people belongs to spouse
+context : i exercise a lot. @ path_tailentity : spouse,exercise _UsedFor staying fit Causes health is desired by person has a specific instance spouse
+context : i exercise a lot. @ path_tailentity : spouse,exercise lot is a subevent of play sports has prequisite buy clothes _UsedFor department store is the location which has spouse
 context : i exercise a lot. @ path_tailentity : spouse,exercise lot is a subevent of get physical activity motivated by goal good health is the location which has spouse
-context : i exercise a lot. @ path_tailentity : spouse,exercise lot is a subevent of get physical activity has prequisite go outside is the first subevent of go for walk can be typically done by person desires spouse
+context : i exercise a lot. @ path_tailentity : spouse,exercise lot is a subevent of get physical activity has prequisite go outside is the first subevent of go for walk can be typically done by person Desires spouse
 context : i exercise a lot. @ path_tailentity : spouse,exercise lot is a dependency of stay healthy has subevent live long life can be typically done by cat is desired by spouse
 context : i exercise a lot. @ path_tailentity : spouse,exercise lot is a dependency of get fit is wanted due to getting laid is a subevent of loving else used for marriage is the location which has spouse
 context : i exercise a lot. @ path_tailentity : have spouse,exercise has prequisite have spouse
-context : i exercise a lot. @ path_tailentity : spouse,exercise can be typically done by humans has a two people creates marriage is the location which has spouse
+context : i exercise a lot. @ path_tailentity : spouse,exercise can be typically done by humans has a two people _CreatedBy marriage is the location which has spouse
 context : i exercise a lot. @ path_tailentity : spouse,exercise motivated by goal feel good is a subevent of procreate has prequisite spouse
-context : i exercise a lot. @ path_tailentity : spouse,exercise uses dog has a two people is a dependency of copulating causes spouse
-context : i exercise a lot. @ path_tailentity : spouse,exercise has prequisite lift weights can be typically done by person not desires divorced is a spouse
+context : i exercise a lot. @ path_tailentity : spouse,exercise _UsedFor dog has a two people is a dependency of copulating Causes spouse
+context : i exercise a lot. @ path_tailentity : spouse,exercise has prequisite lift weights can be typically done by person not Desires divorced is a spouse
 context : i exercise a lot. @ path_tailentity : spouse,exercise is the goal which motivates do exercises has subevent sweat is a dependency of get physical activity is wanted due to spouse
 context : i exercise a lot. @ path_tailentity : spouse,exercise lot is a dependency of stay fit has last subevent die is not desired by spouse
 context : i exercise a lot. @ path_tailentity : spouse,exercise lot is a dependency of get in shape motivated by goal live long life can be typically done by married person has a spouse
 context : i exercise a lot. @ path_tailentity : spouse,exercise lot is a dependency of get fit has subevent eat healthy food is desired by person has a specific instance spouse
-context : i exercise a lot. @ path_tailentity : spouse,exercise lot is a dependency of maintain good health is wanted due to heart attack is caused by having sex uses spouse
+context : i exercise a lot. @ path_tailentity : spouse,exercise lot is a dependency of maintain good health is wanted due to heart attack is caused by having sex _UsedFor spouse
 context : i exercise a lot. @ path_tailentity : have spouse,exercise has prequisite have spouse
 context : i am an artist. @ path_tailentity : nighttime,artist has a specific instance nighttime
 context : i am an artist. @ path_tailentity : nighttime,artist capable of paint picture is wanted due to nighttime
-context : i am an artist. @ path_tailentity : nighttime,artist capable of paint picture is wanted due to beautiful day is desired by person not desires nighttime
+context : i am an artist. @ path_tailentity : nighttime,artist capable of paint picture is wanted due to beautiful day is desired by person not Desires nighttime
 context : i am an artist. @ path_tailentity : love nighttime,artist capable of love nighttime
 context : i am an artist. @ path_tailentity : love,artist capable of paint picture motivated by goal see in person is a dependency of love another is wanted due to love
 context : i am an artist. @ path_tailentity : nighttime,artist _occupation nighttime
 context : i am an artist. @ path_tailentity : nighttime,artist _occupation alexander pushkin is known for nighttime
-context : i am an artist. @ path_tailentity : nighttime,artist has a specific instance dramatist creates play uses nightclub is at location nighttime
+context : i am an artist. @ path_tailentity : nighttime,artist has a specific instance dramatist _CreatedBy play _UsedFor nightclub is at location nighttime
 context : i am an artist. @ path_tailentity : love nighttime,artist capable of love nighttime
 context : i am an artist. @ path_tailentity : love,artist capable of paint picture is wanted due to love
-context : i am an artist. @ path_tailentity : nighttime,artist capable of paint picture is wanted due to beautiful day uses going outside for evening has prequisite nighttime
-context : i am an artist. @ path_tailentity : nighttime,artist capable of paint picture is wanted due to beautiful day uses sky is the location which has nighttime
+context : i am an artist. @ path_tailentity : nighttime,artist capable of paint picture is wanted due to beautiful day _UsedFor going outside for evening has prequisite nighttime
+context : i am an artist. @ path_tailentity : nighttime,artist capable of paint picture is wanted due to beautiful day _UsedFor sky is the location which has nighttime
 context : i am an artist. @ path_tailentity : nighttime,artist capable of paint picture is wanted due to beautiful day is caused by enjoying day used for weekends is in the context of nighttime
-context : i am an artist. @ path_tailentity : nighttime,artist capable of paint picture is wanted due to inspiration uses watching film has prequisite movie has a specific instance nighttime
+context : i am an artist. @ path_tailentity : nighttime,artist capable of paint picture is wanted due to inspiration _UsedFor watching film has prequisite movie has a specific instance nighttime
 context : i am an artist. @ path_tailentity : love nighttime,artist capable of love nighttime
 context : i am an artist. @ path_tailentity : love,artist capable of paint picture is wanted due to love
 context : i enjoy making people pretty. @ path_tailentity : internet,enjoy is a subevent of seeing particular program has prequisite cable modem has a context internet
 context : i enjoy making people pretty. @ path_tailentity : internet,enjoy is a dependency of enjoy company of friends motivated by goal company has a specific instance internet company product internet
-context : i enjoy making people pretty. @ path_tailentity : internet,enjoy is the goal which motivates play game of chess has subevent intellectual stimulation uses internet
-context : i enjoy making people pretty. @ path_tailentity : internet,enjoy make is the goal which motivates sew has subevent make clothing uses needlepoint is at location internet
+context : i enjoy making people pretty. @ path_tailentity : internet,enjoy is the goal which motivates play game of chess has subevent intellectual stimulation _UsedFor internet
+context : i enjoy making people pretty. @ path_tailentity : internet,enjoy make is the goal which motivates sew has subevent make clothing _UsedFor needlepoint is at location internet
 context : i enjoy making people pretty. @ path_tailentity : internet,enjoy make can be typically done by person has a specific instance pornstar has a context internet
 context : i enjoy making people pretty. @ path_tailentity : internet,enjoy make is a dependency of watch film has subevent eat popcorn can be typically done by consumer has a context internet
 context : i enjoy making people pretty. @ path_tailentity : internet,enjoy make is the goal which motivates go to movie is wanted due to advertisments is at location newspaper is a website instance of internet
-context : i enjoy making people pretty. @ path_tailentity : internet,people uses shopping center is the location which has internet
-context : i enjoy making people pretty. @ path_tailentity : internet,people capable of talk on phone uses telephone room is at location building has a specific instance internet
+context : i enjoy making people pretty. @ path_tailentity : internet,people _UsedFor shopping center is the location which has internet
+context : i enjoy making people pretty. @ path_tailentity : internet,people capable of talk on phone _UsedFor telephone room is at location building has a specific instance internet
 context : i enjoy making people pretty. @ path_tailentity : internet,people capable of laugh at comics is a subevent of reading news has prequisite internet
-context : i enjoy making people pretty. @ path_tailentity : internet,people uses eating in fast food restaurant has prequisite order has a context internet
-context : i enjoy making people pretty. @ path_tailentity : internet,people capable of smoke cigarette is a subevent of surf net motivated by goal get information uses internet
-context : i enjoy making people pretty. @ path_tailentity : internet,enjoy uses internet
+context : i enjoy making people pretty. @ path_tailentity : internet,people _UsedFor eating in fast food restaurant has prequisite order has a context internet
+context : i enjoy making people pretty. @ path_tailentity : internet,people capable of smoke cigarette is a subevent of surf net motivated by goal get information _UsedFor internet
+context : i enjoy making people pretty. @ path_tailentity : internet,enjoy _UsedFor internet
 context : i enjoy making people pretty. @ path_tailentity : internet,enjoy is the goal which motivates buy products has prequisite online has a context internet
-context : i enjoy making people pretty. @ path_tailentity : internet,enjoy make is the goal which motivates sew is wanted due to creativity is a dependency of writing story causes response has a context internet
+context : i enjoy making people pretty. @ path_tailentity : internet,enjoy make is the goal which motivates sew is wanted due to creativity is a dependency of writing story Causes response has a context internet
 context : i enjoy making people pretty. @ path_tailentity : internet,enjoy make is the goal which motivates knit is wanted due to summer is the location which has storm has a context internet
-context : i enjoy making people pretty. @ path_tailentity : internet,enjoy make can be typically done by person not desires apathy has a context internet
-context : i enjoy making people pretty. @ path_tailentity : internet,enjoy make is the goal which motivates sew has subevent making clothes uses cloth has a specific instance pattern has a context internet
-context : i enjoy making people pretty. @ path_tailentity : internet,people uses internet
+context : i enjoy making people pretty. @ path_tailentity : internet,enjoy make can be typically done by person not Desires apathy has a context internet
+context : i enjoy making people pretty. @ path_tailentity : internet,enjoy make is the goal which motivates sew has subevent making clothes _UsedFor cloth has a specific instance pattern has a context internet
+context : i enjoy making people pretty. @ path_tailentity : internet,people _UsedFor internet
 context : i enjoy making people pretty. @ path_tailentity : internet,enjoy can be typically done by people has a internet
 context : i enjoy making people pretty. @ path_tailentity : internet,enjoy is the goal which motivates view video is wanted due to advertisement is at location internet
 context : i enjoy making people pretty. @ path_tailentity : internet,enjoy is caused by seeing art used for fun is a property of internet
-context : i enjoy making people pretty. @ path_tailentity : internet,enjoy is wanted due to loneliness is caused by socialising uses internet
+context : i enjoy making people pretty. @ path_tailentity : internet,enjoy is wanted due to loneliness is caused by socialising _UsedFor internet
 context : i enjoy making people pretty. @ path_tailentity : internet,enjoy is a subevent of watching movie has prequisite time is a internet
-context : i enjoy making people pretty. @ path_tailentity : internet,enjoy make is the goal which motivates sew has subevent make clothing uses nylon has a context internet
+context : i enjoy making people pretty. @ path_tailentity : internet,enjoy make is the goal which motivates sew has subevent make clothing _UsedFor nylon has a context internet
 context : i enjoy making people pretty. @ path_tailentity : internet,enjoy make is the goal which motivates sew is wanted due to creativity is a dependency of writing story used for advertising has a context internet
-context : i enjoy making people pretty. @ path_tailentity : internet,enjoy make is the goal which motivates go to film has prequisite go to movie theater is the first subevent of go see film has subevent pay for ticket uses internet
-context : i enjoy making people pretty. @ path_tailentity : internet,people capable of meet people uses cafe is at location internet
-context : i enjoy making people pretty. @ path_tailentity : internet,people capable of read uses internet
+context : i enjoy making people pretty. @ path_tailentity : internet,enjoy make is the goal which motivates go to film has prequisite go to movie theater is the first subevent of go see film has subevent pay for ticket _UsedFor internet
+context : i enjoy making people pretty. @ path_tailentity : internet,people capable of meet people _UsedFor cafe is at location internet
+context : i enjoy making people pretty. @ path_tailentity : internet,people capable of read _UsedFor internet
 context : i enjoy making people pretty. @ path_tailentity : internet,people capable of pay bills has prequisite online is a property of internet
-context : i enjoy making people pretty. @ path_tailentity : internet,people uses seeing exhibits has subevent learn motivated by goal know has a context internet
+context : i enjoy making people pretty. @ path_tailentity : internet,people _UsedFor seeing exhibits has subevent learn motivated by goal know has a context internet
 context : i do not share my apartment with anyone else. @ path_tailentity : beer,share is the goal which motivates buy beer is wanted due to beer
 context : i do not share my apartment with anyone else. @ path_tailentity : beer,share is the goal which motivates buy beer is wanted due to beer
 context : i am a man pursuing a career as a brand ambassador in california. @ path_tailentity : enjoy,brand product clothing is at location shop motivated by goal enjoy
 context : i am a man pursuing a career as a brand ambassador in california. @ path_tailentity : enjoy,brand has a specific instance pritt is a company is the goal which motivates chat with friends has subevent enjoy
 context : i am a man pursuing a career as a brand ambassador in california. @ path_tailentity : enjoy,brand capable of sell product is the goal which motivates give plug has subevent mention product is a dependency of give plug motivated by goal enjoy
-context : i am a man pursuing a career as a brand ambassador in california. @ path_tailentity : enjoy,brand is a company is desired by person not desires listen to loud music is a subevent of go to concert motivated by goal enjoy
+context : i am a man pursuing a career as a brand ambassador in california. @ path_tailentity : enjoy,brand is a company is desired by person not Desires listen to loud music is a subevent of go to concert motivated by goal enjoy
 context : i am a man pursuing a career as a brand ambassador in california. @ path_tailentity : enjoy,brand has a specific instance vogue is a magazine has genre humour used for make laugh is a subevent of entertain motivated by goal enjoy
-context : i am a man pursuing a career as a brand ambassador in california. @ path_tailentity : calm,brand capable of ship products has prequisite buy one has a pay for is a subevent of buying small causes calm
+context : i am a man pursuing a career as a brand ambassador in california. @ path_tailentity : calm,brand capable of ship products has prequisite buy one has a pay for is a subevent of buying small Causes calm
 context : i am a man pursuing a career as a brand ambassador in california. @ path_tailentity : calm,brand has a specific instance tanning lotion is at location store used for buying things is a subevent of go to mall has prequisite calm
 context : i am a man pursuing a career as a brand ambassador in california. @ path_tailentity : calm,brand has a specific instance hyundai product car has property slow is a dependency of listen has last subevent quiet
 context : i am a man pursuing a career as a brand ambassador in california. @ path_tailentity : calm,brand has a specific instance cruise ship is the location which has captain used for command attention is a dependency of calm
@@ -284,24 +284,24 @@ context : i am a man pursuing a career as a brand ambassador in california. @ pa
 context : i am a man pursuing a career as a brand ambassador in california. @ path_tailentity : calm,brand has a specific instance apple is at location garden used for relax has prequisite calm
 context : i am a man pursuing a career as a brand ambassador in california. @ path_tailentity : enjoy,brand ambassador is a worker capable of bag trash is the last subevent of eat has subevent enjoy
 context : i am a man pursuing a career as a brand ambassador in california. @ path_tailentity : enjoy,brand ambassador is a ambassador has a context travel has subevent enjoy
-context : i am a man pursuing a career as a brand ambassador in california. @ path_tailentity : enjoy,brand is a company uses meeting people has subevent enjoy
+context : i am a man pursuing a career as a brand ambassador in california. @ path_tailentity : enjoy,brand is a company _UsedFor meeting people has subevent enjoy
 context : i am a man pursuing a career as a brand ambassador in california. @ path_tailentity : enjoy,brand is the location which has hair care article used for look nice is the goal which motivates go for haircut has subevent pay is the last subevent of enjoy
 context : i am a man pursuing a career as a brand ambassador in california. @ path_tailentity : enjoy,brand has a specific instance milk chocolate is desired by person capable of feel happy is a subevent of enjoy
 context : i am a man pursuing a career as a brand ambassador in california. @ path_tailentity : enjoy,brand capable of ship product has a specific instance air ticket used for enjoy
 context : i am a man pursuing a career as a brand ambassador in california. @ path_tailentity : enjoy,brand is a company is the location which has success used for celebrate is the last subevent of enjoy company of friends motivated by goal enjoy
-context : i am a man pursuing a career as a brand ambassador in california. @ path_tailentity : calm,brand is a company uses entertaining has subevent calm
+context : i am a man pursuing a career as a brand ambassador in california. @ path_tailentity : calm,brand is a company _UsedFor entertaining has subevent calm
 context : i am a man pursuing a career as a brand ambassador in california. @ path_tailentity : calm,brand has a specific instance british columbia is in the context of calm
 context : i am a man pursuing a career as a brand ambassador in california. @ path_tailentity : calm,brand has a specific instance igor sikorsky is known for sikhism is in the context of calm
-context : i am a man pursuing a career as a brand ambassador in california. @ path_tailentity : calm,brand can be typically done by bell used for calling causes calm
+context : i am a man pursuing a career as a brand ambassador in california. @ path_tailentity : calm,brand can be typically done by bell used for calling Causes calm
 context : i am a man pursuing a career as a brand ambassador in california. @ path_tailentity : enjoy,brand ambassador is a worker capable of bag trash is the last subevent of eat has subevent enjoy
 context : i am a man pursuing a career as a brand ambassador in california. @ path_tailentity : enjoy,brand ambassador is a ambassador has a context travel motivated by goal enjoy
 context : i love to take road trips. @ path_tailentity : fan,trip can be typically done by person has a specific instance fan
 context : i love to take road trips. @ path_tailentity : fan,trip can be typically done by fan
-context : i love to take road trips. @ path_tailentity : huge fan,trip uses fan has a specific instance huge fan
-context : i love to take road trips. @ path_tailentity : huge fan,trip can be typically done by person desires large fan
+context : i love to take road trips. @ path_tailentity : huge fan,trip _UsedFor fan has a specific instance huge fan
+context : i love to take road trips. @ path_tailentity : huge fan,trip can be typically done by person Desires large fan
 context : i love to take road trips. @ path_tailentity : fan,road trip is a travel is in the context of fan
 context : i love to take road trips. @ path_tailentity : fan,trip can be typically done by person has a specific instance fan
-context : i love to take road trips. @ path_tailentity : huge fan,trip uses leg is the location which has fan has a specific instance huge fan
+context : i love to take road trips. @ path_tailentity : huge fan,trip _UsedFor leg is the location which has fan has a specific instance huge fan
 context : i love to take road trips. @ path_tailentity : huge fan,trip is a subevent of skiing is in the context of big fan
 context : i love to take road trips. @ path_tailentity : fan,road trip is a travel is in the context of fan
 context : i love to dance. @ path_tailentity : enjoy,dance motivated by goal enjoy
@@ -313,27 +313,27 @@ context : i love to dance. @ path_tailentity : enjoy reading,dance motivated by 
 context : i love to dance. @ path_tailentity : reading,dance is wanted due to boredom is caused by reading
 context : i love to dance. @ path_tailentity : enjoy,dance motivated by goal enjoy
 context : i love to dance. @ path_tailentity : enjoy reading,dance motivated by goal enjoy reading
-context : i love to dance. @ path_tailentity : reading,dance motivated by goal fun uses reading
+context : i love to dance. @ path_tailentity : reading,dance motivated by goal fun _UsedFor reading
 context : i love to dance. @ path_tailentity : reading,dance motivated by goal enjoyable is a property of reading
 context : i play football. @ path_tailentity : video,football is a video
 context : i play football. @ path_tailentity : video,play football has subevent tackle is a video
 context : i play football. @ path_tailentity : video,play football has subevent run has a context video
-context : i play football. @ path_tailentity : video,play football motivated by goal fun uses seeing movie has prequisite video
-context : i play football. @ path_tailentity : video,play uses video
+context : i play football. @ path_tailentity : video,play football motivated by goal fun _UsedFor seeing movie has prequisite video
+context : i play football. @ path_tailentity : video,play _UsedFor video
 context : i play football. @ path_tailentity : video,football is a video
-context : i play football. @ path_tailentity : video,play football motivated by goal fun uses watching movie has prequisite video
+context : i play football. @ path_tailentity : video,play football motivated by goal fun _UsedFor watching movie has prequisite video
 context : i play football. @ path_tailentity : video,play football has subevent run fast can be typically done by athlete has a specific instance athlete has a context video
-context : i play football. @ path_tailentity : video,play football has first subevent find football is a dependency of play football motivated by goal team to win is desired by person not desires video
-context : i play football. @ path_tailentity : video,play football has subevent catching uses baseball is in the context of slide can be typically done by video
-context : i play football. @ path_tailentity : video,play uses video
+context : i play football. @ path_tailentity : video,play football has first subevent find football is a dependency of play football motivated by goal team to win is desired by person not Desires video
+context : i play football. @ path_tailentity : video,play football has subevent catching _UsedFor baseball is in the context of slide can be typically done by video
+context : i play football. @ path_tailentity : video,play _UsedFor video
 context : i keep many kittens. @ path_tailentity : lock,kitten is at location closet used for lock
 context : i keep many kittens. @ path_tailentity : lock,kitten is at location box used for lock
 context : i keep many kittens. @ path_tailentity : lock,kitten is at location bedroom has a door has a part which is lock
-context : i keep many kittens. @ path_tailentity : lock,kitten is at location box capable of hold things inside uses lock
+context : i keep many kittens. @ path_tailentity : lock,kitten is at location box capable of hold things inside _UsedFor lock
 context : i keep many kittens. @ path_tailentity : lock,kitten is at location house has a part which is lock
 context : i keep many kittens. @ path_tailentity : color,kitten is at location color
-context : i keep many kittens. @ path_tailentity : lock,many kitten has a eyes capable of open door uses lock
-context : i keep many kittens. @ path_tailentity : lock,many kitten has a eyes is a dependency of reading newspaper has subevent open envelope uses key capable of lock
+context : i keep many kittens. @ path_tailentity : lock,many kitten has a eyes capable of open door _UsedFor lock
+context : i keep many kittens. @ path_tailentity : lock,many kitten has a eyes is a dependency of reading newspaper has subevent open envelope _UsedFor key capable of lock
 context : i keep many kittens. @ path_tailentity : lock,many kitten has property female has a specific instance lassie capable of lock
 context : i keep many kittens. @ path_tailentity : lock,many kitten has property female is in the context of lgbt has a specific instance outrage is a outrage is caused by convicting suspect for crime has subevent lock
 context : i keep many kittens. @ path_tailentity : lock,kitten is at location door has a part which is lock
@@ -350,16 +350,16 @@ context : i keep many kittens. @ path_tailentity : lock,many kitten has a eyes i
 context : i keep many kittens. @ path_tailentity : lock,many kitten has property black is the location which has key used for lock
 context : i keep many kittens. @ path_tailentity : lock,many kitten has a eyes is a dependency of reading letter has subevent open envelope can be typically done by secretary used for do job is the goal which motivates lock
 context : i keep many kittens. @ path_tailentity : lock,many kitten has a eyes is a dependency of reading letter has subevent open envelope can be typically done by secretary used for working box office has prequisite lock
-context : i keep many kittens. @ path_tailentity : lock,many kitten has property small has a specific instance child capable of keep keys uses key chain has a lock
+context : i keep many kittens. @ path_tailentity : lock,many kitten has property small has a specific instance child capable of keep keys _UsedFor key chain has a lock
 context : i am an orphan. @ path_tailentity : pub,orphan is at location pub
 context : i am an orphan. @ path_tailentity : menu,orphan is a human is at location cafe has a menu
 context : i am an orphan. @ path_tailentity : menu,orphan is a human is at location restaurant has a part which is menu
 context : i am an orphan. @ path_tailentity : local pub,orphan has a context comics is at location local pub
 context : i am an orphan. @ path_tailentity : local pub,orphan has a context comics is at location bar is a local pub
-context : i am an orphan. @ path_tailentity : local pub,orphan is a person desires burger king uses local pub
+context : i am an orphan. @ path_tailentity : local pub,orphan is a person Desires burger king _UsedFor local pub
 context : i am an orphan. @ path_tailentity : pub,orphan is at location pub
 context : i am an orphan. @ path_tailentity : menu,orphan is at location restaurant has a menu
-context : i am an orphan. @ path_tailentity : menu,orphan has a context literature is a written text is caused by typing uses keyboard belongs to computer is the location which has menu
+context : i am an orphan. @ path_tailentity : menu,orphan has a context literature is a written text is caused by typing _UsedFor keyboard belongs to computer is the location which has menu
 context : i am an orphan. @ path_tailentity : menu,orphan has a specific instance human is at location restaurant is the location which has menu
 context : i am an orphan. @ path_tailentity : local pub,orphan is at location pub has a specific instance local pub
 context : i am an orphan. @ path_tailentity : pub,orphan is at location pub
@@ -367,8 +367,8 @@ context : i am an orphan. @ path_tailentity : menu,orphan is a human is at locat
 context : i am an orphan. @ path_tailentity : local pub,orphan is at location pub has a specific instance local pub
 context : in the future i want to drive a large vehicle. @ path_tailentity : care,vehicle is in the context of accident is a subevent of have heart attack has prequisite care
 context : in the future i want to drive a large vehicle. @ path_tailentity : care,vehicle is a vehicle used for mobility is a dependency of going to work has subevent care
-context : in the future i want to drive a large vehicle. @ path_tailentity : care,vehicle is a person desires care
-context : in the future i want to drive a large vehicle. @ path_tailentity : care,vehicle used for mobility is a dependency of riding bike causes getting to other side is a subevent of riding bike used for care
+context : in the future i want to drive a large vehicle. @ path_tailentity : care,vehicle is a person Desires care
+context : in the future i want to drive a large vehicle. @ path_tailentity : care,vehicle used for mobility is a dependency of riding bike Causes getting to other side is a subevent of riding bike used for care
 context : in the future i want to drive a large vehicle. @ path_tailentity : take care,vehicle is in the context of take care
 context : in the future i want to drive a large vehicle. @ path_tailentity : take,vehicle is in the context of take
 context : i am a parent to 3 kids. @ path_tailentity : car,kid is at location car
@@ -379,9 +379,9 @@ context : i am a parent to 3 kids. @ path_tailentity : car,kid is at location ca
 context : i am a parent to 3 kids. @ path_tailentity : car,parent is at location car
 context : i am a parent to 3 kids. @ path_tailentity : car,parent is a guardian has a context canada is the location which has car
 context : i am a parent to 3 kids. @ path_tailentity : car,kid is at location car
-context : i am a parent to 3 kids. @ path_tailentity : car,parent has a specific instance mom is desired by person not desires crash can be typically done by car
+context : i am a parent to 3 kids. @ path_tailentity : car,parent has a specific instance mom is desired by person not Desires crash can be typically done by car
 context : i am a parent to 3 kids. @ path_tailentity : car,parent has a specific instance mother can be typically done by child is at location car
-context : i am a parent to 3 kids. @ path_tailentity : car,parent capable of own car is a dependency of drive to work motivated by goal get there faster uses car
+context : i am a parent to 3 kids. @ path_tailentity : car,parent capable of own car is a dependency of drive to work motivated by goal get there faster _UsedFor car
 context : i prefer things to be authentic. @ path_tailentity : fan,prefer can be typically done by fan
 context : i prefer things to be authentic. @ path_tailentity : fan,prefer thing can be typically done by person has a specific instance fan
 context : i prefer things to be authentic. @ path_tailentity : fan,prefer can be typically done by fan
@@ -390,23 +390,23 @@ context : i prefer things to be authentic. @ path_tailentity : fan,prefer thing 
 context : i prefer things to be authentic. @ path_tailentity : fan,prefer is in the context of fan
 context : i prefer things to be authentic. @ path_tailentity : fan,prefer thing can be typically done by person has a specific instance fan
 context : i like sports. @ path_tailentity : team,sport is in the context of team
-context : i like sports. @ path_tailentity : favorite team,sport uses baseball stadium is the location which has fan belongs to favorite team
+context : i like sports. @ path_tailentity : favorite team,sport _UsedFor baseball stadium is the location which has fan belongs to favorite team
 context : i like sports. @ path_tailentity : favorite team,sport is in the context of go to baseball game motivated by goal favorite team
 context : i like sports. @ path_tailentity : favorite team,sport has a specific instance baseball is the location which has outfield used for baseball players has a favorite team
 context : i like sports. @ path_tailentity : favorite team,sport has a specific instance hockey is the location which has hockey puck used for play hockey motivated by goal favorite team
-context : i like sports. @ path_tailentity : favorite team,sport uses baseball is in the context of home run is desired by person not desires favorite team
+context : i like sports. @ path_tailentity : favorite team,sport _UsedFor baseball is in the context of home run is desired by person not Desires favorite team
 context : i like sports. @ path_tailentity : favorite,sport has a specific instance golf is in the context of favorite
 context : i like sports. @ path_tailentity : favorite,sport has a specific instance baseball is in the context of favorite
 context : i live with my parents. @ path_tailentity : travel,parent capable of take care of children is the goal which motivates earn living has prequisite travel
-context : i live with my parents. @ path_tailentity : travel,parent has a specific instance mom is desired by person not desires traffic congestion is caused by taking bus used for travel
+context : i live with my parents. @ path_tailentity : travel,parent has a specific instance mom is desired by person not Desires traffic congestion is caused by taking bus used for travel
 context : i live with my parents. @ path_tailentity : travel,parent has a specific instance mom has a context travel
 context : i live with my parents. @ path_tailentity : travel,parent capable of visit friend is the goal which motivates travel
-context : i live with my parents. @ path_tailentity : travel,parent has a specific instance mother belongs to everyone uses traveling has prequisite travel
+context : i live with my parents. @ path_tailentity : travel,parent has a specific instance mother belongs to everyone _UsedFor traveling has prequisite travel
 context : i live with my parents. @ path_tailentity : travel,parent capable of care about children is the goal which motivates buy christmas presents has prequisite travel
 context : i live with my parents. @ path_tailentity : travel,parent can be typically done by child used for playing games has subevent have fun is the goal which motivates travel
 context : i live with my parents. @ path_tailentity : travel,parent can be typically done by child used for having fun is a subevent of travel
 context : i am in college. @ path_tailentity : favorite,college is the location which has friend is a dependency of love another motivated by goal loved
-context : i am in college. @ path_tailentity : favorite,college is the location which has book is a dependency of reading to children causes favorite
+context : i am in college. @ path_tailentity : favorite,college is the location which has book is a dependency of reading to children Causes favorite
 context : i am in college. @ path_tailentity : favorite,college is the location which has love is a dependency of love another motivated by goal loved can not be done to favorite
 context : i am in college. @ path_tailentity : favorite,college is the location which has student capable of borrow book from library is a dependency of read to children motivated by goal favorite
 context : i am in college. @ path_tailentity : favorite book,college is the location which has book has a specific instance favorite book
@@ -436,7 +436,7 @@ context : i am not a fan of soy products. @ path_tailentity : environment,soy pr
 context : i am not a fan of soy products. @ path_tailentity : environment,soy is a plant is a part of environment
 context : i am not a fan of soy products. @ path_tailentity : environment,soy is a company product land is at location environment
 context : i am not a fan of soy products. @ path_tailentity : care,soy is a food is a dependency of living life has subevent care
-context : i am not a fan of soy products. @ path_tailentity : care,soy is a person desires care
+context : i am not a fan of soy products. @ path_tailentity : care,soy is a person Desires care
 context : i am not a fan of soy products. @ path_tailentity : environment,soy product is a food is in the context of environment
 context : i am not a fan of soy products. @ path_tailentity : environment,soy product is a food is the location which has fungus is a part of environment
 context : i am not a fan of soy products. @ path_tailentity : environment,soy is a food is in the context of vegetation is a part of environment
@@ -475,7 +475,7 @@ context : i have a son. @ path_tailentity : love,son is a human is at location l
 context : i prefer wearing a belt. @ path_tailentity : computer,belt is a computer
 context : i prefer wearing a belt. @ path_tailentity : computer,belt is at location office is a computer
 context : i prefer wearing a belt. @ path_tailentity : computer,prefer can be typically done by computer
-context : i prefer wearing a belt. @ path_tailentity : computer,prefer can be typically done by people desires solve problems uses computer
+context : i prefer wearing a belt. @ path_tailentity : computer,prefer can be typically done by people Desires solve problems _UsedFor computer
 context : i prefer wearing a belt. @ path_tailentity : computer,prefer wear _not capable of windows belongs to computer
 context : i prefer wearing a belt. @ path_tailentity : computer,prefer wear _not capable of computers has a memory chip is a part of computer
 context : i prefer wearing a belt. @ path_tailentity : computer,belt is a device can be typically done by computer
@@ -487,12 +487,12 @@ context : i prefer wearing a belt. @ path_tailentity : computer,prefer can be ty
 context : i prefer wearing a belt. @ path_tailentity : computer,prefer not has property expensive is a property of computer
 context : i prefer wearing a belt. @ path_tailentity : computer,prefer wear _not capable of windows belongs to computer
 context : i prefer wearing a belt. @ path_tailentity : computer,prefer wear _not capable of computers is at location computer
-context : my dream is to own my own restaurant. @ path_tailentity : grill,own restaurant can be typically done by chef creates gnocchi is a food uses grill
+context : my dream is to own my own restaurant. @ path_tailentity : grill,own restaurant can be typically done by chef _CreatedBy gnocchi is a food _UsedFor grill
 context : my dream is to own my own restaurant. @ path_tailentity : grill,own restaurant can be typically done by one is a property of hole is at location grill
-context : my dream is to own my own restaurant. @ path_tailentity : grill,dream is wanted due to hunger uses grill
-context : my dream is to own my own restaurant. @ path_tailentity : grill,dream has subevent relaxing uses grill
-context : my dream is to own my own restaurant. @ path_tailentity : grill,dream motivated by goal sleeping uses kitchen is the location which has grill
-context : my dream is to own my own restaurant. @ path_tailentity : grill,dream has subevent wake up is the last subevent of cook dinner uses grill
+context : my dream is to own my own restaurant. @ path_tailentity : grill,dream is wanted due to hunger _UsedFor grill
+context : my dream is to own my own restaurant. @ path_tailentity : grill,dream has subevent relaxing _UsedFor grill
+context : my dream is to own my own restaurant. @ path_tailentity : grill,dream motivated by goal sleeping _UsedFor kitchen is the location which has grill
+context : my dream is to own my own restaurant. @ path_tailentity : grill,dream has subevent wake up is the last subevent of cook dinner _UsedFor grill
 context : i really like to look at paintings and statues. @ path_tailentity : sell,statue is at location church used for sell
 context : i really like to look at paintings and statues. @ path_tailentity : sell,statue is a ornament used for sell
 context : i really like to look at paintings and statues. @ path_tailentity : sell,painting used for sell
@@ -502,7 +502,7 @@ context : i really like to look at paintings and statues. @ path_tailentity : se
 context : i really like to look at paintings and statues. @ path_tailentity : sell book,statue is the location which has spirit used for sell book
 context : i really like to look at paintings and statues. @ path_tailentity : sell,statue is at location church used for sell
 context : i really like to look at paintings and statues. @ path_tailentity : sell,painting used for advertisement capable of sell
-context : i really like to look at paintings and statues. @ path_tailentity : sell,painting causes profit uses sale
+context : i really like to look at paintings and statues. @ path_tailentity : sell,painting Causes profit _UsedFor sale
 context : i really like to look at paintings and statues. @ path_tailentity : sell book,statue used for selling is a subevent of sell book
 context : i really like to look at paintings and statues. @ path_tailentity : sell book,statue is at location bookstore used for sell book
 context : i really like to look at paintings and statues. @ path_tailentity : sell book,statue used for selling makes someone want to sell book
@@ -511,7 +511,7 @@ context : i really like to look at paintings and statues. @ path_tailentity : se
 context : i really like to look at paintings and statues. @ path_tailentity : sell,statue is a artwork is at location museum used for sell
 context : i really like to look at paintings and statues. @ path_tailentity : sell,statue is at location church used for selling is a subevent of sell
 context : i really like to look at paintings and statues. @ path_tailentity : sell,painting is in the context of paint motivated by goal sell
-context : i really like to look at paintings and statues. @ path_tailentity : sell,painting uses acrylic is at location paint house motivated by goal sell
+context : i really like to look at paintings and statues. @ path_tailentity : sell,painting _UsedFor acrylic is at location paint house motivated by goal sell
 context : i really like to look at paintings and statues. @ path_tailentity : sell,painting used for selling is a subevent of get money from motivated by goal sell
 context : i really like to look at paintings and statues. @ path_tailentity : sell book,statue is at location church used for sell book
 context : i wish to work in hollywood. @ path_tailentity : outgo,hollywood is the location which has outgo
@@ -535,7 +535,7 @@ context : i prefer the night instead of the day. @ path_tailentity : have woman,
 context : i prefer the night instead of the day. @ path_tailentity : have woman,prefer is the goal which motivates marry has prequisite have woman
 context : i prefer the night instead of the day. @ path_tailentity : time,prefer is in the context of time
 context : i work as a computer programmer. @ path_tailentity : pilot,programmer has a specific instance pilot
-context : i work as a computer programmer. @ path_tailentity : pilot,computer programmer is a programmer creates software is in the context of pilot
+context : i work as a computer programmer. @ path_tailentity : pilot,computer programmer is a programmer _CreatedBy software is in the context of pilot
 context : i work as a computer programmer. @ path_tailentity : pilot,computer used for fly helicopter can be typically done by pilot
 context : i work as a computer programmer. @ path_tailentity : pilot,computer is in the context of pilot
 context : i work as a computer programmer. @ path_tailentity : pilot,computer is a dependency of flying in airplane used for pilot
@@ -557,18 +557,18 @@ context : i ride in a sporty vehicle. @ path_tailentity : job,sporty has a speci
 context : i ride in a sporty vehicle. @ path_tailentity : job,sporty has a context job
 context : i used to interact in sports in my older teen years. @ path_tailentity : repair,interact is desired by humans capable of die is a subevent of repair
 context : i used to interact in sports in my older teen years. @ path_tailentity : repair,interact has a context military is the location which has underground area used for repair
-context : i used to interact in sports in my older teen years. @ path_tailentity : repair,interact is desired by humans capable of make mistakes is a subevent of fixing computer causes broken can not be done to repair
+context : i used to interact in sports in my older teen years. @ path_tailentity : repair,interact is desired by humans capable of make mistakes is a subevent of fixing computer Causes broken can not be done to repair
 context : i used to interact in sports in my older teen years. @ path_tailentity : construction,interact has a context construction
 context : i used to interact in sports in my older teen years. @ path_tailentity : roof,interact is desired by humans is at location roof
 context : i used to interact in sports in my older teen years. @ path_tailentity : roof,interact is desired by cat is at location roof
 context : i used to interact in sports in my older teen years. @ path_tailentity : repair,interact is a dependency of keep things orderly and tidy has subevent repair
-context : i used to interact in sports in my older teen years. @ path_tailentity : repair,interact has a context geology is a specific way to do contact entails handicraft has a specific instance repair
-context : i used to interact in sports in my older teen years. @ path_tailentity : repair,interact is a dependency of play game of chess motivated by goal have fun is a subevent of repairing umbrella causes mend hole can be typically done by repair
-context : i used to interact in sports in my older teen years. @ path_tailentity : repair,interact is the goal which motivates make friends has prequisite have sex is a subevent of fixing computer causes damage has a specific instance repair
+context : i used to interact in sports in my older teen years. @ path_tailentity : repair,interact has a context geology is a specific way to do contact entails entails handicraft has a specific instance repair
+context : i used to interact in sports in my older teen years. @ path_tailentity : repair,interact is a dependency of play game of chess motivated by goal have fun is a subevent of repairing umbrella Causes mend hole can be typically done by repair
+context : i used to interact in sports in my older teen years. @ path_tailentity : repair,interact is the goal which motivates make friends has prequisite have sex is a subevent of fixing computer Causes damage has a specific instance repair
 context : i used to interact in sports in my older teen years. @ path_tailentity : repair,interact is desired by humans capable of lie down is a subevent of sleep is a dependency of do housework motivated by goal mend can be typically done by repair
 context : i used to interact in sports in my older teen years. @ path_tailentity : construction,interact has a context construction
 context : i used to interact in sports in my older teen years. @ path_tailentity : roof,interact is desired by people is at location roof
-context : i used to interact in sports in my older teen years. @ path_tailentity : roof,interact uses doorway is at location roof
+context : i used to interact in sports in my older teen years. @ path_tailentity : roof,interact _UsedFor doorway is at location roof
 context : i used to interact in sports in my older teen years. @ path_tailentity : roof,interact has a context construction has a specific instance pier is at location roof
 context : i used to interact in sports in my older teen years. @ path_tailentity : repair,interact has a context engineering is a repair
 context : i used to interact in sports in my older teen years. @ path_tailentity : repair,interact is the goal which motivates knit has subevent mend hole is caused by repairing umbrella used for repair
@@ -576,7 +576,7 @@ context : i used to interact in sports in my older teen years. @ path_tailentity
 context : i used to interact in sports in my older teen years. @ path_tailentity : roof,interact is desired by cats is at location roof
 context : i used to interact in sports in my older teen years. @ path_tailentity : roof,interact is desired by people is at location roof
 context : i used to interact in sports in my older teen years. @ path_tailentity : roof,interact is desired by humans has a bones is at location roof
-context : i used to interact in sports in my older teen years. @ path_tailentity : repair,interact is desired by person not desires broken has a context repair
+context : i used to interact in sports in my older teen years. @ path_tailentity : repair,interact is desired by person not Desires broken has a context repair
 context : i used to interact in sports in my older teen years. @ path_tailentity : repair,interact is desired by humans capable of hurt is caused by repairing umbrella used for repair
 context : i used to interact in sports in my older teen years. @ path_tailentity : repair,interact is a dependency of live is the goal which motivates breathe fresh air has subevent feel relieved is the first subevent of repair
 context : i used to interact in sports in my older teen years. @ path_tailentity : construction,interact has a context construction
@@ -584,74 +584,74 @@ context : i used to interact in sports in my older teen years. @ path_tailentity
 context : i used to interact in sports in my older teen years. @ path_tailentity : roof,interact is desired by cats has a fur is at location roof
 context : i used to interact in sports in my older teen years. @ path_tailentity : roof,interact is desired by cats capable of bark is at location roof
 context : i used to interact in sports in my older teen years. @ path_tailentity : repair,interact is desired by humans capable of use tools is a subevent of repair
-context : i used to interact in sports in my older teen years. @ path_tailentity : repair,interact is the goal which motivates knit is a subevent of repairing umbrella causes mend hole can be typically done by repair
+context : i used to interact in sports in my older teen years. @ path_tailentity : repair,interact is the goal which motivates knit is a subevent of repairing umbrella Causes mend hole can be typically done by repair
 context : i used to interact in sports in my older teen years. @ path_tailentity : construction,interact has a context construction
 context : i used to interact in sports in my older teen years. @ path_tailentity : roof,interact is desired by humans is at location roof
 context : i used to interact in sports in my older teen years. @ path_tailentity : roof,interact has a context roofing is at location roof
-context : i like skateboarding. @ path_tailentity : pizza,skateboard motivated by goal fun uses pizza
+context : i like skateboarding. @ path_tailentity : pizza,skateboard motivated by goal fun _UsedFor pizza
 context : i like skateboarding. @ path_tailentity : favorite,skateboard motivated by goal like
-context : i like skateboarding. @ path_tailentity : favorite food,skateboard motivated by goal fun uses eating ice cream has prequisite spoon is the location which has favorite food
+context : i like skateboarding. @ path_tailentity : favorite food,skateboard motivated by goal fun _UsedFor eating ice cream has prequisite spoon is the location which has favorite food
 context : i like skateboarding. @ path_tailentity : favorite food,skateboard motivated by goal fun belongs to favorite food
-context : i like skateboarding. @ path_tailentity : favorite food,skateboard motivated by goal fun uses seafood restaurant has a favorite food
-context : i like skateboarding. @ path_tailentity : favorite food,skateboard motivated by goal fun uses eating breakfast in bed causes favorite food
+context : i like skateboarding. @ path_tailentity : favorite food,skateboard motivated by goal fun _UsedFor seafood restaurant has a favorite food
+context : i like skateboarding. @ path_tailentity : favorite food,skateboard motivated by goal fun _UsedFor eating breakfast in bed Causes favorite food
 context : i enjoy nature. @ path_tailentity : credence,enjoy is a subevent of seeing art used for tradition has a part which is tradition item is a credence
 context : i enjoy nature. @ path_tailentity : credence,enjoy is a subevent of tasting sweet has prequisite sugar is a mixture has a part which is substance is in the context of credence
 context : i enjoy nature. @ path_tailentity : credence,enjoy is a subevent of see art motivated by goal appreciate can be typically done by humans has a genes is a legacy has a part which is credibility
 context : i enjoy nature. @ path_tailentity : credence,enjoy is the goal which motivates get has subevent reward is caused by giving clue used for clue card is a credibility
-context : i enjoy nature. @ path_tailentity : credence,enjoy is the goal which motivates enjoy company of friends has prequisite tell stories can be typically done by teachers uses committing to memory causes credibility
-context : i enjoy nature. @ path_tailentity : credence,enjoy nature is desired by person not desires authority is a credibility
+context : i enjoy nature. @ path_tailentity : credence,enjoy is the goal which motivates enjoy company of friends has prequisite tell stories can be typically done by teachers _UsedFor committing to memory Causes credibility
+context : i enjoy nature. @ path_tailentity : credence,enjoy nature is desired by person not Desires authority is a credibility
 context : i enjoy nature. @ path_tailentity : credence,enjoy nature is desired by person has a specific instance law is in the context of credibility
 context : i enjoy nature. @ path_tailentity : credence,nature is the location which has artifact used for consumption is a general way of emotion has a specific instance credence
-context : i enjoy nature. @ path_tailentity : credence,nature is the location which has fox has a long tail is desired by person not desires authority is a credibility
-context : i enjoy nature. @ path_tailentity : credence,nature is the location which has creature used for consumption entails change can be typically done by name is a credibility
-context : i enjoy nature. @ path_tailentity : credence,nature is the location which has lizard capable of pet uses cat has a name is a credibility
-context : i enjoy nature. @ path_tailentity : credence,nature is the location which has mountain used for climbing causes getting to top is a subevent of climbing mountain has prequisite credence
+context : i enjoy nature. @ path_tailentity : credence,nature is the location which has fox has a long tail is desired by person not Desires authority is a credibility
+context : i enjoy nature. @ path_tailentity : credence,nature is the location which has creature used for consumption entails entails change can be typically done by name is a credibility
+context : i enjoy nature. @ path_tailentity : credence,nature is the location which has lizard capable of pet _UsedFor cat has a name is a credibility
+context : i enjoy nature. @ path_tailentity : credence,nature is the location which has mountain used for climbing Causes getting to top is a subevent of climbing mountain has prequisite credence
 context : i enjoy nature. @ path_tailentity : credence,enjoy is a subevent of seeing art used for education is in the context of credence
-context : i enjoy nature. @ path_tailentity : credence,enjoy nature is a subevent of hiking causes fatigue is similar to bore is a curse
+context : i enjoy nature. @ path_tailentity : credence,enjoy nature is a subevent of hiking Causes fatigue is similar to bore is a curse
 context : i enjoy nature. @ path_tailentity : credence,enjoy nature is the goal which motivates hike is wanted due to boots is a dependency of climbing mountain used for challenge is a credibility
 context : i enjoy nature. @ path_tailentity : credence,enjoy nature is the goal which motivates hike is wanted due to thirst is caused by drinking has prequisite drinking water is a credential
 context : i enjoy nature. @ path_tailentity : credence,nature is the location which has cave used for archeology is in the context of credence
 context : i enjoy nature. @ path_tailentity : credence,nature is the location which has attribute is a credibility
-context : i enjoy nature. @ path_tailentity : credence,nature has a part which is culture uses artifact has a specific instance credence
-context : i enjoy nature. @ path_tailentity : credence,enjoy is a subevent of seeing idea become reality causes conviction is a credibility
+context : i enjoy nature. @ path_tailentity : credence,nature has a part which is culture _UsedFor artifact has a specific instance credence
+context : i enjoy nature. @ path_tailentity : credence,enjoy is a subevent of seeing idea become reality Causes conviction is a credibility
 context : i enjoy nature. @ path_tailentity : credence,enjoy is a dependency of entertain people is wanted due to conviction is a credibility
 context : i enjoy nature. @ path_tailentity : credence,enjoy is a dependency of enjoy company of friends motivated by goal know _not capable of stranger used for contact is a general way of credibility
-context : i enjoy nature. @ path_tailentity : credence,enjoy is a subevent of buy for loved one is wanted due to gratitude is a virtue is a dependency of giving assistance causes credence
+context : i enjoy nature. @ path_tailentity : credence,enjoy is a subevent of buy for loved one is wanted due to gratitude is a virtue is a dependency of giving assistance Causes credence
 context : i enjoy nature. @ path_tailentity : credence,enjoy nature is a subevent of hiking has prequisite courage is a credibility
 context : i enjoy nature. @ path_tailentity : credence,enjoy nature is the goal which motivates hike is wanted due to boots is a dependency of climbing mountain used for accomplishment has a specific instance conviction
-context : i enjoy nature. @ path_tailentity : credence,enjoy nature is desired by person not desires stigma made of prejudice is caused by stigma made of credence
+context : i enjoy nature. @ path_tailentity : credence,enjoy nature is desired by person not Desires stigma made of prejudice is caused by stigma made of credence
 context : i enjoy nature. @ path_tailentity : credence,enjoy nature is the goal which motivates hike is wanted due to thirst is caused by drinking used for intoxication is similar to curse
 context : i enjoy nature. @ path_tailentity : credence,nature is the location which has artifact has a specific instance credence
 context : i enjoy nature. @ path_tailentity : credence,nature is the location which has forest used for timber is a cement is similar to credence
 context : i enjoy nature. @ path_tailentity : credence,nature is the location which has fox has a nose used for smell can be typically done by nosewash is a credential
 context : i enjoy nature. @ path_tailentity : credence,nature is the location which has rock is a thing is in the context of credence
 context : i enjoy nature. @ path_tailentity : credence,enjoy is caused by seeing movie has prequisite ticket is a credential
-context : i enjoy nature. @ path_tailentity : credence,enjoy is a subevent of seeing art causes nostalgia is a emotion is a general way of crime entails credibility
-context : i enjoy nature. @ path_tailentity : credence,enjoy nature is a subevent of hiking causes fatigue is similar to cramp is a curse
-context : i enjoy nature. @ path_tailentity : credence,enjoy nature is desired by person not desires guilt is caused by committing perjury has prequisite credibility
-context : i enjoy nature. @ path_tailentity : credence,enjoy nature is desired by person not desires authority is a credential
-context : i enjoy nature. @ path_tailentity : credence,nature has a part which is person desires commitment is a dependency of getting contract causes obligation is a credibility
-context : i enjoy nature. @ path_tailentity : credence,nature is the location which has artifact causes cognition has a specific instance handwriting is in the context of credence
+context : i enjoy nature. @ path_tailentity : credence,enjoy is a subevent of seeing art Causes nostalgia is a emotion is a general way of crime entails entails credibility
+context : i enjoy nature. @ path_tailentity : credence,enjoy nature is a subevent of hiking Causes fatigue is similar to cramp is a curse
+context : i enjoy nature. @ path_tailentity : credence,enjoy nature is desired by person not Desires guilt is caused by committing perjury has prequisite credibility
+context : i enjoy nature. @ path_tailentity : credence,enjoy nature is desired by person not Desires authority is a credential
+context : i enjoy nature. @ path_tailentity : credence,nature has a part which is person Desires commitment is a dependency of getting contract Causes obligation is a credibility
+context : i enjoy nature. @ path_tailentity : credence,nature is the location which has artifact Causes cognition has a specific instance handwriting is in the context of credence
 context : i enjoy nature. @ path_tailentity : credence,nature is the location which has water has a caudance is a disposition
-context : i enjoy nature. @ path_tailentity : credence,nature is the location which has system used for consistency is a dependency of keeping things orderly and tidy causes conformity is a credibility
+context : i enjoy nature. @ path_tailentity : credence,nature is the location which has system used for consistency is a dependency of keeping things orderly and tidy Causes conformity is a credibility
 context : i enjoy nature. @ path_tailentity : credence,nature is the location which has cave used for nature is a attribute is at location description has a part which is credibility
 context : i enjoy nature. @ path_tailentity : credence,enjoy is a subevent of seeing exhibits used for education is in the context of credence
-context : i enjoy nature. @ path_tailentity : credence,enjoy nature is desired by person not desires authority is a credential
+context : i enjoy nature. @ path_tailentity : credence,enjoy nature is desired by person not Desires authority is a credential
 context : i enjoy nature. @ path_tailentity : credence,nature is the location which has system of abstract thought has a specific instance logic is in the context of credence
 context : i enjoy nature. @ path_tailentity : credence,nature is the location which has animal has a specific instance credence
 context : i enjoy nature. @ path_tailentity : credence,nature is the location which has fox has a nose is the location which has stain is a cement is similar to credence
-context : i enjoy nature. @ path_tailentity : credence,nature is the location which has creature is a attribute used for identification is a dependency of cashing in causes credibility
+context : i enjoy nature. @ path_tailentity : credence,nature is the location which has creature is a attribute used for identification is a dependency of cashing in Causes credibility
 context : i enjoy nature. @ path_tailentity : credence,enjoy is caused by seeing exciting story used for education is in the context of credence
-context : i enjoy nature. @ path_tailentity : credence,enjoy is the goal which motivates see art has prequisite buy canvas is a subevent of creating art causes fame is a credibility
-context : i enjoy nature. @ path_tailentity : credence,enjoy is a dependency of have fun is a subevent of playing sport causes injury is a credential
-context : i enjoy nature. @ path_tailentity : credence,enjoy nature is desired by person not desires disgrace is a credibility
+context : i enjoy nature. @ path_tailentity : credence,enjoy is the goal which motivates see art has prequisite buy canvas is a subevent of creating art Causes fame is a credibility
+context : i enjoy nature. @ path_tailentity : credence,enjoy is a dependency of have fun is a subevent of playing sport Causes injury is a credential
+context : i enjoy nature. @ path_tailentity : credence,enjoy nature is desired by person not Desires disgrace is a credibility
 context : i enjoy nature. @ path_tailentity : credence,enjoy nature is the goal which motivates hike is wanted due to curiosity is a motive is a dependency of killing people used for tradition has a part which is credibility
 context : i enjoy nature. @ path_tailentity : credence,enjoy nature is the goal which motivates hike has subevent sweat is caused by proving physical endurance has prequisite physique
 context : i enjoy nature. @ path_tailentity : credence,nature is the location which has bald eagle is a eagle has a context legal is a property of conviction
 context : i enjoy swimming. @ path_tailentity : spouse,swim has prequisite have sex can be typically done by spouse
 context : i enjoy swimming. @ path_tailentity : spouse,swim has subevent drown is not desired by spouse
-context : i enjoy swimming. @ path_tailentity : spouse,swim uses pool is in the context of spouse
-context : i enjoy swimming. @ path_tailentity : spouse,enjoy swim can be typically done by person desires spouse
+context : i enjoy swimming. @ path_tailentity : spouse,swim _UsedFor pool is in the context of spouse
+context : i enjoy swimming. @ path_tailentity : spouse,enjoy swim can be typically done by person Desires spouse
 context : i enjoy swimming. @ path_tailentity : spouse,enjoy can be typically done by spouse
 context : i enjoy swimming. @ path_tailentity : spouse,swim is desired by person has a specific instance spouse
 context : i enjoy swimming. @ path_tailentity : spouse,enjoy swim can be typically done by person has a specific instance spouse
@@ -659,22 +659,22 @@ context : i enjoy swimming. @ path_tailentity : spouse,enjoy swim is a subevent 
 context : i enjoy swimming. @ path_tailentity : spouse,enjoy swim is a subevent of go to beach is a dependency of swim can be typically done by spouse
 context : i enjoy swimming. @ path_tailentity : spouse,enjoy can be typically done by spouse
 context : i enjoy swimming. @ path_tailentity : spouse,swim has prequisite have sex can be typically done by spouse
-context : i enjoy swimming. @ path_tailentity : spouse,swim has prequisite get water uses cold faucet is at location house has a part which is spouse
-context : i enjoy swimming. @ path_tailentity : spouse,swim uses boat is the location which has spouse
-context : i enjoy swimming. @ path_tailentity : spouse,swim motivated by goal love uses spouse
+context : i enjoy swimming. @ path_tailentity : spouse,swim has prequisite get water _UsedFor cold faucet is at location house has a part which is spouse
+context : i enjoy swimming. @ path_tailentity : spouse,swim _UsedFor boat is the location which has spouse
+context : i enjoy swimming. @ path_tailentity : spouse,swim motivated by goal love _UsedFor spouse
 context : i enjoy swimming. @ path_tailentity : spouse,enjoy swim can be typically done by people has a spouse
-context : i enjoy swimming. @ path_tailentity : spouse,enjoy swim can be typically done by person desires spouse
+context : i enjoy swimming. @ path_tailentity : spouse,enjoy swim can be typically done by person Desires spouse
 context : i enjoy swimming. @ path_tailentity : spouse,enjoy swim can be typically done by family has a part which is spouse
 context : i enjoy swimming. @ path_tailentity : spouse,enjoy can be typically done by spouse
 context : i have a very strong body. @ path_tailentity : deer,strong is a property of deer
 context : i have a very strong body. @ path_tailentity : hunt deer,strong is a property of wolves capable of hunt deer
-context : i have a very strong body. @ path_tailentity : deer,strong body is desired by person not desires cougar
-context : i have a very strong body. @ path_tailentity : deer,strong body is desired by person not desires eaten by animals can not be done to frogs is a deer
-context : i have a very strong body. @ path_tailentity : deer,strong body is desired by person not desires bark is a part of deer
+context : i have a very strong body. @ path_tailentity : deer,strong body is desired by person not Desires cougar
+context : i have a very strong body. @ path_tailentity : deer,strong body is desired by person not Desires eaten by animals can not be done to frogs is a deer
+context : i have a very strong body. @ path_tailentity : deer,strong body is desired by person not Desires bark is a part of deer
 context : i have a very strong body. @ path_tailentity : deer,strong is a property of deer
 context : i have a very strong body. @ path_tailentity : hunt deer,strong is a property of wolves capable of hunt deer
-context : i have a very strong body. @ path_tailentity : deer,strong body is desired by person not desires frostbite is caused by sleighing ride used for winter is the location which has deer
-context : i have a very strong body. @ path_tailentity : deer,strong body is desired by person not desires frostbite is a subevent of sleighing ride causes frostbite is the location which has deer
+context : i have a very strong body. @ path_tailentity : deer,strong body is desired by person not Desires frostbite is caused by sleighing ride used for winter is the location which has deer
+context : i have a very strong body. @ path_tailentity : deer,strong body is desired by person not Desires frostbite is a subevent of sleighing ride Causes frostbite is the location which has deer
 context : i have glasses. @ path_tailentity : watch,glass used for watch
 context : i have glasses. @ path_tailentity : watch voice,glass used for watch voice
 context : i have glasses. @ path_tailentity : voice,glass is the location which has voice
@@ -682,29 +682,29 @@ context : i have glasses. @ path_tailentity : watch,glass used for watch
 context : i have glasses. @ path_tailentity : watch voice,glass used for watch voice
 context : i have glasses. @ path_tailentity : voice,glass is the location which has voice
 "context : i am an artist , i work with watercolors. @ path_tailentity : christmas",watercolor has a context art has a specific instance christmas
-"context : i am an artist , i work with watercolors. @ path_tailentity : hate christmas",watercolor is a color is desired by person not desires hate christmas
+"context : i am an artist , i work with watercolors. @ path_tailentity : hate christmas",watercolor is a color is desired by person not Desires hate christmas
 "context : i am an artist , i work with watercolors. @ path_tailentity : hate christmas",watercolor has a context art used for everyone capable of hate christmas
-"context : i am an artist , i work with watercolors. @ path_tailentity : hate christmas",watercolor has a context art is desired by person not desires hate christmas
-"context : i am an artist , i work with watercolors. @ path_tailentity : hate",watercolor has a context photography is a specific way to do change is a dependency of destroying enemy causes hate
-"context : i am an artist , i work with watercolors. @ path_tailentity : hate",watercolor has a context art is a hobby uses playing frisbee causes anger is a dependency of hate
+"context : i am an artist , i work with watercolors. @ path_tailentity : hate christmas",watercolor has a context art is desired by person not Desires hate christmas
+"context : i am an artist , i work with watercolors. @ path_tailentity : hate",watercolor has a context photography is a specific way to do change is a dependency of destroying enemy Causes hate
+"context : i am an artist , i work with watercolors. @ path_tailentity : hate",watercolor has a context art is a hobby _UsedFor playing frisbee Causes anger is a dependency of hate
 "context : i am an artist , i work with watercolors. @ path_tailentity : christmas",watercolor has a context art has a specific instance christmas
 "context : i am an artist , i work with watercolors. @ path_tailentity : christmas",watercolor has a context christianity has a specific instance christmas
-"context : i am an artist , i work with watercolors. @ path_tailentity : hate christmas",watercolor is a color is desired by person not desires hate christmas
-"context : i am an artist , i work with watercolors. @ path_tailentity : hate christmas",watercolor has a context art has a specific instance person not desires hate christmas
-"context : i am an artist , i work with watercolors. @ path_tailentity : hate",watercolor has a context photography is a person not desires hatred
+"context : i am an artist , i work with watercolors. @ path_tailentity : hate christmas",watercolor is a color is desired by person not Desires hate christmas
+"context : i am an artist , i work with watercolors. @ path_tailentity : hate christmas",watercolor has a context art has a specific instance person not Desires hate christmas
+"context : i am an artist , i work with watercolors. @ path_tailentity : hate",watercolor has a context photography is a person not Desires hatred
 "context : i am an artist , i work with watercolors. @ path_tailentity : hate",watercolor has a context art used for pleasure is caused by killing people has prequisite hate
 "context : i am an artist , i work with watercolors. @ path_tailentity : christmas",watercolor has a context art has a specific instance christmas
 "context : i am an artist , i work with watercolors. @ path_tailentity : christmas",watercolor has a context christianity has a specific instance christmas
-"context : i am an artist , i work with watercolors. @ path_tailentity : hate christmas",watercolor is a color is desired by person not desires hate christmas
-"context : i am an artist , i work with watercolors. @ path_tailentity : hate christmas",watercolor has a context art has a specific instance person not desires hate christmas
+"context : i am an artist , i work with watercolors. @ path_tailentity : hate christmas",watercolor is a color is desired by person not Desires hate christmas
+"context : i am an artist , i work with watercolors. @ path_tailentity : hate christmas",watercolor has a context art has a specific instance person not Desires hate christmas
 "context : i am an artist , i work with watercolors. @ path_tailentity : hate",watercolor is a color used for color blind is a property of people capable of hate
-"context : i am an artist , i work with watercolors. @ path_tailentity : hate",watercolor has a context art uses acrylic is at location war is a hate
-"context : i am an artist , i work with watercolors. @ path_tailentity : hate",watercolor has a context photography is a specific way to do change is the location which has penny used for money is a dependency of buying for loved one causes hate
-"context : i am an artist , i work with watercolors. @ path_tailentity : hate",watercolor has a context art uses painting picture causes emotions belongs to people capable of hate
-"context : i am an artist , i work with watercolors. @ path_tailentity : hate",watercolor has a context painting causes pain can be typically done by humans desires live in peace is wanted due to hate
+"context : i am an artist , i work with watercolors. @ path_tailentity : hate",watercolor has a context art _UsedFor acrylic is at location war is a hate
+"context : i am an artist , i work with watercolors. @ path_tailentity : hate",watercolor has a context photography is a specific way to do change is the location which has penny used for money is a dependency of buying for loved one Causes hate
+"context : i am an artist , i work with watercolors. @ path_tailentity : hate",watercolor has a context art _UsedFor painting picture Causes emotions belongs to people capable of hate
+"context : i am an artist , i work with watercolors. @ path_tailentity : hate",watercolor has a context painting Causes pain can be typically done by humans Desires live in peace is wanted due to hate
 context : i work in the tech field. @ path_tailentity : tropical,tech has a context australia has property tropical
 context : i work in the tech field. @ path_tailentity : tropical,tech is a company is at location japan has property tropical
-context : i work in the tech field. @ path_tailentity : tropical,tech is a person not desires rain has property tropical
+context : i work in the tech field. @ path_tailentity : tropical,tech is a person not Desires rain has property tropical
 context : i work in the tech field. @ path_tailentity : tropical,tech has a context science fiction is in the genre storm is at location tropical
 context : i work in the tech field. @ path_tailentity : tropical island,tech has a context hawaii is a tropical island
 context : i work in the tech field. @ path_tailentity : tropical island,tech has a context british columbia is the location which has tropical island
@@ -730,25 +730,25 @@ context : i enjoy gardening. @ path_tailentity : favorite drink,gardening is in 
 context : i enjoy gardening. @ path_tailentity : favorite drink,gardening is in the context of wine is a favorite drink
 context : i enjoy gardening. @ path_tailentity : drink,gardening is in the context of clear is a dependency of drink
 context : i enjoy gardening. @ path_tailentity : drink,gardening is in the context of aim is a dependency of spit motivated by goal drink
-context : i dropped out of school. @ path_tailentity : piano,drop has a context music uses keyboard instrument is at location piano
-context : i dropped out of school. @ path_tailentity : piano,drop has a context music uses flat is a property of piano
+context : i dropped out of school. @ path_tailentity : piano,drop has a context music _UsedFor keyboard instrument is at location piano
+context : i dropped out of school. @ path_tailentity : piano,drop has a context music _UsedFor flat is a property of piano
 context : i dropped out of school. @ path_tailentity : piano,drop is a subevent of playing piano has prequisite piano
-context : i dropped out of school. @ path_tailentity : piano,drop school has a context music uses piano
-context : i dropped out of school. @ path_tailentity : piano,drop school has a context music uses flat is a property of piano
+context : i dropped out of school. @ path_tailentity : piano,drop school has a context music _UsedFor piano
+context : i dropped out of school. @ path_tailentity : piano,drop school has a context music _UsedFor flat is a property of piano
 context : i dropped out of school. @ path_tailentity : piano,drop school can be typically done by school is the location which has piano
 context : i dropped out of school. @ path_tailentity : learn piano,drop has a context music makes someone want to play piano has prequisite learn piano
-context : i dropped out of school. @ path_tailentity : piano,drop has a context music uses keyboard instrument is at location piano
-context : i dropped out of school. @ path_tailentity : piano,drop has a context music uses flat is a property of piano
-context : i dropped out of school. @ path_tailentity : piano,drop school has a context music uses piano
-context : i dropped out of school. @ path_tailentity : piano,drop school has a context education uses playing piano has prequisite piano
-context : i dropped out of school. @ path_tailentity : piano,drop school has a context music uses symphony hall is the location which has piano
+context : i dropped out of school. @ path_tailentity : piano,drop has a context music _UsedFor keyboard instrument is at location piano
+context : i dropped out of school. @ path_tailentity : piano,drop has a context music _UsedFor flat is a property of piano
+context : i dropped out of school. @ path_tailentity : piano,drop school has a context music _UsedFor piano
+context : i dropped out of school. @ path_tailentity : piano,drop school has a context education _UsedFor playing piano has prequisite piano
+context : i dropped out of school. @ path_tailentity : piano,drop school has a context music _UsedFor symphony hall is the location which has piano
 context : i dropped out of school. @ path_tailentity : learn piano,drop is a subevent of play piano has prequisite learn piano
 context : i dropped out of school. @ path_tailentity : learn piano,drop has a context music is a subevent of play piano has prequisite learn piano
-context : i dropped out of school. @ path_tailentity : piano,drop has a context music uses keyboard instrument is at location piano
+context : i dropped out of school. @ path_tailentity : piano,drop has a context music _UsedFor keyboard instrument is at location piano
 context : i dropped out of school. @ path_tailentity : piano,drop can be typically done by music is in the context of piano
 context : i dropped out of school. @ path_tailentity : piano,drop can be typically done by piano
-context : i dropped out of school. @ path_tailentity : piano,drop has a context music uses symphony hall is the location which has piano
-context : i dropped out of school. @ path_tailentity : piano,drop school can be typically done by teacher desires teach uses piano
+context : i dropped out of school. @ path_tailentity : piano,drop has a context music _UsedFor symphony hall is the location which has piano
+context : i dropped out of school. @ path_tailentity : piano,drop school can be typically done by teacher Desires teach _UsedFor piano
 context : i dropped out of school. @ path_tailentity : learn piano,drop has a context music makes someone want to play piano has prequisite learn piano
 context : i dropped out of school. @ path_tailentity : learn piano,drop is a subevent of play piano has prequisite learn piano
 context : i dropped out of school. @ path_tailentity : learn piano,drop has a context music is the goal which motivates play piano has prequisite learn piano
@@ -756,14 +756,14 @@ context : i ve recently started working as a freelance designer. @ path_tailenti
 context : i ve recently started working as a freelance designer. @ path_tailentity : go movie,freelance is a travel has last subevent go home is the goal which motivates go to movie
 context : i ve recently started working as a freelance designer. @ path_tailentity : go movie,freelance is a film is in the context of popcorn is at location go movie
 context : i ve recently started working as a freelance designer. @ path_tailentity : go movie,freelance is a magazine used for learn about world has prequisite go to movies
-context : i ve recently started working as a freelance designer. @ path_tailentity : movie,freelance designer is a person desires movie
+context : i ve recently started working as a freelance designer. @ path_tailentity : movie,freelance designer is a person Desires movie
 context : i like the pigskin sport. @ path_tailentity : rig,pigskin has a specific instance skin is at location rug is similar to rig
 context : i like the pigskin sport. @ path_tailentity : huge rig,pigskin has a specific instance skin is at location big rig
 context : i like the pigskin sport. @ path_tailentity : huge rig,pigskin has a specific instance skin belongs to animals is in the context of big rig
 context : i like the pigskin sport. @ path_tailentity : huge,pigskin has a specific instance skin has property small _not has property world has property huge
 context : i like the pigskin sport. @ path_tailentity : huge,pigskin has a specific instance skin belongs to humans has property small _not has property world has property huge
 context : i like the pigskin sport. @ path_tailentity : rig,pigskin has a specific instance skin is at location rug is similar to rig
-context : i like the pigskin sport. @ path_tailentity : huge rig,pigskin has a specific instance skin belongs to animals uses ranch is the location which has huge rig
+context : i like the pigskin sport. @ path_tailentity : huge rig,pigskin has a specific instance skin belongs to animals _UsedFor ranch is the location which has huge rig
 context : i like the pigskin sport. @ path_tailentity : huge rig,pigskin has a specific instance skin is at location ocean has a specific instance great salt lake is the location which has great rig
 context : i like the pigskin sport. @ path_tailentity : huge rig,pigskin has a specific instance skin is at location shark is at location huge rig
 context : i like the pigskin sport. @ path_tailentity : huge,pigskin has a specific instance skin belongs to world has property huge
@@ -775,7 +775,7 @@ context : i like the pigskin sport. @ path_tailentity : huge,pigskin has a speci
 context : i like the pigskin sport. @ path_tailentity : huge,pigskin has a specific instance skin is at location universe has property huge
 context : i like the pigskin sport. @ path_tailentity : huge,pigskin has a specific instance skin belongs to animals has property huge
 context : i love music. @ path_tailentity : hair,music is in the context of short is a property of hair
-context : i love music. @ path_tailentity : hair,music is in the context of bobby desires hair
+context : i love music. @ path_tailentity : hair,music is in the context of bobby Desires hair
 context : i love music. @ path_tailentity : hair,music is in the context of arse is a hair
 context : i love music. @ path_tailentity : cut hair,music is in the context of barber comb used for cut hair
 context : i love music. @ path_tailentity : cut hair,music is in the context of square is a property of scissors used for cut hair
@@ -783,7 +783,7 @@ context : i love music. @ path_tailentity : hair,music is in the context of smoo
 context : i love music. @ path_tailentity : cut hair,music is in the context of cut is a dependency of cut hair
 context : i love music. @ path_tailentity : cut hair,music is in the context of barbershop used for cut hair
 context : i love music. @ path_tailentity : hair,music is in the context of long is a property of hair
-context : i love music. @ path_tailentity : hair,music is in the context of polish uses hair
+context : i love music. @ path_tailentity : hair,music is in the context of polish _UsedFor hair
 context : i love music. @ path_tailentity : hair,music is in the context of trans is a property of hair
 context : i love music. @ path_tailentity : cut hair,music is in the context of cut hair
 context : i love music. @ path_tailentity : cut hair,music is in the context of style is the goal which motivates cut hair
@@ -791,7 +791,7 @@ context : my favorite food is strawberries. @ path_tailentity : beach,strawberry
 context : my favorite food is strawberries. @ path_tailentity : love beach,strawberry is at location beach has a specific instance love beach
 context : my favorite food is strawberries. @ path_tailentity : love beach,strawberry is a fruit is at location beach belongs to shore used for love beach
 context : my favorite food is strawberries. @ path_tailentity : go beach,strawberry is at location beach belongs to shore used for go beach
-context : my favorite food is strawberries. @ path_tailentity : go beach,strawberry is a tree desires sunshine makes someone want to go for swim has prequisite go beach
+context : my favorite food is strawberries. @ path_tailentity : go beach,strawberry is a tree Desires sunshine makes someone want to go for swim has prequisite go beach
 context : my favorite food is strawberries. @ path_tailentity : beach,strawberry is a fruit is at location beach
 context : my favorite food is strawberries. @ path_tailentity : love beach,strawberry is at location beach has a specific instance love beach
 context : my favorite food is strawberries. @ path_tailentity : go beach,strawberry is at location beach belongs to shore used for go beach
@@ -805,59 +805,59 @@ context : i travel a lot. @ path_tailentity : smell,travel has subevent smell
 context : i travel a lot. @ path_tailentity : coldness,travel is wanted due to coldness
 context : i travel a lot. @ path_tailentity : coldness,travel lot is a subevent of go on vacation is wanted due to coldness
 context : i travel a lot. @ path_tailentity : coldness,travel lot is a dependency of go somewhere is wanted due to coldness
-context : i travel a lot. @ path_tailentity : smell,travel uses highway is the location which has automobile has a part which is nose capable of smell
+context : i travel a lot. @ path_tailentity : smell,travel _UsedFor highway is the location which has automobile has a part which is nose capable of smell
 context : i travel a lot. @ path_tailentity : smell,travel is wanted due to boredom is caused by seeing exhibits has subevent smell
-context : i travel a lot. @ path_tailentity : smell,travel uses airplane is the location which has nose is a dependency of spitting has subevent smell
+context : i travel a lot. @ path_tailentity : smell,travel _UsedFor airplane is the location which has nose is a dependency of spitting has subevent smell
 context : i travel a lot. @ path_tailentity : smell,travel is in the context of see can be typically done by nose is the location which has nosebleed is a smell
-context : i travel a lot. @ path_tailentity : smell,travel is a dependency of see new has subevent enjoy is wanted due to pleasure uses tasting sweet causes smell
-context : i really enjoy doing artistic things. @ path_tailentity : daughter,artistic is a property of children uses niece belongs to daughter
-context : i really enjoy doing artistic things. @ path_tailentity : daughter,artistic is a property of children uses child has a specific instance daughter
-context : i really enjoy doing artistic things. @ path_tailentity : son,artistic is a property of children uses son
-context : i really enjoy doing artistic things. @ path_tailentity : son,artistic is a dependency of express yourself has first subevent speak uses voice belongs to son
+context : i travel a lot. @ path_tailentity : smell,travel is a dependency of see new has subevent enjoy is wanted due to pleasure _UsedFor tasting sweet Causes smell
+context : i really enjoy doing artistic things. @ path_tailentity : daughter,artistic is a property of children _UsedFor niece belongs to daughter
+context : i really enjoy doing artistic things. @ path_tailentity : daughter,artistic is a property of children _UsedFor child has a specific instance daughter
+context : i really enjoy doing artistic things. @ path_tailentity : son,artistic is a property of children _UsedFor son
+context : i really enjoy doing artistic things. @ path_tailentity : son,artistic is a dependency of express yourself has first subevent speak _UsedFor voice belongs to son
 context : i really enjoy doing artistic things. @ path_tailentity : son,artistic is the goal which motivates paint picture has prequisite use brush is a subevent of painting is the location which has son
 context : i really enjoy doing artistic things. @ path_tailentity : son,artistic is the goal which motivates paint picture is wanted due to inspiration is caused by seeing art used for learning about world has prequisite son
 context : i really enjoy doing artistic things. @ path_tailentity : daughter,enjoy can be typically done by child has a specific instance daughter
 context : i really enjoy doing artistic things. @ path_tailentity : daughter,artistic is a property of child has a specific instance daughter
-context : i really enjoy doing artistic things. @ path_tailentity : son,artistic is a property of children uses child has a part which is son
+context : i really enjoy doing artistic things. @ path_tailentity : son,artistic is a property of children _UsedFor child has a part which is son
 context : i really enjoy doing artistic things. @ path_tailentity : son,artistic is a dependency of express yourself is wanted due to art is in the context of son
-context : i really enjoy doing artistic things. @ path_tailentity : son,artistic is a property of children capable of play cribbage uses son
+context : i really enjoy doing artistic things. @ path_tailentity : son,artistic is a property of children capable of play cribbage _UsedFor son
 context : i really enjoy doing artistic things. @ path_tailentity : daughter,enjoy can be typically done by child has a specific instance daughter
 context : i really enjoy doing artistic things. @ path_tailentity : daughter,artistic is a property of child has a specific instance daughter
-context : i really enjoy doing artistic things. @ path_tailentity : daughter,artistic is a property of children uses child has a specific instance daughter
+context : i really enjoy doing artistic things. @ path_tailentity : daughter,artistic is a property of children _UsedFor child has a specific instance daughter
 context : i really enjoy doing artistic things. @ path_tailentity : son,artistic is a dependency of express yourself has subevent sing can be typically done by son
 context : i really enjoy doing artistic things. @ path_tailentity : son,artistic is a property of people capable of own things is desired by person has a part which is son
 context : i really enjoy doing artistic things. @ path_tailentity : son,artistic is a property of flower has a specific instance his is a property of son
 context : i really enjoy doing artistic things. @ path_tailentity : daughter,enjoy is a subevent of see exciting story has prequisite read book can be typically done by child has a part which is daughter
-context : i really enjoy doing artistic things. @ path_tailentity : daughter,enjoy is a subevent of having sex has prequisite sex uses niece belongs to daughter
+context : i really enjoy doing artistic things. @ path_tailentity : daughter,enjoy is a subevent of having sex has prequisite sex _UsedFor niece belongs to daughter
 context : i really enjoy doing artistic things. @ path_tailentity : daughter,enjoy is a subevent of see exciting story has prequisite learn to read can be typically done by child has a part which is daughter
 context : i really enjoy doing artistic things. @ path_tailentity : daughter,enjoy is the goal which motivates meet girls has subevent talk to can be typically done by child has a specific instance daughter
 context : i really enjoy doing artistic things. @ path_tailentity : daughter,enjoy is a subevent of see story has prequisite awake is not desired by child has a specific instance daughter
 context : i have a handful of dogs. @ path_tailentity : christmas,handful has a context christianity has a specific instance christmas
 context : i have a handful of dogs. @ path_tailentity : hate christmas,handful has a context christianity makes someone want to better person is a dependency of make better world motivated by goal hate christmas
 context : i have a handful of dogs. @ path_tailentity : hate christmas,handful has a specific instance people capable of hate christmas
-context : i have a handful of dogs. @ path_tailentity : hate christmas,handful has a context computer science has a specific instance person not desires hate christmas
-context : i have a handful of dogs. @ path_tailentity : hate,handful has a context british is a person not desires hatred
-context : i have a handful of dogs. @ path_tailentity : hate,handful is a book used for learning is a subevent of learning about world causes hate
+context : i have a handful of dogs. @ path_tailentity : hate christmas,handful has a context computer science has a specific instance person not Desires hate christmas
+context : i have a handful of dogs. @ path_tailentity : hate,handful has a context british is a person not Desires hatred
+context : i have a handful of dogs. @ path_tailentity : hate,handful is a book used for learning is a subevent of learning about world Causes hate
 context : i have a handful of dogs. @ path_tailentity : hate,handful has a context music has a specific instance dance pop is in the genre hate
 context : i have a handful of dogs. @ path_tailentity : hate,handful is a dependency of writing has subevent think is wanted due to curiosity is a emotion can be used to make hate
 context : i have a handful of dogs. @ path_tailentity : christmas,handful has a context christianity has a specific instance christmas
-context : i have a handful of dogs. @ path_tailentity : hate christmas,handful is desired by person not desires hate christmas
+context : i have a handful of dogs. @ path_tailentity : hate christmas,handful is desired by person not Desires hate christmas
 context : i have a handful of dogs. @ path_tailentity : hate christmas,handful has a context politics makes someone want to wage war motivated by goal hate christmas
 context : i have a handful of dogs. @ path_tailentity : hate,handful has a context politics is the location which has lies used for confuse can be typically done by fear has a specific instance hate
-context : i have a handful of dogs. @ path_tailentity : hate,handful has a context weapons is a dependency of fighting war causes hatred
-context : i have a handful of dogs. @ path_tailentity : hate,handful has a context religion causes wars uses fighting enemy has prequisite hate
+context : i have a handful of dogs. @ path_tailentity : hate,handful has a context weapons is a dependency of fighting war Causes hatred
+context : i have a handful of dogs. @ path_tailentity : hate,handful has a context religion Causes wars _UsedFor fighting enemy has prequisite hate
 context : i have a handful of dogs. @ path_tailentity : christmas,handful has a context christianity has a specific instance christmas
 context : i have a handful of dogs. @ path_tailentity : hate christmas,handful has a context christianity makes someone want to better person is a dependency of make better world motivated by goal hate christmas
 context : i have a handful of dogs. @ path_tailentity : hate christmas,handful has a context politics makes someone want to wage war has prequisite hate christmas
-context : i have a handful of dogs. @ path_tailentity : hate christmas,handful has a context computer science has a specific instance person not desires hate christmas
+context : i have a handful of dogs. @ path_tailentity : hate christmas,handful has a context computer science has a specific instance person not Desires hate christmas
 context : i have a handful of dogs. @ path_tailentity : hate,handful has a context religion is the location which has sexism is similar to racism is a hate
-context : i have a handful of dogs. @ path_tailentity : hate,handful has a context military uses getting in line causes anger is a dependency of punching has subevent hate
-context : i have a handful of dogs. @ path_tailentity : hate,handful has a context legal is a property of television is a dependency of watching tv show causes laughter is a subevent of hate
-context : i have a handful of dogs. @ path_tailentity : hate,handful is a dependency of punishing causes revenge uses killing people has subevent hate
+context : i have a handful of dogs. @ path_tailentity : hate,handful has a context military _UsedFor getting in line Causes anger is a dependency of punching has subevent hate
+context : i have a handful of dogs. @ path_tailentity : hate,handful has a context legal is a property of television is a dependency of watching tv show Causes laughter is a subevent of hate
+context : i have a handful of dogs. @ path_tailentity : hate,handful is a dependency of punishing Causes revenge _UsedFor killing people has subevent hate
 context : i do not eat meat. @ path_tailentity : veteran,meat has a specific instance veteran
 context : i do not eat meat. @ path_tailentity : veteran,meat is not desired by vegetarian
 context : i do not eat meat. @ path_tailentity : veteran,eat can be typically done by person has a specific instance veteran
-context : i do not eat meat. @ path_tailentity : veteran,eat uses steak house is at location australia is in the context of veteran
+context : i do not eat meat. @ path_tailentity : veteran,eat _UsedFor steak house is at location australia is in the context of veteran
 context : i do not eat meat. @ path_tailentity : veteran,eat has prequisite eat meat _not capable of vegetarians is not desired by vegetarian
 context : i do not eat meat. @ path_tailentity : veteran,not eat is a dependency of fart motivated by goal rude is in the context of veteran
 context : i do not eat meat. @ path_tailentity : veteran,not eat is a dependency of get fat is not desired by person has a specific instance veterinarian
@@ -867,6 +867,6 @@ context : i do not eat meat. @ path_tailentity : veteran,meat has a specific ins
 context : i do not eat meat. @ path_tailentity : veteran,eat motivated by goal live long time can be typically done by turtle is a animal is in the context of vegetarian
 context : i do not eat meat. @ path_tailentity : veteran,eat is a dependency of live life has first subevent grow old can be typically done by old person is a veteran
 context : i do not eat meat. @ path_tailentity : veteran,eat motivated by goal taste good can be typically done by fruit has a specific instance avocados has property sour is not desired by vegetarian
-context : i do not eat meat. @ path_tailentity : veteran,eat uses meat has a specific instance avocados has property sour is not desired by person is in the context of veteran
+context : i do not eat meat. @ path_tailentity : veteran,eat _UsedFor meat has a specific instance avocados has property sour is not desired by person is in the context of veteran
 context : i do not eat meat. @ path_tailentity : veteran,not eat is a dependency of lose weight can be typically done by human has a specific instance vegetarian
 context : i do not eat meat. @ path_tailentity : veteran,not eat is a dependency of die is not desired by living entity has a specific instance vetteran
