@@ -163,12 +163,10 @@ class GPT5bot(torch.nn.Module):
         target_keywords = get_verbnouns(target.strip())
         if split_entities_into_multi:
             def _augment(lst):
-                global augmentation_cnt
                 for w in lst[:]:
                     tmp = w.strip().split()
                     if len(tmp)>1:
                         lst.extend(tmp)
-                        augmentation_cnt += len(tmp)
             # print("earlier : context_words = ", context_words)
             _augment(context_keywords)
             # print("after aug : context_words = ", context_words)
