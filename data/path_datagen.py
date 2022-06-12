@@ -35,11 +35,11 @@ for i in range(4):
         writer.writerow(["inputs", "target"])
         for d in data:
             if idx != 0:
-                inputs = "context : " + d["context"] + " @ path_tailentity : " + d["path_tailentity"]
-                path = d["path"]
-                for key, val in relation:
-                    path = path.replace(val, "")
-                    path = path.replace(key, "")
+                inputs = "context : " + d["context"].lower() + " @ path_tailentity : " + d["path_tailentity"].lower()
+                path = d["path"].lower()
+                # for key, val in relation:
+                #     path = path.replace(val, "")
+                #     path = path.replace(key, "")
                 target = path
                 writer.writerow([inputs, target])
             idx += 1
@@ -60,12 +60,12 @@ for i in range(4):
         writer.writerow(["inputs", "target"])
         for d in data:
             if idx != 0:
-                path = d["path"]
-                for key, val in relation:
-                    path = path.replace(val, "")
-                    path = path.replace(key, "")
+                path = d["path"].lower()
+                # for key, val in relation:
+                #     path = path.replace(val, "")
+                #     path = path.replace(key, "")
                 target = path
-                inputs = "context : " + d["context"] + " @ path_tailentity : " + d["path_tailentity"] + " @ path : " + path
-                target = d["response"]
+                inputs = "context : " + d["context"].lower() + " @ path_tailentity : " + d["path_tailentity"].lower() + " @ path : " + path
+                target = d["response"].lower()
             idx += 1
             writer.writerow([inputs, target])
