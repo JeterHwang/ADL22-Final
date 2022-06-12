@@ -38,8 +38,8 @@ for i in range(4):
                 inputs = "context : " + d["context"] + " @ path_tailentity : " + d["path_tailentity"]
                 path = d["path"]
                 for key, val in relation:
-                    if path.find(val) >= 0:
-                        path = path.replace(val, key.lower())
+                    path = path.replace(val, "")
+                    path = path.replace(key, "")
                 target = path
                 writer.writerow([inputs, target])
             idx += 1
@@ -62,9 +62,8 @@ for i in range(4):
             if idx != 0:
                 path = d["path"]
                 for key, val in relation:
-                    
-                    if path.find(val) >= 0:
-                        path = path.replace(val, key.lower())
+                    path = path.replace(val, "")
+                    path = path.replace(key, "")
                 target = path
                 inputs = "context : " + d["context"] + " @ path_tailentity : " + d["path_tailentity"] + " @ path : " + path
                 target = d["response"]

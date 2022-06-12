@@ -16,6 +16,7 @@ from datasets import load_metric
 
 from dataset import read_data
 
+
 def same_seeds(seed):
     torch.manual_seed(seed)
     if torch.cuda.is_available():
