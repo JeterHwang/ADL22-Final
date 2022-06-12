@@ -143,6 +143,14 @@ def main(args):
     ###########################################
     tokenizer.pad_token = tokenizer.eos_token #
     tokenizer.add_tokens(['@'])
+    new_tokens = []
+    g = open("../data/relation2text.json")
+    relation = json.load(g)
+    for key in relation.keys():
+        new_tokens.append(key.lower())
+    tokenizer.add_tokens(new_tokens)
+    model.resize_token_embeddings(len(tokenizer))
+    # print("# ", num_added_tokens, " tokens added")
     ###########################################
     print('----- Finish Model Initialization -----')
 

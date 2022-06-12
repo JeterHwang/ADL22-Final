@@ -26,7 +26,7 @@ def preprocess_function(examples, tokenizer, max_input_length=60, max_target_len
                 add_special_tokens=True,
                 return_tensors="pt",
             )
-
+        labels["input_ids"][labels["input_ids"] == tokenizer.pad_token_id] = -100
         model_inputs["labels"] = labels["input_ids"]
         model_inputs["targets"] = targets
     return model_inputs
