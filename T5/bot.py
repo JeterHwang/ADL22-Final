@@ -5,8 +5,8 @@ import math
 import torch.nn.functional as F
 from tqdm import tqdm, tnrange
 from transformers import T5Tokenizer, T5ForConditionalGeneration
-from transformers import GPT2Config, GPT2Tokenizer, GPT2Model
-from utils import connect_entities, get_verbnouns, check_overlap, idf_score, get_min_path, get_filtered_paths
+from transformers import GPT2Config, GPT2Tokenizer, GPT2Model, GPT2LMHeadModel
+from utils import connect_entities, get_verbnouns, check_overlap, idf_score, get_min_path, get_filtered_paths, clean_generation, predict_formality
 
 extra_stopwords = ["lot", "person", "have", "not", "also", "very", "often", "however", "too", "usually", "really", "early", "never", "always", "sometimes", "together", "likely", "simply", "generally", "instead", "actually", "again", "rather", "almost", "especially", "ever", "quickly", "probably", "already", "below", "directly", "therefore", "else", "thus", "easily", "eventually", "exactly", "certainly", "normally", "currently", "extremely", "finally", "constantly", "properly", "soon", "specifically", "ahead", "daily", "highly", "immediately", "relatively", "slowly", "fairly", "primarily", "completely", "ultimately", "widely", "recently", "seriously", "frequently", "fully", "mostly", "naturally", "nearly", "occasionally", "carefully", "clearly", "essentially", "possibly", "slightly", "somewhat", "equally", "greatly", "necessarily", "personally", "rarely", "regularly", "similarly", "basically", "closely", "effectively", "initially", "literally", "mainly", "merely", "gently", "hopefully", "originally", "roughly", "significantly", "totally", "twice", "elsewhere", "everywhere", "obviously", "perfectly", "physically", "successfully", "suddenly", "truly", "virtually", "altogether", "anyway", "automatically", "deeply", "definitely", "deliberately", "hardly", "readily", "terribly", "unfortunately", "forth", "briefly", "moreover", "strongly", "honestly", "previously", "as", "there", "when", "how", "so", "up", "out", "no", "only", "well", "then", "first", "where", "why", "now", "around", "once", "down", "off", "here", "away", "today", "far", "quite", "later", "above", "yet", "maybe", "otherwise", "near", "forward", "somewhere", "anywhere", "please", "forever", "somehow", "absolutely", "abroad", "yeah", "nowhere", "the", "to", "in", "on", "by", "more", "about", "such", "through", "new", "just", "any", "each", "much", "before", "between", "free", "right", "best", "since", "both", "sure", "without", "back", "better", "enough", "lot", "small", "though", "less", "little", "under", "next", "hard", "real", "left", "least", "short", "last", "within", "along", "lower", "TRUE", "bad", "across", "clear", "easy", "full", "close", "late", "proper", "fast", "wide", "item", "wrong", "ago", "behind", "quick", "straight", "direct", "extra", "pretty", "overall", "alone", "bright", "flat", "whatever", "slow", "clean", "fresh", "whenever", "cheap", "thin", "cool", "fair", "fine", "smooth", "FALSE", "thick", "nearby", "wild", "apart", "none", "strange", "aside", "super", "ill", "honest", "ok", "thanks"]
 
@@ -107,7 +107,7 @@ class T5bot(torch.nn.Module):
 class GPT5bot(torch.nn.Module):
     def __init__(self, stage1_model, tokenizer1, stage2_model, tokenizer2, keywords, gutenberg_idf, relation2text, device='cpu'):
         super(GPT5bot, self).__init__()
-        self.GPT2          =  stage1_model
+        self.GPT2          = stage1_model
         self.GPT2tokenizer = tokenizer1
         self.T5            = stage2_model
         self.T5tokenizer   = tokenizer2
@@ -115,12 +115,12 @@ class GPT5bot(torch.nn.Module):
         self.gutenberg_idf = gutenberg_idf
         self.relation2text = relation2text
         self.device        = device
-        self.T5tokenizer.add_tokens(['@', '<s>', '</s>'])
+        # self.T5tokenizer.add_tokens(['@', '<s>', '</s>'])
         
         self.target = None
 
     @staticmethod
-    def from_pretrained(model2_path, tokenizer2_path, commensense_model_path, keywords_path, rel2text_path, counts_path, device):
+    def from_pretrained(commensense_model_path, model2_path, tokenizer2_path, keywords_path, rel2text_path, counts_path, device):
         print('----- Start Loading GPT-2 -----')
         lm_type = 'gpt2'
         config = GPT2Config.from_pretrained(lm_type)
@@ -239,7 +239,7 @@ class GPT5bot(torch.nn.Module):
             paths, scores = dp['paths'][ht]['headtotail_paths'], dp['paths'][ht]['headtotail_scores']
                 
             if is_test is True:
-                path, score = get_min_path(paths, scores, self.relation2text, parse_edges=False)
+                path, score = get_min_path(paths, scores, self.relation2text, parse_edges=True)
                 newdp = {'context':dp['context'], 'target': dp['target']}
                 newdp['path'] = path
                 newdp['score_path'] = score
@@ -249,7 +249,7 @@ class GPT5bot(torch.nn.Module):
                 new_dp_list.append(newdp)
                 continue
                 
-            paths, scores = get_filtered_paths(paths, scores, self.relation2text, parse_edges=False)
+            paths, scores = get_filtered_paths(paths, scores, self.relation2text, parse_edges=True)
             for i, path in enumerate(paths):
                 # newdp = copy.deepcopy(dp)
                 newdp = {'context':dp['context'], 'target': dp['target']}
@@ -428,3 +428,211 @@ class Generator(torch.nn.Module):
                 generated = torch.cat((generated, next_token), dim=1)
         # print(probs_arr)
         return generated, probs_arr
+
+class GPT2bot(torch.nn.Module):
+    def __init__(self, stage1_model, tokenizer1, stage2_model, tokenizer2, keywords, gutenberg_idf, relation2text, device='cpu'):
+        super(GPT2bot, self).__init__()
+        self.model1        = stage1_model
+        self.tokenizer1    = tokenizer1
+        self.model2        = stage2_model
+        self.tokenizer2    = tokenizer2
+        self.keywords      = keywords
+        self.gutenberg_idf = gutenberg_idf
+        self.relation2text = relation2text
+        self.device        = device
+        
+        self.target = None
+
+    @staticmethod
+    def from_pretrained(commensense_model_path, model2_path, tokenizer2_path, keywords_path, rel2text_path, counts_path, device):
+        print('----- Start Loading KPG-ht -----')
+        lm_type = 'gpt2'
+        config = GPT2Config.from_pretrained(lm_type)
+        tokenizer = GPT2Tokenizer.from_pretrained(lm_type)
+        tokenizer.add_tokens(['<PAD>'])
+        tokenizer.add_tokens(['<SEP>'])
+        tokenizer.add_tokens(['<END>'])
+        tokenizer.add_tokens(['<contains>'])
+        tokenizer.add_tokens(['<final>'])
+
+        #comment below if there is a size mismatch error. there were nt added in first few models
+        with open(rel2text_path, 'r') as fr:
+            relation2text = json.load(fr)
+            relation2text =  {k.lower(): v for k, v in relation2text.items()}
+        relation_keys = relation2text.keys()
+        relation_token_list = [x.lower() for x in relation_keys] #+ ['_' + x.lower() for x in relation_keys]
+        tokenizer.add_tokens(relation_token_list)
+
+        gpt = GPT2Model.from_pretrained(lm_type)
+        config.vocab_size = len(tokenizer)
+        gpt.resize_token_embeddings(len(tokenizer))
+        pretrain_generator_ckpt = commensense_model_path / "model.ckpt"
+        print('loading generator')
+        generator = Generator(gpt, config)
+        state_dict = torch.load(pretrain_generator_ckpt, map_location='cpu')
+        generator.load_state_dict(state_dict, strict=False)
+        print('loaded state dict generator')
+        generator = generator.to(device)
+        print('----- Start Loading CRG -----')
+        model2 = GPT2LMHeadModel.from_pretrained(model2_path, return_dict=True).to(device)
+        tokenizer2 = GPT2Tokenizer.from_pretrained(tokenizer2_path)
+        keywords = json.loads(keywords_path.read_text())
+        print('----- Start Loading Gutenberg Counts -----')
+        gutenberg_counts = open(counts_path, 'r').readlines()
+        gutenberg_counts = [s.strip().split() for s in gutenberg_counts]
+        gutenberg_word2cnt = {w:int(c) for c,w in gutenberg_counts }
+        gutenberg_idf = {w:(1.0/math.log(1+c)) for w,c in gutenberg_word2cnt.items()} # more frequnt words have low frequency
+        print('----- Finish Loading Pretrained Models -----')
+        return GPT2bot(generator, tokenizer, model2, tokenizer2, keywords, gutenberg_idf, relation2text, device)
+
+    def find_path(self, context, target, verbose=False, remove_overlap=True, split_entities_into_multi=True):
+        dp = {'context': context, 'target': target}
+
+        context_keywords = get_verbnouns(context.strip())
+        target_keywords = [target.strip()]
+
+        if split_entities_into_multi:
+            def _augment(lst):
+                for w in lst[:]:
+                    tmp = w.strip().split()
+                    if len(tmp)>1:
+                        lst.extend(tmp)
+            # print("earlier : context_words = ", context_words)
+            _augment(context_keywords)
+            # print("after aug : context_words = ", context_words)
+            _augment(target_keywords)
+        
+        dp['paths'] = dict()
+        for head_entity in context_keywords:
+            for tail_entity in target_keywords:
+                if tail_entity in ['person'] or head_entity in ['person'] or 'not' in tail_entity:
+                    continue
+
+                # check if want to remove head/tail
+                # - remove head-tail where they overlap (eat, eat food)
+                if remove_overlap and check_overlap(head_entity, tail_entity):
+                    continue
+
+                dp['paths'][head_entity + '---' + tail_entity] = dict()
+                dpht = dp['paths'][head_entity + '---' + tail_entity]
+                paths, scores = connect_entities(
+                    head_entity, 
+                    tail_entity, 
+                    self.model1, 
+                    self.tokenizer1,
+                    device=self.device,
+                    temperature=0.7, 
+                    num_outs=5, 
+                    top_k=0,
+                    top_p=0.9
+                )
+                dpht['headtotail_paths'] = paths
+                dpht['headtotail_scores'] = scores
+                if verbose:
+                    print('\n', head_entity, '->', tail_entity)
+                    for i, path in enumerate(paths):
+                        print(path, scores[i])
+        return dp
+
+    def filter_path(self, dp, is_test=False, apply_reranking=True, apply_ranking_topk=3):
+        all_head_tails = []
+        for ht in dp['paths'].keys():
+            head, tail = ht.split('---')
+            all_head_tails.append((head, tail))
+        # TODO add reranking and filter logic
+        filtered_head_tails = []
+        for ht_pair in all_head_tails:
+            h,t = ht_pair
+            if h in extra_stopwords or t in extra_stopwords:
+                continue
+            if  type(h) is str and len(h)<2 or len(t)<2:
+                continue
+            filtered_head_tails.append(ht_pair)
+        reranked_head_tails = filtered_head_tails
+                
+        ##add reranking
+        if apply_reranking:
+            all_head_tails_scores = [ [x, y, idf_score(x, y, self.gutenberg_idf)] for x, y in reranked_head_tails]
+            all_head_tails_scores = sorted(all_head_tails_scores, key=lambda k:-k[2]) # decreasing score
+            reranked_head_tails = [ [x,y] for x,y,_ in all_head_tails_scores[:apply_ranking_topk] ] 
+
+        new_dp_list = []
+        for ht in reranked_head_tails:
+            ht = ht[0]+'---'+ht[1]
+            head, tail = ht.split('---')
+            paths, scores = dp['paths'][ht]['headtotail_paths'], dp['paths'][ht]['headtotail_scores']
+            if len(paths) == 0:
+                continue
+            if is_test is True:
+                path, score = get_min_path(paths, scores, self.relation2text, parse_edges=True)
+                newdp = {'context':dp['context'], 'target': dp['target']}
+                newdp['path'] = path
+                newdp['score_path'] = score
+                newdp['type'] = 'direct'                     
+                newdp['path_headentity'] = head
+                newdp['path_tailentity'] = tail
+                new_dp_list.append(newdp)
+                continue
+                
+            paths, scores = get_filtered_paths(paths, scores, self.relation2text, parse_edges=True)
+            mindp = {
+                'context':dp['context'], 
+                'target': dp['target'],
+                'path' : paths[0],
+                'score_path' : scores[0],
+                'type' : 'direct',
+                'path_headentity' : head,
+                'path_tailentity' : tail
+            }
+            for i, path in enumerate(paths):
+                # newdp = copy.deepcopy(dp)
+                if scores[i] >= mindp['score_path']:
+                    continue
+                newdp = {'context':dp['context'], 'target': dp['target']}
+                newdp['path'] = path
+                newdp['score_path'] = scores[i]
+                newdp['type'] = 'direct'
+                newdp['path_headentity'] = head
+                newdp['path_tailentity'] = tail
+                mindp = newdp
+            new_dp_list.append(mindp)
+        return new_dp_list           
+
+    def generate_sentence(self, input_text, max_target_len=60):
+        self.model2.eval().to(self.device)
+        all_puretext = []
+        for text in input_text:
+            results_puregen = predict_formality(
+                self.model2,
+                self.tokenizer2,
+                None,
+                [text],
+                precondition_topk=20,
+                do_sample=True,
+                length_cutoff=max_target_len,
+                condition_lambda=0,
+                device=self.device,
+                verbose=False,
+            )
+            results_puregen = clean_generation(results_puregen)
+            all_puretext.append(results_puregen)
+            # print(results_puregen, '--no classifier')
+        return all_puretext
+    
+    def generate(self, source, max_input_length=512):
+        dp = self.find_path(source, self.target)
+        dp = self.filter_path(dp, is_test=False)
+        dp.sort(key=lambda x : x['score_path'])
+        input_text = []
+        for ele in dp:
+            text = '[knowledge clue] ' + ele['path'] + ' [target] ' + ele['target'] + ' [context] ' + ' [eot] '.join([ele['context']]) + ' [response] :'
+            input_text.append(text)
+            # print(ele['score_path'], ele['path'])
+        output = self.generate_sentence(input_text)
+        # for out in output:
+        #     print(out)
+        return output[0]
+
+    def choose_target(self):
+        domain_list = self.keywords[random.choice(['restaurant', 'hotel', 'movie', 'song', 'transportation', 'attraction'])]
+        self.target = ' '.join(random.sample(domain_list, 1))
