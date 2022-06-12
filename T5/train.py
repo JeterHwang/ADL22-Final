@@ -80,9 +80,9 @@ def train(model, optimizer, lr_scheduler, train_loader, valid_loader, accelerato
                         input_ids=input_ids,
                         attention_mask=attention_mask,
                         max_length=args.max_target_len,
-                        num_beams=10, 
-                        no_repeat_ngram_size=2, 
-                        early_stopping=True
+                        do_sample=True,
+                        top_k=50, 
+                        top_p=1, 
                     )
                     generated_tokens = accelerator.pad_across_processes(
                         generated_tokens, 
@@ -113,10 +113,11 @@ def train(model, optimizer, lr_scheduler, train_loader, valid_loader, accelerato
             state_dict_path = args.ckpt_dir / f'Epoch{epoch + 1}'
             state_dict_path.mkdir(parents=True, exist_ok=True)
             unwrapped_model.save_pretrained(
-                state_dict_path, 
+                state_dict_path / 'model', 
                 save_function=accelerator.save, 
                 state_dict=accelerator.get_state_dict(model)
             )
+            tokenizer.save_pretrained(state_dict_path / 'tokenizer')
         #accelerator.save(unwrapped_model.state_dict(), state_dict_path / 'model.pt')
         #unwrapped_model.config.to_json_file(state_dict_path / 'config.json')
     
@@ -143,13 +144,13 @@ def main(args):
     tokenizer = T5Tokenizer.from_pretrained("t5-small")
     ###########################################
     tokenizer.pad_token = tokenizer.eos_token #
-    tokenizer.add_tokens(['@'])
+    tokenizer.add_tokens(['@', '<s>', '</s>'], special_tokens=True)
     new_tokens = []
     g = open("../data/relation2text.json")
     relation = json.load(g)
     for key in relation.keys():
         new_tokens.append(key.lower())
-    tokenizer.add_tokens(new_tokens)
+    tokenizer.add_tokens(new_tokens, special_tokens=True)
     model.resize_token_embeddings(len(tokenizer))
     # print("# ", num_added_tokens, " tokens added")
     ###########################################
@@ -248,7 +249,7 @@ def parse_args() -> Namespace:
     parser.add_argument("--batch_size", type=int, default=4)
 
     # training
-    parser.add_argument("--num_epoch", type=int, default=8)
+    parser.add_argument("--num_epoch", type=int, default=16)
     parser.add_argument("--logging_step", type=int, default=100)
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--gradient_accumulation_steps", type=int, default=8)
