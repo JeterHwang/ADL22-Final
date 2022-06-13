@@ -221,7 +221,7 @@ def parse_args() -> Namespace:
         "--data_dir",
         type=Path,
         help="Directory to the dataset.",
-        default="../data/out_of_domain/",
+        default="./data/out_of_domain/",
     )
     parser.add_argument(
         "--ckpt_dir",
