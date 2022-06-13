@@ -7,7 +7,10 @@ import torch.nn.functional as F
 from nltk import word_tokenize, pos_tag
 from nltk.corpus import wordnet
 from typing import Iterable, List
-
+nltk.download('punkt')
+nltk.download('averaged_perceptron_tagger')
+nltk.download('wordnet')
+nltk.download('omw-1.4')
 nlp = spacy.load("en_core_web_sm")
 stopwords = nlp.Defaults.stop_words
 lemmatizer = nltk.WordNetLemmatizer()
