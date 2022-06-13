@@ -6,10 +6,10 @@ import torch.nn.functional as F
 from tqdm import tqdm, tnrange
 from transformers import T5Tokenizer, T5ForConditionalGeneration
 from transformers import GPT2Config, GPT2Tokenizer, GPT2Model, GPT2LMHeadModel, GPT2TokenizerFast
-
+from datasets import load_metric
 from utils import connect_entities, get_verbnouns, check_overlap, idf_score, get_min_path, get_filtered_paths
 from utils import clean_generation, predict_formality
-from utils import perplexity
+from utils import compute_score
 
 extra_stopwords = ["lot", "person", "have", "not", "also", "very", "often", "however", "too", "usually", "really", "early", "never", "always", "sometimes", "together", "likely", "simply", "generally", "instead", "actually", "again", "rather", "almost", "especially", "ever", "quickly", "probably", "already", "below", "directly", "therefore", "else", "thus", "easily", "eventually", "exactly", "certainly", "normally", "currently", "extremely", "finally", "constantly", "properly", "soon", "specifically", "ahead", "daily", "highly", "immediately", "relatively", "slowly", "fairly", "primarily", "completely", "ultimately", "widely", "recently", "seriously", "frequently", "fully", "mostly", "naturally", "nearly", "occasionally", "carefully", "clearly", "essentially", "possibly", "slightly", "somewhat", "equally", "greatly", "necessarily", "personally", "rarely", "regularly", "similarly", "basically", "closely", "effectively", "initially", "literally", "mainly", "merely", "gently", "hopefully", "originally", "roughly", "significantly", "totally", "twice", "elsewhere", "everywhere", "obviously", "perfectly", "physically", "successfully", "suddenly", "truly", "virtually", "altogether", "anyway", "automatically", "deeply", "definitely", "deliberately", "hardly", "readily", "terribly", "unfortunately", "forth", "briefly", "moreover", "strongly", "honestly", "previously", "as", "there", "when", "how", "so", "up", "out", "no", "only", "well", "then", "first", "where", "why", "now", "around", "once", "down", "off", "here", "away", "today", "far", "quite", "later", "above", "yet", "maybe", "otherwise", "near", "forward", "somewhere", "anywhere", "please", "forever", "somehow", "absolutely", "abroad", "yeah", "nowhere", "the", "to", "in", "on", "by", "more", "about", "such", "through", "new", "just", "any", "each", "much", "before", "between", "free", "right", "best", "since", "both", "sure", "without", "back", "better", "enough", "lot", "small", "though", "less", "little", "under", "next", "hard", "real", "left", "least", "short", "last", "within", "along", "lower", "TRUE", "bad", "across", "clear", "easy", "full", "close", "late", "proper", "fast", "wide", "item", "wrong", "ago", "behind", "quick", "straight", "direct", "extra", "pretty", "overall", "alone", "bright", "flat", "whatever", "slow", "clean", "fresh", "whenever", "cheap", "thin", "cool", "fair", "fine", "smooth", "FALSE", "thick", "nearby", "wild", "apart", "none", "strange", "aside", "super", "ill", "honest", "ok", "thanks"]
 
@@ -443,7 +443,7 @@ class Generator(torch.nn.Module):
         return generated, probs_arr
 
 class GPT2bot(torch.nn.Module):
-    def __init__(self, stage1_model, tokenizer1, stage2_model, tokenizer2, keywords, gutenberg_idf, relation2text, pplx_model, pplx_tokenizer, device='cpu'):
+    def __init__(self, stage1_model, tokenizer1, stage2_model, tokenizer2, keywords, gutenberg_idf, relation2text, pplx_model, pplx_tokenizer, metric, device='cpu'):
         super(GPT2bot, self).__init__()
         self.model1        = stage1_model
         self.tokenizer1    = tokenizer1
@@ -455,7 +455,8 @@ class GPT2bot(torch.nn.Module):
         self.device        = device
         
         self.pplx_model    = pplx_model
-        self.pplx_tokenizer = pplx_tokenizer
+        self.pplx_tokenizer= pplx_tokenizer
+        self.metric        = metric
         self.target = None
 
     @staticmethod
@@ -500,8 +501,9 @@ class GPT2bot(torch.nn.Module):
         print("----- Start Loading Perplexity Model -----")
         pplx_model = GPT2LMHeadModel.from_pretrained('gpt2').to(device)
         pplx_tokenizer = GPT2TokenizerFast.from_pretrained('gpt2')
+        metric = load_metric("sacrebleu") # sacre bleu metric
         print('----- Finish Loading Pretrained Models -----')
-        return GPT2bot(generator, tokenizer, model2, tokenizer2, keywords, gutenberg_idf, relation2text, pplx_model, pplx_tokenizer, device)
+        return GPT2bot(generator, tokenizer, model2, tokenizer2, keywords, gutenberg_idf, relation2text, pplx_model, pplx_tokenizer, metric, device)
 
     def find_path(self, context, target, verbose=False, remove_overlap=True, split_entities_into_multi=True):
         dp = {'context': context, 'target': target}
@@ -635,13 +637,13 @@ class GPT2bot(torch.nn.Module):
             input_text.append(text)
             # print(ele['score_path'], ele['path'])
         output = self.generate_sentence(input_text)
-        min_perplexity, final_result = 10000000, ""
+        max_score, final_result = -1000000, ""
         for out in output:
-            pplx = perplexity(" ".join(history) + " " + out, self.pplx_model, self.pplx_tokenizer, self.device)
-            if pplx < min_perplexity:
+            score = compute_score(self.pplx_model, self.pplx_tokenizer, self.metric, "".join(history[:-1]), out, history[-1], self.device)
+            if score > max_score:
                 final_result = out
-                min_perplexity = pplx
-            # print(pplx, out)
+                max_score = score
+            print(score, out)
         return final_result
 
     def choose_target(self):

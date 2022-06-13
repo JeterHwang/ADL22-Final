@@ -541,34 +541,26 @@ def enforce_repetition_penalty_(lprobs, batch_size, num_beams, prev_output_token
                 lprobs[i, previous_token] /= repetition_penalty
 
 
-def perplexity(model, tokenizer, prediction):
-
-
-    device = "cuda"
+def perplexity(pplx_model, pplx_tokenizer, prediction, device):
     nll = 0
-
     if prediction:
         input_ids = pplx_tokenizer(prediction, return_tensors="pt").input_ids.to(device)
-        #        shuffle(input_ids[0])
         with torch.no_grad():
             outputs = pplx_model(input_ids, labels=input_ids)
             nll += outputs[0].mean().item()
 
     average_nll = nll
     ppl = torch.exp(torch.tensor(average_nll)).item()
-
     return ppl
 
 def bleu_score_compute(metric, prediction, reference):
     result = metric.compute(predictions=[[prediction]], references=[[reference]])
-    
     return result["score"]
 
-def compute_score(model, tokenizer, metric, concat_conversation, prediction, reference):
-    perplexity_score = perplexity(model, tokenizer, concat_conversation)
+def compute_score(model, tokenizer, metric, concat_conversation, prediction, reference, device):
+    perplexity_score = perplexity(model, tokenizer, concat_conversation, device)
     bleu_score = bleu_score_compute(metric, prediction, reference)
     final_score = bleu_score + 100 / (perplexity_score + 1e-8) # The constant 10 is a hyper-parameter and 1e-8 is to prevent nan
-    print(bleu_score, 100 / (perplexity_score + 1e-8))
     return final_score
 
 
