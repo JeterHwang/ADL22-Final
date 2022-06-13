@@ -1,0 +1,14 @@
+python3 classifier.py \
+  --model_name_or_path roberta-large \
+  --train_file ./input.json  \
+  --validation_file ./input.json \
+  --test_file ./input.json \
+  --cache_dir ./cache/ \
+  --do_train \
+  --do_predict \
+  --max_seq_length 128 \
+  --per_device_train_batch_size 32 \
+  --learning_rate 2e-5 \
+  --num_train_epochs 20 \
+  --output_dir ./out/ \
+  --overwrite_output_dir
