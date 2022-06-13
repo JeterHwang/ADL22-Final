@@ -176,57 +176,87 @@ class MyTrainingArguments(TrainingArguments):
         default=True, metadata={"help": "Whether or not to disable the tqdm progress bars."}
     )
 
+
+parser = HfArgumentParser((ModelArguments, DataTrainingArguments, MyTrainingArguments))
+model_args, data_args, training_args = parser.parse_args_into_dataclasses()
+
+# Load pretrained model and tokenizer
+#
+# In distributed training, the .from_pretrained methods guarantee that only one local process can concurrently
+# download model & vocab.
+config = AutoConfig.from_pretrained(
+    model_args.config_name,
+    finetuning_task=data_args.task_name,
+    cache_dir=model_args.cache_dir,
+    revision=model_args.model_revision,
+    use_auth_token=True if model_args.use_auth_token else None,
+)
+tokenizer = AutoTokenizer.from_pretrained(
+    model_args.tokenizer_name,
+    cache_dir=model_args.cache_dir,
+    use_fast=model_args.use_fast_tokenizer,
+    revision=model_args.model_revision,
+    use_auth_token=True if model_args.use_auth_token else None,
+)
+model = AutoModelForSequenceClassification.from_pretrained(
+    model_args.model_name_or_path,
+    config=config,
+    cache_dir=model_args.cache_dir,
+    revision=model_args.model_revision,
+    use_auth_token=True if model_args.use_auth_token else None,
+    ignore_mismatched_sizes=model_args.ignore_mismatched_sizes,
+)
+
+# Padding strategy
+if data_args.pad_to_max_length:
+    padding = "max_length"
+else:
+    # We will pad later, dynamically at batch creation, to the max sequence length in each batch
+    padding = False
+
+max_seq_length = min(data_args.max_seq_length, tokenizer.model_max_length)
+
+def preprocess_function(examples):
+    # Tokenize the texts
+    contexts = []
+    for example in examples['dialog']:
+        contexts.append('<s>' + '</s> <s>'.join(example) + '</s>')
+    result = tokenizer(contexts, padding=padding, max_length=max_seq_length, truncation=True)
+    # Map labels to IDs (not necessary for GLUE tasks)
+    # result["label"] = [(label_to_id[l] if l != -1 else -1) for l in examples[label_name]]
+    return result
+
+# Get the metric function
+metric = load_metric("accuracy")
+
+# You can define your custom compute_metrics function. It takes an `EvalPrediction` object (a namedtuple with a
+# predictions and label_ids field) and has to return a dictionary string to float.
+def compute_metrics(p: EvalPrediction):
+    preds = p.predictions[0] if isinstance(p.predictions, tuple) else p.predictions
+    preds = np.argmax(preds, axis=1)
+    return {"accuracy": (preds == p.label_ids).astype(np.float32).mean().item()}
+
+# Data collator will default to DataCollatorWithPadding when the tokenizer is passed to Trainer, so we change it if
+# we already did the padding.
+if data_args.pad_to_max_length:
+    data_collator = default_data_collator
+elif training_args.fp16:
+    data_collator = DataCollatorWithPadding(tokenizer, pad_to_multiple_of=8)
+else:
+    data_collator = None
+
+# Initialize our Trainer
+trainer = Trainer(
+    model=model,
+    args=training_args,
+    compute_metrics=compute_metrics,
+    tokenizer=tokenizer,
+    data_collator=data_collator,
+)
+
+
 def predict_keyword_roberta(dialog_list):
     dialog_list = [dialog_list]
-    parser = HfArgumentParser((ModelArguments, DataTrainingArguments, MyTrainingArguments))
-    model_args, data_args, training_args = parser.parse_args_into_dataclasses()
-
-    # Load pretrained model and tokenizer
-    #
-    # In distributed training, the .from_pretrained methods guarantee that only one local process can concurrently
-    # download model & vocab.
-    config = AutoConfig.from_pretrained(
-        model_args.config_name,
-        finetuning_task=data_args.task_name,
-        cache_dir=model_args.cache_dir,
-        revision=model_args.model_revision,
-        use_auth_token=True if model_args.use_auth_token else None,
-    )
-    tokenizer = AutoTokenizer.from_pretrained(
-        model_args.tokenizer_name,
-        cache_dir=model_args.cache_dir,
-        use_fast=model_args.use_fast_tokenizer,
-        revision=model_args.model_revision,
-        use_auth_token=True if model_args.use_auth_token else None,
-    )
-    model = AutoModelForSequenceClassification.from_pretrained(
-        model_args.model_name_or_path,
-        config=config,
-        cache_dir=model_args.cache_dir,
-        revision=model_args.model_revision,
-        use_auth_token=True if model_args.use_auth_token else None,
-        ignore_mismatched_sizes=model_args.ignore_mismatched_sizes,
-    )
-
-    # Padding strategy
-    if data_args.pad_to_max_length:
-        padding = "max_length"
-    else:
-        # We will pad later, dynamically at batch creation, to the max sequence length in each batch
-        padding = False
-
-    max_seq_length = min(data_args.max_seq_length, tokenizer.model_max_length)
-
-    def preprocess_function(examples):
-        # Tokenize the texts
-        contexts = []
-        for example in examples['dialog']:
-            contexts.append('<s>' + '</s> <s>'.join(example) + '</s>')
-        result = tokenizer(contexts, padding=padding, max_length=max_seq_length, truncation=True)
-        # Map labels to IDs (not necessary for GLUE tasks)
-        # result["label"] = [(label_to_id[l] if l != -1 else -1) for l in examples[label_name]]
-        return result
-
     input_dict = {"dialog": dialog_list}
     predict_dataset = Dataset.from_dict(input_dict)
     disable_progress_bar()
@@ -235,38 +265,8 @@ def predict_keyword_roberta(dialog_list):
         preprocess_function,
         batched=True,
     )
-
-    # Get the metric function
-    metric = load_metric("accuracy")
-
-    # You can define your custom compute_metrics function. It takes an `EvalPrediction` object (a namedtuple with a
-    # predictions and label_ids field) and has to return a dictionary string to float.
-    def compute_metrics(p: EvalPrediction):
-        preds = p.predictions[0] if isinstance(p.predictions, tuple) else p.predictions
-        preds = np.argmax(preds, axis=1)
-        return {"accuracy": (preds == p.label_ids).astype(np.float32).mean().item()}
-
-    # Data collator will default to DataCollatorWithPadding when the tokenizer is passed to Trainer, so we change it if
-    # we already did the padding.
-    if data_args.pad_to_max_length:
-        data_collator = default_data_collator
-    elif training_args.fp16:
-        data_collator = DataCollatorWithPadding(tokenizer, pad_to_multiple_of=8)
-    else:
-        data_collator = None
-
-    # Initialize our Trainer
-    trainer = Trainer(
-        model=model,
-        args=training_args,
-        compute_metrics=compute_metrics,
-        tokenizer=tokenizer,
-        data_collator=data_collator,
-    )
-
     predictions = trainer.predict(predict_dataset, metric_key_prefix="predict").predictions
     predictions = np.argmax(predictions, axis=1)
-
     with open("subdomain.json", 'r') as f:
         jsonObj = json.load(f)
     subdomain = id2label[predictions[0]]
