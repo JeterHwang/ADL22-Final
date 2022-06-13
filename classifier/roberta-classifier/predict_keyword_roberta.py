@@ -17,9 +17,7 @@
 # You can also adapt this script on your own text classification task. Pointers for this are left as comments.
 
 import logging
-import os
 import random
-import sys
 from dataclasses import dataclass, field
 from typing import Optional
 import json
@@ -27,7 +25,7 @@ import json
 import datasets
 import numpy as np
 from datasets import Dataset
-from datasets import load_dataset, load_metric
+from datasets import load_metric
 from datasets.utils import disable_progress_bar
 
 import transformers
@@ -37,14 +35,12 @@ from transformers import (
     AutoTokenizer,
     DataCollatorWithPadding,
     EvalPrediction,
-    HfArgumentParser,
     PretrainedConfig,
     Trainer,
     TrainingArguments,
     default_data_collator,
     set_seed,
 )
-from transformers.trainer_utils import get_last_checkpoint
 
 
 label2id =  {
@@ -73,94 +69,6 @@ label2id =  {
 id2label = {v:k for k, v in label2id.items()}
 
 @dataclass
-class DataTrainingArguments:
-    """
-    Arguments pertaining to what data we are going to input our model for training and eval.
-
-    Using `HfArgumentParser` we can turn this class
-    into argparse arguments to be able to specify them on
-    the command line.
-    """
-
-    task_name: Optional[str] = field(
-        default=None,
-        metadata={"help": "The name of the task to train on: "},
-    )
-    dataset_name: Optional[str] = field(
-        default=None, metadata={"help": "The name of the dataset to use (via the datasets library)."}
-    )
-    dataset_config_name: Optional[str] = field(
-        default=None, metadata={"help": "The configuration name of the dataset to use (via the datasets library)."}
-    )
-    max_seq_length: int = field(
-        default=128,
-        metadata={
-            "help": (
-                "The maximum total input sequence length after tokenization. Sequences longer "
-                "than this will be truncated, sequences shorter will be padded."
-            )
-        },
-    )
-    overwrite_cache: bool = field(
-        default=False, metadata={"help": "Overwrite the cached preprocessed datasets or not."}
-    )
-    pad_to_max_length: bool = field(
-        default=True,
-        metadata={
-            "help": (
-                "Whether to pad all samples to `max_seq_length`. "
-                "If False, will pad the samples dynamically when batching to the maximum length in the batch."
-            )
-        },
-    )
-    test_file: Optional[str] = field(default=None, metadata={"help": "A csv or a json file containing the test data."})
-
-
-@dataclass
-class ModelArguments:
-    """
-    Arguments pertaining to which model/config/tokenizer we are going to fine-tune from.
-    """
-
-    model_name_or_path: str = field(
-        default = "roberta_model/pytorch_model.bin",
-        metadata={"help": "Path to pretrained model or model identifier from huggingface.co/models"}
-    )
-    config_name: Optional[str] = field(
-        default = "roberta_model/config.json",
-        metadata={"help": "Pretrained config name or path if not the same as model_name"}
-    )
-    tokenizer_name: Optional[str] = field(
-        default = "roberta_model/",
-        metadata={"help": "Pretrained tokenizer name or path if not the same as model_name"}
-    )
-    cache_dir: Optional[str] = field(
-        default=None,
-        metadata={"help": "Where do you want to store the pretrained models downloaded from huggingface.co"},
-    )
-    use_fast_tokenizer: bool = field(
-        default=True,
-        metadata={"help": "Whether to use one of the fast tokenizer (backed by the tokenizers library) or not."},
-    )
-    model_revision: str = field(
-        default="main",
-        metadata={"help": "The specific model version to use (can be a branch name, tag name or commit id)."},
-    )
-    use_auth_token: bool = field(
-        default=False,
-        metadata={
-            "help": (
-                "Will use the token generated when running `transformers-cli login` (necessary to use this script "
-                "with private models)."
-            )
-        },
-    )
-    ignore_mismatched_sizes: bool = field(
-        default=False,
-        metadata={"help": "Will enable to load a pretrained model whose head dimensions are different."},
-    )
-
-@dataclass
 class MyTrainingArguments(TrainingArguments):
     output_dir: str = field(
         default = "./predict",
@@ -176,45 +84,27 @@ class MyTrainingArguments(TrainingArguments):
         default=True, metadata={"help": "Whether or not to disable the tqdm progress bars."}
     )
 
-
-parser = HfArgumentParser((ModelArguments, DataTrainingArguments, MyTrainingArguments))
-model_args, data_args, training_args = parser.parse_args_into_dataclasses()
-
-# Load pretrained model and tokenizer
-#
-# In distributed training, the .from_pretrained methods guarantee that only one local process can concurrently
-# download model & vocab.
 config = AutoConfig.from_pretrained(
-    model_args.config_name,
-    finetuning_task=data_args.task_name,
-    cache_dir=model_args.cache_dir,
-    revision=model_args.model_revision,
-    use_auth_token=True if model_args.use_auth_token else None,
+    "roberta_model/config.json",
+    use_auth_token = None,
 )
 tokenizer = AutoTokenizer.from_pretrained(
-    model_args.tokenizer_name,
-    cache_dir=model_args.cache_dir,
-    use_fast=model_args.use_fast_tokenizer,
-    revision=model_args.model_revision,
-    use_auth_token=True if model_args.use_auth_token else None,
+    "roberta_model/",
+    use_fast = True,
+    revision = "main",
+    use_auth_token = None,
 )
 model = AutoModelForSequenceClassification.from_pretrained(
-    model_args.model_name_or_path,
+    "roberta_model/pytorch_model.bin",
     config=config,
-    cache_dir=model_args.cache_dir,
-    revision=model_args.model_revision,
-    use_auth_token=True if model_args.use_auth_token else None,
-    ignore_mismatched_sizes=model_args.ignore_mismatched_sizes,
+    use_auth_token = None,
+    ignore_mismatched_sizes = False,
 )
 
 # Padding strategy
-if data_args.pad_to_max_length:
-    padding = "max_length"
-else:
-    # We will pad later, dynamically at batch creation, to the max sequence length in each batch
-    padding = False
+padding = "max_length"
 
-max_seq_length = min(data_args.max_seq_length, tokenizer.model_max_length)
+max_seq_length = min(128, tokenizer.model_max_length)
 
 def preprocess_function(examples):
     # Tokenize the texts
@@ -238,13 +128,9 @@ def compute_metrics(p: EvalPrediction):
 
 # Data collator will default to DataCollatorWithPadding when the tokenizer is passed to Trainer, so we change it if
 # we already did the padding.
-if data_args.pad_to_max_length:
-    data_collator = default_data_collator
-elif training_args.fp16:
-    data_collator = DataCollatorWithPadding(tokenizer, pad_to_multiple_of=8)
-else:
-    data_collator = None
+data_collator = default_data_collator
 
+training_args = MyTrainingArguments()
 # Initialize our Trainer
 trainer = Trainer(
     model=model,
