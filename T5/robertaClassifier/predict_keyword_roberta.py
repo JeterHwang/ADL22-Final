@@ -85,17 +85,17 @@ class MyTrainingArguments(TrainingArguments):
     )
 
 config = AutoConfig.from_pretrained(
-    "roberta_model/config.json",
+    "./pretrained/Robertaclassifier/config.json",
     use_auth_token = None,
 )
 tokenizer = AutoTokenizer.from_pretrained(
-    "roberta_model/",
+    "./pretrained/Robertaclassifier/",
     use_fast = True,
     revision = "main",
     use_auth_token = None,
 )
 model = AutoModelForSequenceClassification.from_pretrained(
-    "roberta_model/pytorch_model.bin",
+    "./pretrained/Robertaclassifier/pytorch_model.bin",
     config=config,
     use_auth_token = None,
     ignore_mismatched_sizes = False,
@@ -153,7 +153,7 @@ def predict_keyword_roberta(dialog_list):
     )
     predictions = trainer.predict(predict_dataset, metric_key_prefix="predict").predictions
     predictions = np.argmax(predictions, axis=1)
-    with open("subdomain.json", 'r') as f:
+    with open("./pretrained/subdomain.json", 'r') as f:
         jsonObj = json.load(f)
     subdomain = id2label[predictions[0]]
     sample = np.random.choice(jsonObj[subdomain])

@@ -312,7 +312,6 @@ class GPT5bot(torch.nn.Module):
             print(pplx, out)
         return final_result
 
-
 class Generator(torch.nn.Module):
     def __init__(self, gpt, config, max_len=64, temperature=0.7):
         super(Generator, self).__init__()

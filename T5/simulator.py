@@ -1,4 +1,5 @@
 import argparse
+from ast import keyword
 import json
 import random
 from pathlib import Path
@@ -13,7 +14,7 @@ from transformers import (
 )
 from bot import GPT2bot
 from lstmClassifier import predict_keyword_lstm
-# from robertaClassifier import predict_keyword_roberta
+from robertaClassifier import predict_keyword_roberta
 
 def parse_args():
     parser = argparse.ArgumentParser()
@@ -150,7 +151,7 @@ if __name__ == "__main__":
             dialog = []
             if not args.disable_output_dialog:
                 print(f" dialog id: {index}")
-            for _ in range(5):
+            for _round in range(6):
                 inputs = simulator_tokenizer(
                     [
                         "</s> <s>".join(
@@ -167,7 +168,8 @@ if __name__ == "__main__":
                 dialog.append(text)
                 if not args.disable_output_dialog:
                     print(f"\033[0;32;49m {'simulator: ': ^11}{text} \033[0;0m")
-
+                if _round == 5:
+                    continue
                 # you might need to change this line due to the model you use
                 inputs = casualLM_tokenizer(
                     ["</s> <s>".join(dialog[-3:])], return_tensors="pt", truncation=True
@@ -176,14 +178,16 @@ if __name__ == "__main__":
                 normal_conversation = casualLM_tokenizer.batch_decode(reply_ids, skip_special_tokens=True)[
                     0
                 ].strip()
-                # print(normal_conversation)
-                keyword = predict_keyword_lstm(
-                    dialog + [normal_conversation], 
-                    args.classifier_path / "vocab.pkl", 
-                    args.classifier_path / "embeddings.pt", 
-                    args.classifier_path / "model.pkl", 
-                    args.subdomain_path,
-                )
+                print(f"Intermediate : {normal_conversation}")
+                # keyword = predict_keyword_lstm(
+                #     dialog, 
+                #     args.classifier_path / "vocab.pkl", 
+                #     args.classifier_path / "embeddings.pt", 
+                #     args.classifier_path / "model.pkl", 
+                #     args.subdomain_path,
+                # )
+
+                keyword = predict_keyword_roberta(dialog + [normal_conversation])
                 print(keyword)
                 bot.target = keyword
                 topic_transfer = bot.generate(
