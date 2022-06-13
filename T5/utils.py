@@ -1,3 +1,4 @@
+from operator import concat
 import torch
 import math
 import spacy
@@ -7,7 +8,6 @@ import torch.nn.functional as F
 from nltk import word_tokenize, pos_tag
 from nltk.corpus import wordnet
 from random import shuffle
-from transformers import GPT2LMHeadModel, GPT2TokenizerFast
 
 nlp = spacy.load("en_core_web_sm")
 stopwords = nlp.Defaults.stop_words
@@ -539,30 +539,33 @@ def enforce_repetition_penalty_(lprobs, batch_size, num_beams, prev_output_token
             else:
                 lprobs[i, previous_token] /= repetition_penalty
 
-def perplexity(prediction):
+def perplexity(model, tokenizer, prediction):
+
     device = "cuda"
-    # gpt2, microsoft/DialoGPT-medium
-    model_id = "gpt2"
-    model = GPT2LMHeadModel.from_pretrained(model_id).to(device)
-    tokenizer = GPT2TokenizerFast.from_pretrained(model_id)
-
-    # prediction = load_dataset("text", data_files={"prediction": sys.argv[1]})["prediction"]
-
-    loss = 0
-    steps = 0
     nll = 0
 
-    # for p in tqdm(prediction):
     if prediction:
         input_ids = tokenizer(prediction, return_tensors="pt").input_ids.to(device)
         #        shuffle(input_ids[0])
         with torch.no_grad():
             outputs = model(input_ids, labels=input_ids)
             nll += outputs[0].mean().item()
-    steps += 1
 
-    average_nll = nll / steps
+    average_nll = nll
     ppl = torch.exp(torch.tensor(average_nll)).item()
 
     return ppl
+
+def bleu_score_compute(metric, prediction, reference):
+    result = metric.compute(predictions=[[prediction]], references=[[reference]])
+    
+    return result["score"]
+
+def compute_score(model, tokenizer, metric, concat_conversation, prediction, reference):
+    perplexity_score = perplexity(model, tokenizer, concat_conversation)
+    bleu_score = bleu_score_compute(metric, prediction, reference)
+    final_score = bleu_score + 100 / (perplexity_score + 1e-8) # The constant 10 is a hyper-parameter and 1e-8 is to prevent nan
+    print(bleu_score, 100 / (perplexity_score + 1e-8))
+    return final_score
+
 

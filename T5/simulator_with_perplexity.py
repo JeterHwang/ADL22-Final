@@ -12,7 +12,9 @@ from transformers import (
     BlenderbotTokenizer,
 )
 from bot import T5bot, GPT5bot
-from utils import perplexity
+from utils import compute_score
+from transformers import GPT2LMHeadModel, GPT2TokenizerFast
+from datasets import load_metric
 
 def parse_args():
     parser = argparse.ArgumentParser()
@@ -84,7 +86,13 @@ if __name__ == "__main__":
     simulator = BlenderbotForConditionalGeneration.from_pretrained(mname).to(args.device)
     simulator_tokenizer = BlenderbotTokenizer.from_pretrained(mname)
     print("start token = ", simulator_tokenizer.bos_token)
-    perplex = []
+    
+    perplex = [] # list to record the perplexity
+
+    model_id = "gpt2"
+    model_GPT2 = GPT2LMHeadModel.from_pretrained(model_id).to(args.device)
+    tokenizer_GPT2 = GPT2TokenizerFast.from_pretrained(model_id)
+    metric = load_metric("sacrebleu") # sacre bleu metric
 
     # load your bot
     if args.bot == 'T5bot':
@@ -200,13 +208,16 @@ if __name__ == "__main__":
                 if not args.disable_output_dialog:
                     print(f"\033[0;33;49m {'bot: ': ^11}{text} \033[0;0m")
             # print("sentences = ", "".join(dialog))
-            print("perplexity = ", perplexity("".join(dialog)))
-            perplex.append(perplexity("".join(dialog)))
+
+            # compute the scores of the response
+            # perplexity_item = perplexity("".join(dialog))
+            # print("perplexity = ", perplexity_item, "bleu = ", bleu_score([dialog[-1]], [reply]))
+            score = compute_score(model_GPT2, tokenizer_GPT2, metric, "".join(dialog), text, reply)
+            print("score = ", score)
             output.append(dialog)
             if not args.disable_output_dialog:
                 print()
 
-        print("overall perplexity = ", sum(perplex) / len(perplex))
         with open(args.output, "w") as f:
             for idx, dialog in enumerate(output):
                 f.write(json.dumps({"id": idx, "dialog": dialog}) + "\n")
