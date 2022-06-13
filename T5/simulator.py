@@ -195,9 +195,10 @@ if __name__ == "__main__":
                 normal_conversation = casualLM_tokenizer.batch_decode(reply_ids, skip_special_tokens=True)[
                     0
                 ].strip()
-                print(normal_conversation)
+                # print(normal_conversation)
                 topic_transfer = bot.generate(
                     normal_conversation,
+                    dialog,
                     args.max_input_len
                 )
                 dialog.append(topic_transfer)
