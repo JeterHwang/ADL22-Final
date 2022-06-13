@@ -565,3 +565,4 @@ def perplexity(prediction):
     ppl = torch.exp(torch.tensor(average_nll)).item()
 
     return ppl
+
