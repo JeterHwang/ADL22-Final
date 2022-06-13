@@ -149,7 +149,8 @@ def get_verbnouns(document):
     features_verb = [x for x in features_verb if x not in ' '.join(verb_phrases)]
     features_verb = [x.replace('have', '').replace("'ve", '').replace("be", '').strip() for x in features_verb]
     allstopwords = stopwords.union(extra_stopwords)
-    res = [x for x in features + features_verb + verb_phrases if x not in allstopwords]
+    # res = [x for x in features + features_verb + verb_phrases if x not in allstopwords]
+    res = [x for x in features + verb_phrases if x not in allstopwords]
     res = [x for x in res if len(x)>2]
     res = [x.replace('person ', '') if 'person ' in x else x for x in res]
     return res
@@ -539,13 +540,10 @@ def enforce_repetition_penalty_(lprobs, batch_size, num_beams, prev_output_token
             else:
                 lprobs[i, previous_token] /= repetition_penalty
 
-def perplexity(prediction):
-    device = "cuda"
+def perplexity(prediction, pplx_model, pplx_tokenizer, device):
+    # device = "cuda"
     # gpt2, microsoft/DialoGPT-medium
-    model_id = "gpt2"
-    model = GPT2LMHeadModel.from_pretrained(model_id).to(device)
-    tokenizer = GPT2TokenizerFast.from_pretrained(model_id)
-
+    
     # prediction = load_dataset("text", data_files={"prediction": sys.argv[1]})["prediction"]
 
     loss = 0
@@ -554,10 +552,10 @@ def perplexity(prediction):
 
     # for p in tqdm(prediction):
     if prediction:
-        input_ids = tokenizer(prediction, return_tensors="pt").input_ids.to(device)
+        input_ids = pplx_tokenizer(prediction, return_tensors="pt").input_ids.to(device)
         #        shuffle(input_ids[0])
         with torch.no_grad():
-            outputs = model(input_ids, labels=input_ids)
+            outputs = pplx_model(input_ids, labels=input_ids)
             nll += outputs[0].mean().item()
     steps += 1
 

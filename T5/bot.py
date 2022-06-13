@@ -5,8 +5,11 @@ import math
 import torch.nn.functional as F
 from tqdm import tqdm, tnrange
 from transformers import T5Tokenizer, T5ForConditionalGeneration
-from transformers import GPT2Config, GPT2Tokenizer, GPT2Model, GPT2LMHeadModel
-from utils import connect_entities, get_verbnouns, check_overlap, idf_score, get_min_path, get_filtered_paths, clean_generation, predict_formality
+from transformers import GPT2Config, GPT2Tokenizer, GPT2Model, GPT2LMHeadModel, GPT2TokenizerFast
+
+from utils import connect_entities, get_verbnouns, check_overlap, idf_score, get_min_path, get_filtered_paths
+from utils import clean_generation, predict_formality
+from utils import perplexity
 
 extra_stopwords = ["lot", "person", "have", "not", "also", "very", "often", "however", "too", "usually", "really", "early", "never", "always", "sometimes", "together", "likely", "simply", "generally", "instead", "actually", "again", "rather", "almost", "especially", "ever", "quickly", "probably", "already", "below", "directly", "therefore", "else", "thus", "easily", "eventually", "exactly", "certainly", "normally", "currently", "extremely", "finally", "constantly", "properly", "soon", "specifically", "ahead", "daily", "highly", "immediately", "relatively", "slowly", "fairly", "primarily", "completely", "ultimately", "widely", "recently", "seriously", "frequently", "fully", "mostly", "naturally", "nearly", "occasionally", "carefully", "clearly", "essentially", "possibly", "slightly", "somewhat", "equally", "greatly", "necessarily", "personally", "rarely", "regularly", "similarly", "basically", "closely", "effectively", "initially", "literally", "mainly", "merely", "gently", "hopefully", "originally", "roughly", "significantly", "totally", "twice", "elsewhere", "everywhere", "obviously", "perfectly", "physically", "successfully", "suddenly", "truly", "virtually", "altogether", "anyway", "automatically", "deeply", "definitely", "deliberately", "hardly", "readily", "terribly", "unfortunately", "forth", "briefly", "moreover", "strongly", "honestly", "previously", "as", "there", "when", "how", "so", "up", "out", "no", "only", "well", "then", "first", "where", "why", "now", "around", "once", "down", "off", "here", "away", "today", "far", "quite", "later", "above", "yet", "maybe", "otherwise", "near", "forward", "somewhere", "anywhere", "please", "forever", "somehow", "absolutely", "abroad", "yeah", "nowhere", "the", "to", "in", "on", "by", "more", "about", "such", "through", "new", "just", "any", "each", "much", "before", "between", "free", "right", "best", "since", "both", "sure", "without", "back", "better", "enough", "lot", "small", "though", "less", "little", "under", "next", "hard", "real", "left", "least", "short", "last", "within", "along", "lower", "TRUE", "bad", "across", "clear", "easy", "full", "close", "late", "proper", "fast", "wide", "item", "wrong", "ago", "behind", "quick", "straight", "direct", "extra", "pretty", "overall", "alone", "bright", "flat", "whatever", "slow", "clean", "fresh", "whenever", "cheap", "thin", "cool", "fair", "fine", "smooth", "FALSE", "thick", "nearby", "wild", "apart", "none", "strange", "aside", "super", "ill", "honest", "ok", "thanks"]
 
@@ -105,7 +108,7 @@ class T5bot(torch.nn.Module):
         return model2_output
 
 class GPT5bot(torch.nn.Module):
-    def __init__(self, stage1_model, tokenizer1, stage2_model, tokenizer2, keywords, gutenberg_idf, relation2text, device='cpu'):
+    def __init__(self, stage1_model, tokenizer1, stage2_model, tokenizer2, keywords, gutenberg_idf, relation2text, pplx_model, pplx_tokenizer, device='cpu'):
         super(GPT5bot, self).__init__()
         self.GPT2          = stage1_model
         self.GPT2tokenizer = tokenizer1
@@ -116,7 +119,9 @@ class GPT5bot(torch.nn.Module):
         self.relation2text = relation2text
         self.device        = device
         # self.T5tokenizer.add_tokens(['@', '<s>', '</s>'])
-        
+        self.pplx_model    = pplx_model
+        self.pplx_tokenizer = pplx_tokenizer
+
         self.target = None
 
     @staticmethod
@@ -153,13 +158,16 @@ class GPT5bot(torch.nn.Module):
         model2 = T5ForConditionalGeneration.from_pretrained(model2_path)
         tokenizer2 = T5Tokenizer.from_pretrained(tokenizer2_path)
         keywords = json.loads(keywords_path.read_text())
+        print("----- Start Loading Perplexity Model -----")
+        pplx_model = GPT2LMHeadModel.from_pretrained('gpt2').to(device)
+        pplx_tokenizer = GPT2TokenizerFast.from_pretrained('gpt2')
         print('----- Start Loading Gutenberg Counts -----')
         gutenberg_counts = open(counts_path, 'r').readlines()
         gutenberg_counts = [s.strip().split() for s in gutenberg_counts]
         gutenberg_word2cnt = {w:int(c) for c,w in gutenberg_counts }
         gutenberg_idf = {w:(1.0/math.log(1+c)) for w,c in gutenberg_word2cnt.items()} # more frequnt words have low frequency
         print('----- Finish Loading Pretrained Models -----')
-        return GPT5bot(generator, tokenizer, model2, tokenizer2, keywords, gutenberg_idf, relation2text, device)
+        return GPT5bot(generator, tokenizer, model2, tokenizer2, keywords, gutenberg_idf, relation2text, pplx_model, pplx_tokenizer, device)
 
     def find_path(self, context, target, verbose=False, remove_overlap=True, split_entities_into_multi=True):
         dp = {'context': context, 'target': target}
@@ -280,15 +288,12 @@ class GPT5bot(torch.nn.Module):
             decoded_result.append(pred.strip())
         return decoded_result 
     
-    def generate(self, source, max_input_length=512):
+    def generate(self, source, history, max_input_length=512):
         dp = self.find_path(source, self.target)
         dp = self.filter_path(dp, is_test=False)
-        dp.sort(key=lambda x : x['score_path'])
-        for ele in dp:
-            print(ele['score_path'], ele['path'])
-        input_text = 'context : ' + dp[0]['context'] + ' @ path_tailentity : ' + self.target + ' @ path : ' + dp[0]['path']
+        input_text = ['context : ' + ele['context'] + ' @ path_tailentity : ' + self.target + ' @ path : ' + ele['path'] for ele in dp]
         T5_input = self.T5tokenizer(
-            [input_text],
+            input_text,
             max_length=max_input_length, 
             truncation=True,
             padding='max_length',
@@ -298,8 +303,16 @@ class GPT5bot(torch.nn.Module):
         T5_output = self.generate_sentence(
             T5_input['input_ids'], 
             T5_input['attention_mask']
-        )[0]
-        return T5_output
+        )
+
+        min_perplexity, final_result = 10000000, ""
+        for out in T5_output:
+            pplx = perplexity(" ".join(history) + " " + out, self.pplx_model, self.pplx_tokenizer, self.device)
+            if pplx < min_perplexity:
+                final_result = out
+                min_perplexity = pplx
+            print(pplx, out)
+        return final_result
 
     def choose_target(self):
         domain_list = self.keywords[random.choice(['restaurant', 'hotel', 'movie', 'song', 'transportation', 'attraction'])]
@@ -430,7 +443,7 @@ class Generator(torch.nn.Module):
         return generated, probs_arr
 
 class GPT2bot(torch.nn.Module):
-    def __init__(self, stage1_model, tokenizer1, stage2_model, tokenizer2, keywords, gutenberg_idf, relation2text, device='cpu'):
+    def __init__(self, stage1_model, tokenizer1, stage2_model, tokenizer2, keywords, gutenberg_idf, relation2text, pplx_model, pplx_tokenizer, device='cpu'):
         super(GPT2bot, self).__init__()
         self.model1        = stage1_model
         self.tokenizer1    = tokenizer1
@@ -441,6 +454,8 @@ class GPT2bot(torch.nn.Module):
         self.relation2text = relation2text
         self.device        = device
         
+        self.pplx_model    = pplx_model
+        self.pplx_tokenizer = pplx_tokenizer
         self.target = None
 
     @staticmethod
@@ -482,8 +497,11 @@ class GPT2bot(torch.nn.Module):
         gutenberg_counts = [s.strip().split() for s in gutenberg_counts]
         gutenberg_word2cnt = {w:int(c) for c,w in gutenberg_counts }
         gutenberg_idf = {w:(1.0/math.log(1+c)) for w,c in gutenberg_word2cnt.items()} # more frequnt words have low frequency
+        print("----- Start Loading Perplexity Model -----")
+        pplx_model = GPT2LMHeadModel.from_pretrained('gpt2').to(device)
+        pplx_tokenizer = GPT2TokenizerFast.from_pretrained('gpt2')
         print('----- Finish Loading Pretrained Models -----')
-        return GPT2bot(generator, tokenizer, model2, tokenizer2, keywords, gutenberg_idf, relation2text, device)
+        return GPT2bot(generator, tokenizer, model2, tokenizer2, keywords, gutenberg_idf, relation2text, pplx_model, pplx_tokenizer, device)
 
     def find_path(self, context, target, verbose=False, remove_overlap=True, split_entities_into_multi=True):
         dp = {'context': context, 'target': target}
@@ -561,8 +579,7 @@ class GPT2bot(torch.nn.Module):
             ht = ht[0]+'---'+ht[1]
             head, tail = ht.split('---')
             paths, scores = dp['paths'][ht]['headtotail_paths'], dp['paths'][ht]['headtotail_scores']
-            if len(paths) == 0:
-                continue
+            
             if is_test is True:
                 path, score = get_min_path(paths, scores, self.relation2text, parse_edges=True)
                 newdp = {'context':dp['context'], 'target': dp['target']}
@@ -575,27 +592,17 @@ class GPT2bot(torch.nn.Module):
                 continue
                 
             paths, scores = get_filtered_paths(paths, scores, self.relation2text, parse_edges=True)
-            mindp = {
-                'context':dp['context'], 
-                'target': dp['target'],
-                'path' : paths[0],
-                'score_path' : scores[0],
-                'type' : 'direct',
-                'path_headentity' : head,
-                'path_tailentity' : tail
-            }
+            
             for i, path in enumerate(paths):
                 # newdp = copy.deepcopy(dp)
-                if scores[i] >= mindp['score_path']:
-                    continue
                 newdp = {'context':dp['context'], 'target': dp['target']}
                 newdp['path'] = path
                 newdp['score_path'] = scores[i]
                 newdp['type'] = 'direct'
                 newdp['path_headentity'] = head
                 newdp['path_tailentity'] = tail
-                mindp = newdp
-            new_dp_list.append(mindp)
+                new_dp_list.append(newdp)
+            
         return new_dp_list           
 
     def generate_sentence(self, input_text, max_target_len=60):
@@ -607,7 +614,7 @@ class GPT2bot(torch.nn.Module):
                 self.tokenizer2,
                 None,
                 [text],
-                precondition_topk=20,
+                precondition_topk=10,
                 do_sample=True,
                 length_cutoff=max_target_len,
                 condition_lambda=0,
@@ -619,19 +626,23 @@ class GPT2bot(torch.nn.Module):
             # print(results_puregen, '--no classifier')
         return all_puretext
     
-    def generate(self, source, max_input_length=512):
+    def generate(self, source, history, max_input_length=512):
         dp = self.find_path(source, self.target)
         dp = self.filter_path(dp, is_test=False)
-        dp.sort(key=lambda x : x['score_path'])
         input_text = []
         for ele in dp:
-            text = '[knowledge clue] ' + ele['path'] + ' [target] ' + ele['target'] + ' [context] ' + ' [eot] '.join([ele['context']]) + ' [response] :'
+            text = '[knowledge clue] ' + ele['path'] + ' [target] ' + ele['target'] + ' [context] ' + ' '.join([source]) + ' [response] :'
             input_text.append(text)
             # print(ele['score_path'], ele['path'])
         output = self.generate_sentence(input_text)
-        # for out in output:
-        #     print(out)
-        return output[0]
+        min_perplexity, final_result = 10000000, ""
+        for out in output:
+            pplx = perplexity(" ".join(history) + " " + out, self.pplx_model, self.pplx_tokenizer, self.device)
+            if pplx < min_perplexity:
+                final_result = out
+                min_perplexity = pplx
+            # print(pplx, out)
+        return final_result
 
     def choose_target(self):
         domain_list = self.keywords[random.choice(['restaurant', 'hotel', 'movie', 'song', 'transportation', 'attraction'])]

@@ -6,3 +6,11 @@
 ```
 CUDA_VISIBLE_DEVICES=0,1 accelerate launch --config_file config.yml train.py
 ```
+
+## Inference
+```
+[Under directory T5]
+./download.sh
+python simulator.py --device cuda:0 --split test --bot GPT2bot
+```
+
