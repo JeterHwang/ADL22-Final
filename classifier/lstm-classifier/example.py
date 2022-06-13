@@ -8,5 +8,5 @@ INPUT = [
         "I like that too! I also like to make my own chocolate by grinding up cocoa beans.",
         "That sounds really good, I'll have to try that sometime. Do you have a favorite dessert?"
      ]
-keyword = predict_keyword_lstm(INPUT, "./data/vocab.pkl", "./data/embeddings.pt", "./model/model.pkl", "subdomain.json")
+keyword = predict_keyword_lstm(INPUT, "./vocabulary/vocab.pkl", "./vocabulary/embeddings.pt", "./model/model.pkl", "subdomain.json")
 print("result:", keyword)
