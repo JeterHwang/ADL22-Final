@@ -12,7 +12,7 @@ from transformers import (
     BlenderbotTokenizer,
 )
 from bot import T5bot, GPT5bot
-from perplexity import perplexity
+from utils import perplexity
 
 def parse_args():
     parser = argparse.ArgumentParser()
