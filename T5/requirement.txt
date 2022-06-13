@@ -5,3 +5,5 @@ datasets
 tqdm
 spacy
 nltk
+scikit-learn
+jsonl

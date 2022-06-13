@@ -16,19 +16,8 @@ CUDA_VISIBLE_DEVICES=0,1 accelerate launch --config_file config.yml train.py
 ```
 [Under directory T5]
 ./download.sh
-python simulator.py --device cuda:0 --split test --bot GPT2bot
+python simulator.py --device cuda:0 --split test
 ```
-
-## Domain Classifier
-:::info
-
-:::
-
-## Metrics
-
-:::info
-
-:::
 
 ## BOT
 ### <a style="color:red">GPT2bot</a> :+1: 
