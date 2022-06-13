@@ -108,13 +108,12 @@ class T5bot(torch.nn.Module):
         return model2_output
 
 class GPT5bot(torch.nn.Module):
-    def __init__(self, stage1_model, tokenizer1, stage2_model, tokenizer2, keywords, gutenberg_idf, relation2text, pplx_model, pplx_tokenizer, device='cpu'):
+    def __init__(self, stage1_model, tokenizer1, stage2_model, tokenizer2, gutenberg_idf, relation2text, pplx_model, pplx_tokenizer, device='cpu'):
         super(GPT5bot, self).__init__()
         self.GPT2          = stage1_model
         self.GPT2tokenizer = tokenizer1
         self.T5            = stage2_model
         self.T5tokenizer   = tokenizer2
-        self.keywords      = keywords
         self.gutenberg_idf = gutenberg_idf
         self.relation2text = relation2text
         self.device        = device
@@ -125,7 +124,7 @@ class GPT5bot(torch.nn.Module):
         self.target = None
 
     @staticmethod
-    def from_pretrained(commensense_model_path, model2_path, tokenizer2_path, keywords_path, rel2text_path, counts_path, device):
+    def from_pretrained(commensense_model_path, model2_path, tokenizer2_path, rel2text_path, counts_path, device):
         print('----- Start Loading GPT-2 -----')
         lm_type = 'gpt2'
         config = GPT2Config.from_pretrained(lm_type)
@@ -157,7 +156,6 @@ class GPT5bot(torch.nn.Module):
         print('----- Start Loading T5 -----')
         model2 = T5ForConditionalGeneration.from_pretrained(model2_path)
         tokenizer2 = T5Tokenizer.from_pretrained(tokenizer2_path)
-        keywords = json.loads(keywords_path.read_text())
         print("----- Start Loading Perplexity Model -----")
         pplx_model = GPT2LMHeadModel.from_pretrained('gpt2').to(device)
         pplx_tokenizer = GPT2TokenizerFast.from_pretrained('gpt2')
@@ -167,7 +165,7 @@ class GPT5bot(torch.nn.Module):
         gutenberg_word2cnt = {w:int(c) for c,w in gutenberg_counts }
         gutenberg_idf = {w:(1.0/math.log(1+c)) for w,c in gutenberg_word2cnt.items()} # more frequnt words have low frequency
         print('----- Finish Loading Pretrained Models -----')
-        return GPT5bot(generator, tokenizer, model2, tokenizer2, keywords, gutenberg_idf, relation2text, pplx_model, pplx_tokenizer, device)
+        return GPT5bot(generator, tokenizer, model2, tokenizer2, gutenberg_idf, relation2text, pplx_model, pplx_tokenizer, device)
 
     def find_path(self, context, target, verbose=False, remove_overlap=True, split_entities_into_multi=True):
         dp = {'context': context, 'target': target}
@@ -314,9 +312,6 @@ class GPT5bot(torch.nn.Module):
             print(pplx, out)
         return final_result
 
-    def choose_target(self):
-        domain_list = self.keywords[random.choice(['restaurant', 'hotel', 'movie', 'song', 'transportation', 'attraction'])]
-        self.target = random.choice(domain_list)
 
 class Generator(torch.nn.Module):
     def __init__(self, gpt, config, max_len=64, temperature=0.7):
@@ -443,13 +438,12 @@ class Generator(torch.nn.Module):
         return generated, probs_arr
 
 class GPT2bot(torch.nn.Module):
-    def __init__(self, stage1_model, tokenizer1, stage2_model, tokenizer2, keywords, gutenberg_idf, relation2text, pplx_model, pplx_tokenizer, metric, device='cpu'):
+    def __init__(self, stage1_model, tokenizer1, stage2_model, tokenizer2, gutenberg_idf, relation2text, pplx_model, pplx_tokenizer, metric, device='cpu'):
         super(GPT2bot, self).__init__()
         self.model1        = stage1_model
         self.tokenizer1    = tokenizer1
         self.model2        = stage2_model
         self.tokenizer2    = tokenizer2
-        self.keywords      = keywords
         self.gutenberg_idf = gutenberg_idf
         self.relation2text = relation2text
         self.device        = device
@@ -457,10 +451,10 @@ class GPT2bot(torch.nn.Module):
         self.pplx_model    = pplx_model
         self.pplx_tokenizer= pplx_tokenizer
         self.metric        = metric
-        self.target = None
+        self.target        = None
 
     @staticmethod
-    def from_pretrained(commensense_model_path, model2_path, tokenizer2_path, keywords_path, rel2text_path, counts_path, device):
+    def from_pretrained(commensense_model_path, model2_path, tokenizer2_path, rel2text_path, counts_path, device):
         print('----- Start Loading KPG-ht -----')
         lm_type = 'gpt2'
         config = GPT2Config.from_pretrained(lm_type)
@@ -492,7 +486,6 @@ class GPT2bot(torch.nn.Module):
         print('----- Start Loading CRG -----')
         model2 = GPT2LMHeadModel.from_pretrained(model2_path, return_dict=True).to(device)
         tokenizer2 = GPT2Tokenizer.from_pretrained(tokenizer2_path)
-        keywords = json.loads(keywords_path.read_text())
         print('----- Start Loading Gutenberg Counts -----')
         gutenberg_counts = open(counts_path, 'r').readlines()
         gutenberg_counts = [s.strip().split() for s in gutenberg_counts]
@@ -503,7 +496,7 @@ class GPT2bot(torch.nn.Module):
         pplx_tokenizer = GPT2TokenizerFast.from_pretrained('gpt2')
         metric = load_metric("sacrebleu") # sacre bleu metric
         print('----- Finish Loading Pretrained Models -----')
-        return GPT2bot(generator, tokenizer, model2, tokenizer2, keywords, gutenberg_idf, relation2text, pplx_model, pplx_tokenizer, metric, device)
+        return GPT2bot(generator, tokenizer, model2, tokenizer2, gutenberg_idf, relation2text, pplx_model, pplx_tokenizer, metric, device)
 
     def find_path(self, context, target, verbose=False, remove_overlap=True, split_entities_into_multi=True):
         dp = {'context': context, 'target': target}
@@ -645,7 +638,3 @@ class GPT2bot(torch.nn.Module):
                 max_score = score
             print(score, out)
         return final_result
-
-    def choose_target(self):
-        domain_list = self.keywords[random.choice(['restaurant', 'hotel', 'movie', 'song', 'transportation', 'attraction'])]
-        self.target = ' '.join(random.sample(domain_list, 1))

@@ -12,6 +12,7 @@ from transformers import (
     BlenderbotTokenizer,
 )
 from bot import T5bot, GPT5bot, GPT2bot
+from lstmClassifier import predict_keyword_lstm
 
 def parse_args():
     parser = argparse.ArgumentParser()
@@ -48,16 +49,18 @@ def parse_args():
         help="whether output the dialogs to the command line",
     )
 
-    parser.add_argument("--bot", type=str, default='T5bot', choices=['T5bot', 'GPT5bot', 'GPT2bot'])
+    parser.add_argument("--bot", type=str, default='GPT2bot', choices=['GPT5bot', 'GPT2bot'])
     parser.add_argument("--rel2text_path", type=Path, default="./pretrained/relation2text.json")
     parser.add_argument("--counts_path", type=Path, default="./pretrained/counts.txt")
-    parser.add_argument("--T5model1_path", type=Path, default='./pretrained/T5model1')
+    # parser.add_argument("--T5model1_path", type=Path, default='./pretrained/T5model1')
     parser.add_argument("--T5model2_path", type=Path, default='./pretrained/T5model2')
     parser.add_argument("--T5tokenizer2_path", type=str, default='./pretrained/T5model2')
     parser.add_argument("--GPT2model1_path", type=Path, default='./pretrained/GPT2model1')
     parser.add_argument("--GPT2model2_path", type=Path, default='./pretrained/GPT2model2')
     parser.add_argument("--GPT2tokenizer2_path", type=str, default='./pretrained/GPT2model2')
-    parser.add_argument("--keywords_path", type=Path, default='./pretrained/keywords.json')
+    # parser.add_argument("--keywords_path", type=Path, default='./pretrained/keywords.json')
+    parser.add_argument("--subdomain_path", type=Path, default='./pretrained/subdomain.json')
+    parser.add_argument("--classifier_path", type=Path, default='./pretrained/LSTMclassifier')
     parser.add_argument("--max_input_len", type=int, default=512)
     parser.add_argument("--device", type=str, default='cuda:0')
     args = parser.parse_args()
@@ -90,20 +93,11 @@ if __name__ == "__main__":
     casualLM_tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
 
     # load your bot
-    if args.bot == 'T5bot':
-        bot = T5bot.from_pretrained(
-            args.T5model1_path, 
-            args.T5model2_path, 
-            args.T5tokenizer2_path, 
-            args.keywords_path,
-            args.device
-        )
-    elif args.bot == 'GPT5bot':
+    if args.bot == 'GPT5bot':
         bot = GPT5bot.from_pretrained(
             args.GPT2model1_path,
             args.T5model2_path,
             args.T5tokenizer2_path,
-            args.keywords_path,
             args.rel2text_path,
             args.counts_path,
             args.device,
@@ -113,7 +107,6 @@ if __name__ == "__main__":
             args.GPT2model1_path,
             args.GPT2model2_path,
             args.GPT2tokenizer2_path,
-            args.keywords_path,
             args.rel2text_path,
             args.counts_path,
             args.device,
@@ -164,8 +157,6 @@ if __name__ == "__main__":
         for index, context in enumerate(
             tqdm(dataset["context"], disable=(not args.disable_output_dialog))
         ):
-            bot.choose_target() ## Choose a topic to transfer in this dialogue
-            print(bot.target)
             dialog = []
             if not args.disable_output_dialog:
                 print(f" dialog id: {index}")
@@ -196,6 +187,14 @@ if __name__ == "__main__":
                     0
                 ].strip()
                 # print(normal_conversation)
+                keyword = predict_keyword_lstm(
+                    dialog + [normal_conversation], 
+                    args.classifier_path / "vocab.pkl", 
+                    args.classifier_path / "embeddings.pt", 
+                    args.classifier_path / "model.pkl", 
+                    args.subdomain_path,
+                )
+                print(keyword)
                 topic_transfer = bot.generate(
                     normal_conversation,
                     dialog,
