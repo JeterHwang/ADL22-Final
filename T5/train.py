@@ -143,14 +143,14 @@ def main(args):
     model = T5ForConditionalGeneration.from_pretrained("t5-small")
     tokenizer = T5Tokenizer.from_pretrained("t5-small")
     ###########################################
-    tokenizer.pad_token = tokenizer.eos_token #
-    tokenizer.add_tokens(['@', '<s>', '</s>'], special_tokens=True)
-    new_tokens = []
-    g = open("../data/relation2text.json")
-    relation = json.load(g)
-    for key in relation.keys():
-        new_tokens.append(key.lower())
-    tokenizer.add_tokens(new_tokens, special_tokens=True)
+    # tokenizer.pad_token = tokenizer.eos_token #
+    tokenizer.add_tokens(['@'], special_tokens=True)
+    # new_tokens = []
+    # g = open("../data/relation2text.json")
+    # relation = json.load(g)
+    # for key in relation.keys():
+    #     new_tokens.append(key.lower())
+    # tokenizer.add_tokens(new_tokens, special_tokens=True)
     model.resize_token_embeddings(len(tokenizer))
     # print("# ", num_added_tokens, " tokens added")
     ###########################################

@@ -3,8 +3,11 @@ import math
 import spacy
 import nltk
 import numpy as np
+import torch.nn.functional as F
 from nltk import word_tokenize, pos_tag
 from nltk.corpus import wordnet
+from random import shuffle
+from transformers import GPT2LMHeadModel, GPT2TokenizerFast
 
 nlp = spacy.load("en_core_web_sm")
 stopwords = nlp.Defaults.stop_words
@@ -102,6 +105,7 @@ def get_features(document):
 def get_verbnouns(document):
     extra_stopwords = ["lot", "person", "have", "not", "also", "very", "often", "however", "too", "usually", "really", "early", "never", "always", "sometimes", "together", "likely", "simply", "generally", "instead", "actually", "again", "rather", "almost", "especially", "ever", "quickly", "probably", "already", "below", "directly", "therefore", "else", "thus", "easily", "eventually", "exactly", "certainly", "normally", "currently", "extremely", "finally", "constantly", "properly", "soon", "specifically", "ahead", "daily", "highly", "immediately", "relatively", "slowly", "fairly", "primarily", "completely", "ultimately", "widely", "recently", "seriously", "frequently", "fully", "mostly", "naturally", "nearly", "occasionally", "carefully", "clearly", "essentially", "possibly", "slightly", "somewhat", "equally", "greatly", "necessarily", "personally", "rarely", "regularly", "similarly", "basically", "closely", "effectively", "initially", "literally", "mainly", "merely", "gently", "hopefully", "originally", "roughly", "significantly", "totally", "twice", "elsewhere", "everywhere", "obviously", "perfectly", "physically", "successfully", "suddenly", "truly", "virtually", "altogether", "anyway", "automatically", "deeply", "definitely", "deliberately", "hardly", "readily", "terribly", "unfortunately", "forth", "briefly", "moreover", "strongly", "honestly", "previously", "as", "there", "when", "how", "so", "up", "out", "no", "only", "well", "then", "first", "where", "why", "now", "around", "once", "down", "off", "here", "away", "today", "far", "quite", "later", "above", "yet", "maybe", "otherwise", "near", "forward", "somewhere", "anywhere", "please", "forever", "somehow", "absolutely", "abroad", "yeah", "nowhere", "the", "to", "in", "on", "by", "more", "about", "such", "through", "new", "just", "any", "each", "much", "before", "between", "free", "right", "best", "since", "both", "sure", "without", "back", "better", "enough", "lot", "small", "though", "less", "little", "under", "next", "hard", "real", "left", "least", "short", "last", "within", "along", "lower", "TRUE", "bad", "across", "clear", "easy", "full", "close", "late", "proper", "fast", "wide", "item", "wrong", "ago", "behind", "quick", "straight", "direct", "extra", "pretty", "overall", "alone", "bright", "flat", "whatever", "slow", "clean", "fresh", "whenever", "cheap", "thin", "cool", "fair", "fine", "smooth", "FALSE", "thick", "nearby", "wild", "apart", "none", "strange", "aside", "super", "ill", "honest", "ok", "thanks"]
     document = document.lower()
+    document = document.replace("i'm", "i am")
     if document.startswith('i '):
         document = document.replace("i ", 'person ')
     document = document.replace(" i ", ' person ')
@@ -137,13 +141,13 @@ def get_verbnouns(document):
             # print(verbe, verbe_index)
             for noune in noune_indexdict:
                 # print(verbe, noune, noune_indexdict[noune],verbe_index)
-                if noune_indexdict[noune] > verbe_index and noune_indexdict[noune] - verbe_index < 3:
+                if noune_indexdict[noune] > verbe_index and noune_indexdict[noune] - verbe_index < 2:
                     # print(verbe, noune)
                     verb_phrases.append(verbe + ' ' + noune)
 
     features = [x for x in features if x not in ' '.join(verb_phrases)]
     features_verb = [x for x in features_verb if x not in ' '.join(verb_phrases)]
-    features_verb = [x.replace('have', '').replace("'ve", '').strip() for x in features_verb]
+    features_verb = [x.replace('have', '').replace("'ve", '').replace("be", '').strip() for x in features_verb]
     allstopwords = stopwords.union(extra_stopwords)
     res = [x for x in features + features_verb + verb_phrases if x not in allstopwords]
     res = [x for x in res if len(x)>2]
@@ -283,3 +287,281 @@ def get_min_path(paths, scores, relation2text, parse_edges=True):
     # print(paths, filt_path)
     return filt_path, filt_score
 
+''' GPT-2 Response Generation Related '''
+
+def clean_generation(results):
+    if type(results)==list:
+        results = results[0]
+    results = results.split('[response] : ')[-1]
+    eor_ind = results.find('<eor')
+    final = results[:eor_ind - 1].strip()
+    
+    return final
+
+def predict_formality(model, tokenizer, conditioning_model, input_text, precondition_topk=200, do_sample=True, length_cutoff=512, condition_lambda=1.0, device='cuda', verbose=True):
+    with torch.no_grad():
+        batch_size = len(input_text)
+        # assumes initially all same length.
+        encoded_input = [tokenizer.encode(it, return_tensors='pt').to(device) for it in input_text] # batch x seq
+        encoded_input = torch.cat(encoded_input, dim=0)
+
+        # input_ids = torch.LongTensor([[65000]]).to(device)
+        input_ids = encoded_input.to(device)
+        cur_len = 1
+        max_length = length_cutoff
+        min_length = 0
+        temperature = 0.7#1.0
+        top_k = 50
+        top_p = 1.0
+        repetition_penalty = 1.0
+        no_repeat_ngram_size = 0
+        bad_words_ids = [[65000]]
+        pad_token_id = 65000
+        eos_token_id = 0
+        effective_batch_size = batch_size
+        attention_mask = encoded_input.new_ones(encoded_input.shape)
+        use_cache = True
+        # model_specific_kwargs = {'encoder_outputs': model.get_encoder()(encoded_input, attention_mask=attention_mask)}
+        model_specific_kwargs = {'encoder_outputs': model(encoded_input, attention_mask=attention_mask)}
+
+        output = _generate_no_beam_search(model, tokenizer,
+                                        conditioning_model,
+                                        condition_lambda,
+                                        precondition_topk,
+                                        encoded_input,
+                                        input_ids,
+                                        cur_len,
+                                        max_length,
+                                        min_length,
+                                        do_sample,
+                                        temperature,
+                                        top_k,
+                                        top_p,
+                                        repetition_penalty,
+                                        no_repeat_ngram_size,
+                                        bad_words_ids,
+                                        pad_token_id,
+                                        eos_token_id,
+                                        batch_size,
+                                        attention_mask,
+                                        use_cache,
+                                        model_specific_kwargs,
+                                          verbose=verbose,)
+
+        return [tokenizer.decode(s[:], skip_special_tokens=True) for s in output] # 1: to delete the pad token
+
+# hack of code from transformers/generation_utils.py
+# to get our conditioning
+def _generate_no_beam_search(
+        model, tokenizer,
+        conditioning_model,
+        condition_lambda,
+        precondition_topk,
+        encoded_input,
+        input_ids,
+        cur_len,
+        max_length,
+        min_length,
+        do_sample,
+        temperature,
+        top_k,
+        top_p,
+        repetition_penalty,
+        no_repeat_ngram_size,
+        bad_words_ids,
+        pad_token_id,
+        eos_token_id,
+        batch_size,
+        attention_mask,
+        use_cache,
+        model_kwargs,
+        verbose=True,
+):
+        """Generate sequences for each example without beam search (num_beams == 1).
+        All returned sequence are generated independantly.
+        """
+        # length of generated sentences / unfinished sentences
+        unfinished_sents = input_ids.new(batch_size).fill_(1)
+        sent_lengths = input_ids.new(batch_size).fill_(max_length)
+
+        past = None
+        while cur_len < max_length:
+            # model_inputs = model.prepare_inputs_for_generation(input_ids, past=past, attention_mask=attention_mask, use_cache=use_cache, **model_kwargs)
+            model_inputs = model.prepare_inputs_for_generation(input_ids, past=past, attention_mask=attention_mask, use_cache=use_cache)
+            outputs = model(**model_inputs, return_dict=True)
+            next_token_logits = outputs.logits[:, -1, :]
+
+            # scores = model.postprocess_next_token_scores(
+            scores = postprocess_next_token_scores(
+                scores=next_token_logits,input_ids=input_ids,no_repeat_ngram_size=no_repeat_ngram_size,bad_words_ids=bad_words_ids,
+                cur_len=cur_len,min_length=min_length,max_length=max_length,eos_token_id=eos_token_id,repetition_penalty=repetition_penalty,batch_size=batch_size,num_beams=1,)
+
+            # if model has past, then set the past variable to speed up decoding
+            if "past_key_values" in outputs:
+                past = outputs.past_key_values
+            elif "mems" in outputs:
+                past = outputs.mems
+            tt = tokenizer
+            top_logits, top_indices = scores.topk(precondition_topk, dim=1) # batch x topk
+            input_ids_suffix = input_ids
+            if condition_lambda>0:
+                target_idx = (input_ids[0] == 16793).nonzero(as_tuple=True)[-1].tolist()
+                if len(target_idx)>0 and input_ids[0][target_idx[0]+1].item()==60:
+                    input_ids_suffix = input_ids[:,target_idx[0]+2:]
+                # print(input_ids_suffix)
+                # import pdb;pdb.set_trace()
+            tplus1_candidates = torch.cat([input_ids_suffix.unsqueeze(1).expand(-1, precondition_topk, -1), top_indices.unsqueeze(2)], dim=2)[:, :, 1:] # batch x topk x seq+1, with pad dropped
+            expanded_lengths = torch.LongTensor([[cur_len for _ in range(precondition_topk)] for _ in range(batch_size)]).to(scores.device)
+            input_lengths = torch.LongTensor([tplus1_candidates.shape[2] for _ in range(precondition_topk)]).to(scores.device)
+
+            if condition_lambda == 0:
+                condition_logits = torch.zeros_like(top_logits).float()
+            else:                
+                condition_logits = conditioning_model(tplus1_candidates.flatten(0, 1), # batch*topk x seq+1
+                                                    # expanded_lengths.flatten(0, 1), # batch*topk
+                                                    input_lengths,
+                                                    None,
+                                                    None,
+                                                    None)
+                condition_logits = condition_logits.view(batch_size, precondition_topk, -1)[:, :, -1] # batch x topk of last formality pred
+                # condition_logits = condition_logits - torch.log(1 + torch.exp(condition_logits)) # get correct log probs
+                # print(condition_logits)
+            full_logits = top_logits + condition_lambda * condition_logits
+            scores = F.softmax(full_logits, dim=-1)
+
+            top_probs = F.softmax(top_logits, dim=-1)
+            condition_logits_prob = F.softmax(condition_logits, dim=-1)
+            # full_probs = top_probs + condition_lambda * condition_logits_prob
+            # scores = F.normalize(full_probs,dim=-1, p=1)
+
+            if do_sample:
+                scores = scores / temperature
+                # scores = top_k_top_p_filtering(scores, top_k=top_k, top_p=top_p)
+                topchosen_token_indice = torch.multinomial(scores, num_samples=1).squeeze(1)
+                next_token = top_indices[torch.arange(batch_size).to(top_indices.device), topchosen_token_indice]
+            else:
+                # Greedy decoding
+                topchosen_token_indice = torch.argmax(scores, dim=-1)
+                next_token = top_indices[torch.arange(batch_size).to(top_indices.device), torch.argmax(scores, dim=-1)]
+
+            if verbose and condition_lambda>0:
+                print([(i, tokenizer.decode([z]), round(x,4),round(y,4), round(s,4)) for i, (x,y,s,z) in enumerate(zip(top_probs[0].tolist(), condition_logits_prob[0].tolist(), scores[0].tolist(), top_indices[0].tolist()))])
+                # print([tokenizer.decode([x]) for x in top_indices[0]])
+                print(tokenizer.decode(input_ids[0]))
+                print(next_token[0], tokenizer.decode([next_token]), topchosen_token_indice[0].item())
+
+            tokens_to_add = next_token
+            
+            # add token and increase length by one
+            input_ids = torch.cat([input_ids, tokens_to_add.unsqueeze(-1)], dim=-1)
+            cur_len = cur_len + 1
+
+            if next_token[0]==tokenizer.eos_token_id:
+                break
+            # extend attention_mask for new generated input if only decoder
+            if model.config.is_encoder_decoder is False:
+                attention_mask = torch.cat(
+                    [attention_mask, attention_mask.new_ones((attention_mask.shape[0], 1))], dim=-1
+                )
+
+        return input_ids
+
+def postprocess_next_token_scores(
+        scores,
+        input_ids,
+        no_repeat_ngram_size,
+        bad_words_ids,
+        cur_len,
+        min_length,
+        max_length,
+        eos_token_id,
+        repetition_penalty,
+        batch_size,
+        num_beams,
+    ):
+        # repetition penalty (from CTRL paper https://arxiv.org/abs/1909.05858)
+        if repetition_penalty != 1.0:
+            enforce_repetition_penalty_(
+                scores,
+                batch_size,
+                num_beams,
+                input_ids,
+                repetition_penalty,
+            )
+
+        # set eos token prob to zero if min_length is not reached
+        if eos_token_id is not None and cur_len < min_length:
+            scores[:, eos_token_id] = -float("inf")
+
+        if no_repeat_ngram_size > 0:
+            # calculate a list of banned tokens to prevent repetitively generating the same ngrams
+            num_batch_hypotheses = batch_size * num_beams
+            # from fairseq: https://github.com/pytorch/fairseq/blob/a07cb6f40480928c9e0548b737aadd36ee66ac76/fairseq/sequence_generator.py#L345
+            banned_batch_tokens = calc_banned_ngram_tokens(
+                input_ids, num_batch_hypotheses, no_repeat_ngram_size, cur_len
+            )
+            for i, banned_tokens in enumerate(banned_batch_tokens):
+                scores[i, banned_tokens] = -float("inf")
+
+        return scores
+
+def calc_banned_ngram_tokens(prev_input_ids, num_hypos, no_repeat_ngram_size, cur_len):
+    """Copied from fairseq for no_repeat_ngram in beam_search"""
+    if cur_len + 1 < no_repeat_ngram_size:
+        # return no banned tokens if we haven't generated no_repeat_ngram_size tokens yet
+        return [[] for _ in range(num_hypos)]
+    generated_ngrams = [{} for _ in range(num_hypos)]
+    for idx in range(num_hypos):
+        gen_tokens = prev_input_ids[idx].tolist()
+        generated_ngram = generated_ngrams[idx]
+        for ngram in zip(*[gen_tokens[i:] for i in range(no_repeat_ngram_size)]):
+            prev_ngram_tuple = tuple(ngram[:-1])
+            generated_ngram[prev_ngram_tuple] = generated_ngram.get(prev_ngram_tuple, []) + [ngram[-1]]
+
+    def _get_generated_ngrams(hypo_idx):
+        # Before decoding the next token, prevent decoding of ngrams that have already appeared
+        start_idx = cur_len + 1 - no_repeat_ngram_size
+        ngram_idx = tuple(prev_input_ids[hypo_idx, start_idx:cur_len].tolist())
+        return generated_ngrams[hypo_idx].get(ngram_idx, [])
+
+    banned_tokens = [_get_generated_ngrams(hypo_idx) for hypo_idx in range(num_hypos)]
+    return banned_tokens
+
+def enforce_repetition_penalty_(lprobs, batch_size, num_beams, prev_output_tokens, repetition_penalty):
+    """
+    Enforce the repetition penalty (from the `CTRL paper <https://arxiv.org/abs/1909.05858>`__).
+    """
+    for i in range(batch_size * num_beams):
+        for previous_token in set(prev_output_tokens[i].tolist()):
+            # if score < 0 then repetition penalty has to multiplied to reduce the previous token probability
+            if lprobs[i, previous_token] < 0:
+                lprobs[i, previous_token] *= repetition_penalty
+            else:
+                lprobs[i, previous_token] /= repetition_penalty
+
+def perplexity(prediction):
+    device = "cuda"
+    # gpt2, microsoft/DialoGPT-medium
+    model_id = "gpt2"
+    model = GPT2LMHeadModel.from_pretrained(model_id).to(device)
+    tokenizer = GPT2TokenizerFast.from_pretrained(model_id)
+
+    # prediction = load_dataset("text", data_files={"prediction": sys.argv[1]})["prediction"]
+
+    loss = 0
+    steps = 0
+    nll = 0
+
+    # for p in tqdm(prediction):
+    if prediction:
+        input_ids = tokenizer(prediction, return_tensors="pt").input_ids.to(device)
+        #        shuffle(input_ids[0])
+        with torch.no_grad():
+            outputs = model(input_ids, labels=input_ids)
+            nll += outputs[0].mean().item()
+    steps += 1
+
+    average_nll = nll / steps
+    ppl = torch.exp(torch.tensor(average_nll)).item()
+
+    return ppl

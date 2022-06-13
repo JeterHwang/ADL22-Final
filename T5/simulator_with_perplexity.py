@@ -11,7 +11,8 @@ from transformers import (
     BlenderbotForConditionalGeneration,
     BlenderbotTokenizer,
 )
-from bot import T5bot, GPT5bot, GPT2bot
+from bot import T5bot, GPT5bot
+from perplexity import perplexity
 
 def parse_args():
     parser = argparse.ArgumentParser()
@@ -48,15 +49,13 @@ def parse_args():
         help="whether output the dialogs to the command line",
     )
 
-    parser.add_argument("--bot", type=str, default='T5bot', choices=['T5bot', 'GPT5bot', 'GPT2bot'])
+    parser.add_argument("--bot", type=str, default='T5bot', choices=['T5bot', 'GPT5bot'])
+    parser.add_argument("--commensense_model_path", type=Path, default="./pretrained/checkpoints_6lendict_wcontains")
     parser.add_argument("--rel2text_path", type=Path, default="./pretrained/relation2text.json")
     parser.add_argument("--counts_path", type=Path, default="./pretrained/counts.txt")
-    parser.add_argument("--T5model1_path", type=Path, default='./pretrained/T5model1')
-    parser.add_argument("--T5model2_path", type=Path, default='./pretrained/T5model2')
-    parser.add_argument("--T5tokenizer2_path", type=str, default='./pretrained/T5model2')
-    parser.add_argument("--GPT2model1_path", type=Path, default='./pretrained/GPT2model1')
-    parser.add_argument("--GPT2model2_path", type=Path, default='./pretrained/GPT2model2')
-    parser.add_argument("--GPT2tokenizer2_path", type=str, default='./pretrained/GPT2model2')
+    parser.add_argument("--model1_path", type=Path, default='./pretrained/model1')
+    parser.add_argument("--model2_path", type=Path, default='./pretrained/model2')
+    parser.add_argument("--tokenizer2_path", type=str, default='t5-small')
     parser.add_argument("--keywords_path", type=Path, default='./pretrained/keywords.json')
     parser.add_argument("--max_input_len", type=int, default=512)
     parser.add_argument("--device", type=str, default='cuda:0')
@@ -85,34 +84,22 @@ if __name__ == "__main__":
     simulator = BlenderbotForConditionalGeneration.from_pretrained(mname).to(args.device)
     simulator_tokenizer = BlenderbotTokenizer.from_pretrained(mname)
     print("start token = ", simulator_tokenizer.bos_token)
-
-    casualLM = AutoModelForSeq2SeqLM.from_pretrained(args.model_name_or_path).to(args.device)
-    casualLM_tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
+    perplex = []
 
     # load your bot
     if args.bot == 'T5bot':
         bot = T5bot.from_pretrained(
-            args.T5model1_path, 
-            args.T5model2_path, 
-            args.T5tokenizer2_path, 
+            args.model1_path, 
+            args.model2_path, 
+            args.tokenizer2_path, 
             args.keywords_path,
             args.device
         )
-    elif args.bot == 'GPT5bot':
-        bot = GPT5bot.from_pretrained(
-            args.GPT2model1_path,
-            args.T5model2_path,
-            args.T5tokenizer2_path,
-            args.keywords_path,
-            args.rel2text_path,
-            args.counts_path,
-            args.device,
-        )
     else:
-        bot = GPT2bot.from_pretrained(
-            args.GPT2model1_path,
-            args.GPT2model2_path,
-            args.GPT2tokenizer2_path,
+        bot = GPT5bot.from_pretrained(
+            args.model2_path,
+            args.tokenizer2_path,
+            args.commensense_model_path,
             args.keywords_path,
             args.rel2text_path,
             args.counts_path,
@@ -187,27 +174,39 @@ if __name__ == "__main__":
                 if not args.disable_output_dialog:
                     print(f"\033[0;32;49m {'simulator: ': ^11}{text} \033[0;0m")
 
-                # you might need to change this line due to the model you use
-                inputs = casualLM_tokenizer(
-                    ["</s> <s>".join(dialog[-3:])], return_tensors="pt", truncation=True
+
+                # generate a reply based on the conversation
+                inputs = simulator_tokenizer(
+                    [
+                        "</s> <s>".join(
+                            ([context] + dialog if len(dialog) < 3 else dialog[-3:])
+                        )
+                    ],
+                    return_tensors="pt",
+                    truncation=True,
                 ).to(args.device)
-                reply_ids = casualLM.generate(**inputs)
-                normal_conversation = casualLM_tokenizer.batch_decode(reply_ids, skip_special_tokens=True)[
-                    0
-                ].strip()
-                print(normal_conversation)
-                topic_transfer = bot.generate(
-                    normal_conversation,
+                reply_ids = simulator.generate(**inputs)
+                reply = simulator_tokenizer.batch_decode(
+                    reply_ids, skip_special_tokens=True
+                )[0].strip()
+
+                # you might need to change this line due to the model you use
+                text = bot.generate(
+                    reply,
+                    #dialog[-1],
                     args.max_input_len
                 )
-                dialog.append(topic_transfer)
+                dialog.append(text)
                 if not args.disable_output_dialog:
-                    print(f"\033[0;33;49m {'bot: ': ^11}{topic_transfer} \033[0;0m")
-
+                    print(f"\033[0;33;49m {'bot: ': ^11}{text} \033[0;0m")
+            # print("sentences = ", "".join(dialog))
+            print("perplexity = ", perplexity("".join(dialog)))
+            perplex.append(perplexity("".join(dialog)))
             output.append(dialog)
             if not args.disable_output_dialog:
                 print()
 
+        print("overall perplexity = ", sum(perplex) / len(perplex))
         with open(args.output, "w") as f:
             for idx, dialog in enumerate(output):
                 f.write(json.dumps({"id": idx, "dialog": dialog}) + "\n")
