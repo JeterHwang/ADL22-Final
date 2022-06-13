@@ -178,17 +178,18 @@ if __name__ == "__main__":
                 normal_conversation = casualLM_tokenizer.batch_decode(reply_ids, skip_special_tokens=True)[
                     0
                 ].strip()
-                print(f"Intermediate : {normal_conversation}")
-                # keyword = predict_keyword_lstm(
-                #     dialog, 
-                #     args.classifier_path / "vocab.pkl", 
-                #     args.classifier_path / "embeddings.pt", 
-                #     args.classifier_path / "model.pkl", 
-                #     args.subdomain_path,
-                # )
-
-                keyword = predict_keyword_roberta(dialog + [normal_conversation])
-                print(keyword)
+                # print(f"Intermediate : {normal_conversation}")
+                ###############################################################
+                keyword = predict_keyword_lstm(
+                    dialog + [normal_conversation], 
+                    args.classifier_path / "vocab.pkl", 
+                    args.classifier_path / "embeddings.pt", 
+                    args.classifier_path / "model.pkl", 
+                    args.subdomain_path,
+                )
+                # keyword = predict_keyword_lstm(dialog + [normal_conversation])
+                ################################################################
+                # print(keyword)
                 bot.target = keyword
                 topic_transfer = bot.generate(
                     normal_conversation,

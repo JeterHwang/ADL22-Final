@@ -636,4 +636,6 @@ class GPT2bot(torch.nn.Module):
                 final_result = out
                 max_score = score
             # print(score, out)
+        if final_result == "":
+            final_result = source
         return final_result

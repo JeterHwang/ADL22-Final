@@ -1,0 +1,7 @@
+accelerate
+transformers
+torch
+datasets
+tqdm
+spacy
+nltk

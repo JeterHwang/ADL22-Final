@@ -1,4 +1,3 @@
-from operator import concat
 import torch
 import math
 import spacy
@@ -7,7 +6,6 @@ import numpy as np
 import torch.nn.functional as F
 from nltk import word_tokenize, pos_tag
 from nltk.corpus import wordnet
-from random import shuffle
 from typing import Iterable, List
 
 nlp = spacy.load("en_core_web_sm")
