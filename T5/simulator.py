@@ -12,7 +12,7 @@ from transformers import (
     BlenderbotForConditionalGeneration,
     BlenderbotTokenizer,
 )
-from bot import GPT2bot
+from bot import GPT2bot, GPT5bot, T5bot
 from lstmClassifier import predict_keyword_lstm
 from robertaClassifier import predict_keyword_roberta
 
@@ -50,10 +50,10 @@ def parse_args():
         action="store_true",
         help="whether output the dialogs to the command line",
     )
-
+    parser.add_argument("--bot", type=str, default="T5bot", choices=['T5bot', 'GPT5bot', 'GPT2bot'])
     parser.add_argument("--rel2text_path", type=Path, default="./pretrained/relation2text.json")
     parser.add_argument("--counts_path", type=Path, default="./pretrained/counts.txt")
-    # parser.add_argument("--T5model1_path", type=Path, default='./pretrained/T5model1')
+    parser.add_argument("--T5model1_path", type=Path, default='./pretrained/T5model1')
     parser.add_argument("--T5model2_path", type=Path, default='./pretrained/T5model2')
     parser.add_argument("--T5tokenizer2_path", type=str, default='./pretrained/T5model2')
     parser.add_argument("--GPT2model1_path", type=Path, default='./pretrained/GPT2model1')
@@ -94,14 +94,31 @@ if __name__ == "__main__":
     casualLM_tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
 
     # load your bot
-    bot = GPT2bot.from_pretrained(
-        args.GPT2model1_path,
-        args.GPT2model2_path,
-        args.GPT2tokenizer2_path,
-        args.rel2text_path,
-        args.counts_path,
-        args.device,
-    )
+    if args.bot == 'T5bot':
+        bot = T5bot.from_pretrained(
+            args.T5model1_path,
+            args.T5model2_path,
+            args.T5model2_path,
+            args.device,
+        )
+    elif args.bot == 'GPT5bot':
+        bot = GPT5bot.from_pretrained(
+            args.GPT2model1_path,
+            args.T5model2_path,
+            args.T5model2_path,
+            args.rel2text_path,
+            args.counts_path,
+            args.device,
+        )
+    else:
+        bot = GPT2bot.from_pretrained(
+            args.GPT2model1_path,
+            args.GPT2model2_path,
+            args.GPT2tokenizer2_path,
+            args.rel2text_path,
+            args.counts_path,
+            args.device,
+        )
 
     dataset = load_dataset("blended_skill_talk", split=args.split)
     dataset = dataset.map(
